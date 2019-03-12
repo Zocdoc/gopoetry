@@ -1,0 +1,3 @@
+package gopoetry
+
+func main() {}
