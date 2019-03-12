@@ -1,4 +1,4 @@
-package cs
+package poetrycs
 
 import (
 	"fmt"

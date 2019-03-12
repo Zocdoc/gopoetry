@@ -1,1 +1,1 @@
-module github.com/vsapronov/gopoetry
+module github.com/vsapronov/poetrycs
