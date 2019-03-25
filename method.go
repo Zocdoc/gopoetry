@@ -9,7 +9,8 @@ type MethodDeclaration struct {
 	name string
 	returns string
 	modifiers []string
-	params []ParamDeclaration
+	attributes []Writable
+	params []Writable
 	body []string
 }
 
@@ -31,12 +32,21 @@ func (self *MethodDeclaration) Public() *MethodDeclaration {
 	return self.addModifier("public")
 }
 
+func (self *MethodDeclaration) AddAttributes(attributes ...Writable) *MethodDeclaration {
+	self.attributes = append(self.attributes, attributes...)
+	return self
+}
+
+func (self *MethodDeclaration) WithAttribute(code string) *MethodDeclaration {
+	return self.AddAttributes(Attribute(code))
+}
+
 func (self *MethodDeclaration) Static() *MethodDeclaration {
 	return self.addModifier("static")
 }
 
-func (self *MethodDeclaration) Params(params ...ParamDeclaration) *MethodDeclaration {
-	self.params = params;
+func (self *MethodDeclaration) AddParams(params ...Writable) *MethodDeclaration {
+	self.params = append(self.params, params...)
 	return self
 }
 
@@ -46,7 +56,28 @@ func (self *MethodDeclaration) Body(lines ...string) *MethodDeclaration {
 	return self
 }
 
+func (self *MethodDeclaration) Param(type_ string, name string) *ParamDeclaration {
+	param := Param(type_, name)
+	self.AddParams(param)
+	return param
+}
+
+func Method(name string) *MethodDeclaration {
+	return &MethodDeclaration{
+		name: name,
+		returns: "void",
+		modifiers: []string{},
+		params: []Writable{},
+		body: nil,
+	}
+}
+
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
+	for _, attribute := range self.attributes {
+		attribute.WriteCode(writer)
+		writer.Eol()
+	}
+
 	if len(self.modifiers) > 0 {
 		writer.Write(strings.Join(self.modifiers, " ")+" ")
 	}
@@ -63,21 +94,11 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		writer.Begin()
 		for _, line := range self.body {
 			writer.Write(line)
-			writer.Eof()
+			writer.Eol()
 		}
 		writer.End()
 	} else {
 		writer.Write(";")
-		writer.Eof()
-	}
-}
-
-func Method(name string) *MethodDeclaration {
-	return &MethodDeclaration{
-		name: name,
-		returns: "void",
-		modifiers: []string{},
-		params: []ParamDeclaration{},
-		body: nil,
+		writer.Eol()
 	}
 }

@@ -7,7 +7,7 @@ import (
 type CodeWriter interface {
 	Begin()
 	End()
-	Eof()
+	Eol()
 	Write(code string)
 }
 
@@ -23,19 +23,19 @@ type codeWriter struct {
 }
 
 func (self *codeWriter) Begin() {
-	self.Eof()
+	self.Eol()
 	self.Write("{")
-	self.Eof()
+	self.Eol()
 	self.indentation += 1
 }
 
 func (self *codeWriter) End() {
 	self.indentation -= 1
 	self.Write("}")
-	self.Eof()
+	self.Eol()
 }
 
-func (self *codeWriter) Eof() {
+func (self *codeWriter) Eol() {
 	self.Write("\n")
 	self.newLine = true
 }
