@@ -1,15 +1,15 @@
-package poetrycs
+package csharp
 
 import "fmt"
 
 type ParamDeclaration struct {
-	name string
+	name  string
 	type_ string
 }
 
 func Param(type_ string, name string) *ParamDeclaration {
 	return &ParamDeclaration{
-		name: name,
+		name:  name,
 		type_: type_,
 	}
 }

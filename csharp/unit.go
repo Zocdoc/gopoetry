@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 type UnitDeclaration struct {
 	imports    []Writable

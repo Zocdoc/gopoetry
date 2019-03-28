@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 import (
 	"strconv"
@@ -25,7 +25,7 @@ func Int(value int) *WritableCode {
 }
 
 func Str(value string) *WritableCode {
-	return Code("\""+value+"\"")
+	return Code("\"" + value + "\"")
 }
 
 func True() *WritableCode {

@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 import (
 	"testing"
@@ -58,6 +58,6 @@ class MyClass
 }
 `
 	class := Class("MyClass")
-	class.Property("Result","MyProperty").Get().Set()
+	class.Property("Result", "MyProperty").Get().Set()
 	assertCode(t, class, expected)
 }

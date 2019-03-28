@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 type Writable interface {
 	WriteCode(writer CodeWriter)

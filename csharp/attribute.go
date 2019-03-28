@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 type AttributeDeclaration struct {
 	code Writable

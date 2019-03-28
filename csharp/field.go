@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 import (
 	"fmt"
@@ -6,10 +6,10 @@ import (
 )
 
 type FieldDeclaration struct {
-	name string
-	type_ string
+	name      string
+	type_     string
 	modifiers []string
-	init Writable
+	init      Writable
 }
 
 func (self *FieldDeclaration) addModifier(modifier string) *FieldDeclaration {
@@ -37,7 +37,7 @@ func (self *FieldDeclaration) Init(init Writable) *FieldDeclaration {
 func (self *FieldDeclaration) WriteCode(writer CodeWriter) {
 	declaration := fmt.Sprintf("%s %s", self.type_, self.name)
 	if len(self.modifiers) > 0 {
-		declaration = strings.Join(self.modifiers, " ")+" "+declaration
+		declaration = strings.Join(self.modifiers, " ") + " " + declaration
 	}
 	writer.Write(declaration)
 	if self.init != nil {
@@ -49,9 +49,9 @@ func (self *FieldDeclaration) WriteCode(writer CodeWriter) {
 
 func Field(type_ string, name string) *FieldDeclaration {
 	return &FieldDeclaration{
-		name: name,
-		type_: type_,
+		name:      name,
+		type_:     type_,
 		modifiers: []string{},
-		init: nil,
+		init:      nil,
 	}
 }

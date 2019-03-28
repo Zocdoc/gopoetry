@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 import (
 	"strings"
@@ -17,9 +17,9 @@ func prefix(indentation int) string {
 }
 
 type codeWriter struct {
-	code strings.Builder
+	code        strings.Builder
 	indentation int
-	newLine bool
+	newLine     bool
 }
 
 func (self *codeWriter) Begin() {

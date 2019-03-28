@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 type NamespaceDeclaration struct {
 	namespace string

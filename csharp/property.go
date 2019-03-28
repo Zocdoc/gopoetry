@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 import (
 	"fmt"
@@ -6,12 +6,12 @@ import (
 )
 
 type PropertyDeclaration struct {
-	name string
-	type_ string
-	modifiers []string
+	name       string
+	type_      string
+	modifiers  []string
 	attributes []Writable
-	hasGet bool
-	hasSet bool
+	hasGet     bool
+	hasSet     bool
 }
 
 func (self *PropertyDeclaration) addModifier(modifier string) *PropertyDeclaration {
@@ -48,11 +48,11 @@ func (self *PropertyDeclaration) WithAttribute(code string) *PropertyDeclaration
 
 func Property(type_ string, name string) *PropertyDeclaration {
 	return &PropertyDeclaration{
-		name: name,
-		type_: type_,
+		name:      name,
+		type_:     type_,
 		modifiers: []string{},
-		hasGet: false,
-		hasSet: false,
+		hasGet:    false,
+		hasSet:    false,
 	}
 }
 
@@ -63,7 +63,7 @@ func (self *PropertyDeclaration) WriteCode(writer CodeWriter) {
 	}
 	declaration := fmt.Sprintf("%s %s", self.type_, self.name)
 	if len(self.modifiers) > 0 {
-		declaration = strings.Join(self.modifiers, " ")+" "+declaration
+		declaration = strings.Join(self.modifiers, " ") + " " + declaration
 	}
 	writer.Write(declaration)
 	writer.Begin()

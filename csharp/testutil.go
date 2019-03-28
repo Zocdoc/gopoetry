@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 import (
 	"gotest.tools/assert"

@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 import (
 	"fmt"
@@ -6,12 +6,12 @@ import (
 )
 
 type MethodDeclaration struct {
-	name string
-	returns string
-	modifiers []string
+	name       string
+	returns    string
+	modifiers  []string
 	attributes []Writable
-	params []Writable
-	body []string
+	params     []Writable
+	body       []string
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
@@ -51,7 +51,9 @@ func (self *MethodDeclaration) AddParams(params ...Writable) *MethodDeclaration 
 }
 
 func (self *MethodDeclaration) Body(lines ...string) *MethodDeclaration {
-	if self.body == nil { self.body = []string{} }
+	if self.body == nil {
+		self.body = []string{}
+	}
 	self.body = append(self.body, lines...)
 	return self
 }
@@ -64,11 +66,11 @@ func (self *MethodDeclaration) Param(type_ string, name string) *ParamDeclaratio
 
 func Method(name string) *MethodDeclaration {
 	return &MethodDeclaration{
-		name: name,
-		returns: "void",
+		name:      name,
+		returns:   "void",
 		modifiers: []string{},
-		params: []Writable{},
-		body: nil,
+		params:    []Writable{},
+		body:      nil,
 	}
 }
 
@@ -79,11 +81,11 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	if len(self.modifiers) > 0 {
-		writer.Write(strings.Join(self.modifiers, " ")+" ")
+		writer.Write(strings.Join(self.modifiers, " ") + " ")
 	}
 	writer.Write(fmt.Sprintf("%s %s", self.returns, self.name))
 	writer.Write("(")
-	for i, param := range(self.params) {
+	for i, param := range self.params {
 		param.WriteCode(writer)
 		if i < len(self.params)-1 {
 			writer.Write(", ")

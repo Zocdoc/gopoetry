@@ -1,4 +1,4 @@
-package poetrycs
+package csharp
 
 import (
 	"fmt"
@@ -6,10 +6,10 @@ import (
 )
 
 type ClassDeclaration struct {
-	name string
-	modifiers []string
+	name       string
+	modifiers  []string
 	attributes []Writable
-	members []Writable
+	members    []Writable
 }
 
 func (self *ClassDeclaration) addModifier(modifier string) *ClassDeclaration {
@@ -63,17 +63,17 @@ func (self *ClassDeclaration) Property(type_ string, name string) *PropertyDecla
 
 func Class(name string) *ClassDeclaration {
 	return &ClassDeclaration{
-		name: name,
-		modifiers: []string{},
+		name:       name,
+		modifiers:  []string{},
 		attributes: []Writable{},
-		members: []Writable{},
+		members:    []Writable{},
 	}
 }
 
 func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	declaration := fmt.Sprintf("class %s", self.name)
 	if len(self.modifiers) > 0 {
-		declaration = strings.Join(self.modifiers, " ")+" "+declaration
+		declaration = strings.Join(self.modifiers, " ") + " " + declaration
 	}
 
 	for _, attribute := range self.attributes {
