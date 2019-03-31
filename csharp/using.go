@@ -1,24 +1,24 @@
 package csharp
 
-type ImportDeclaration struct {
+type UsingDeclaration struct {
 	namespace string
 	isStatic  bool
 }
 
-func Import(namespace string) *ImportDeclaration {
-	return &ImportDeclaration{
+func Using(namespace string) *UsingDeclaration {
+	return &UsingDeclaration{
 		namespace: namespace,
 		isStatic:  false,
 	}
 }
 
-func (self *ImportDeclaration) Static() *ImportDeclaration {
+func (self *UsingDeclaration) Static() *UsingDeclaration {
 	self.isStatic = true
 	return self
 }
 
-func (self *ImportDeclaration) WriteCode(writer CodeWriter) {
-	line := "import "
+func (self *UsingDeclaration) WriteCode(writer CodeWriter) {
+	line := "using "
 	if self.isStatic {
 		line = line + "static "
 	}

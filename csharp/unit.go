@@ -1,22 +1,22 @@
 package csharp
 
 type UnitDeclaration struct {
-	imports    []Writable
+	usings     []Writable
 	namespaces []Writable
 }
 
-func (self *UnitDeclaration) Imports(imports ...Writable) *UnitDeclaration {
-	self.imports = append(self.imports, imports...)
+func (self *UnitDeclaration) AddUsings(usings ...Writable) *UnitDeclaration {
+	self.usings = append(self.usings, usings...)
 	return self
 }
 
-func (self *UnitDeclaration) Import(namespace string) *UnitDeclaration {
-	self.Imports(Import(namespace))
+func (self *UnitDeclaration) Using(namespace string) *UnitDeclaration {
+	self.AddUsings(Using(namespace))
 	return self
 }
 
-func (self *UnitDeclaration) ImportStatic(namespace string) *UnitDeclaration {
-	self.Imports(Import(namespace).Static())
+func (self *UnitDeclaration) UsingStatic(namespace string) *UnitDeclaration {
+	self.AddUsings(Using(namespace).Static())
 	return self
 }
 
@@ -33,13 +33,13 @@ func (self *UnitDeclaration) Namespace(namespace string) *NamespaceDeclaration {
 
 func Unit() *UnitDeclaration {
 	return &UnitDeclaration{
-		imports:    []Writable{},
+		usings:     []Writable{},
 		namespaces: []Writable{},
 	}
 }
 
 func (self *UnitDeclaration) WriteCode(writer CodeWriter) {
-	for _, import_ := range self.imports {
+	for _, import_ := range self.usings {
 		import_.WriteCode(writer)
 		writer.Eol()
 	}

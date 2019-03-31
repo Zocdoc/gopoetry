@@ -11,12 +11,12 @@ namespace Bla
 	assertCode(t, Namespace("Bla"), expected)
 }
 
-func TestNamespaceImportsAndClasses(t *testing.T) {
+func TestNamespaceUsingsAndClasses(t *testing.T) {
 	expected := `
 namespace Bla
 {
-    import Some.Namespace;
-    import Other.Namespace;
+    using Some.Namespace;
+    using Other.Namespace;
     
     class MyClass
     {
@@ -25,8 +25,8 @@ namespace Bla
 `
 	namespace :=
 		Namespace("Bla").
-			Import("Some.Namespace").
-			Import("Other.Namespace").
+			Using("Some.Namespace").
+			Using("Other.Namespace").
 			AddClasses(Class("MyClass"))
 	assertCode(t, namespace, expected)
 }

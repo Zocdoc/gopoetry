@@ -6,14 +6,14 @@ func TestUnitEmpty(t *testing.T) {
 	assertCode(t, Unit(), "")
 }
 
-func TestUnitImportWithNamespace(t *testing.T) {
-	unit := Unit().Import("MyNamespace").ImportStatic("MyOther.Namespace")
+func TestUnitUsingWithNamespace(t *testing.T) {
+	unit := Unit().Using("MyNamespace").UsingStatic("MyOther.Namespace")
 	unit.Namespace("Some.Namespace")
 	unit.Namespace("Other.Namespace")
 
 	expected := `
-import MyNamespace;
-import static MyOther.Namespace;
+using MyNamespace;
+using static MyOther.Namespace;
 
 namespace Some.Namespace
 {

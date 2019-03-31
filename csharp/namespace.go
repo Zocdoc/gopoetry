@@ -2,22 +2,22 @@ package csharp
 
 type NamespaceDeclaration struct {
 	namespace string
-	imports   []Writable
+	usings    []Writable
 	classes   []Writable
 }
 
-func (self *NamespaceDeclaration) Imports(imports ...Writable) *NamespaceDeclaration {
-	self.imports = append(self.imports, imports...)
+func (self *NamespaceDeclaration) AddUsings(usings ...Writable) *NamespaceDeclaration {
+	self.usings = append(self.usings, usings...)
 	return self
 }
 
-func (self *NamespaceDeclaration) Import(namespace string) *NamespaceDeclaration {
-	self.Imports(Import(namespace))
+func (self *NamespaceDeclaration) Using(namespace string) *NamespaceDeclaration {
+	self.AddUsings(Using(namespace))
 	return self
 }
 
-func (self *NamespaceDeclaration) ImportStatic(namespace string) *NamespaceDeclaration {
-	self.Imports(Import(namespace).Static())
+func (self *NamespaceDeclaration) UsingStatic(namespace string) *NamespaceDeclaration {
+	self.AddUsings(Using(namespace).Static())
 	return self
 }
 
@@ -29,7 +29,7 @@ func (self *NamespaceDeclaration) AddClasses(classes ...Writable) *NamespaceDecl
 func Namespace(namespace string) *NamespaceDeclaration {
 	return &NamespaceDeclaration{
 		namespace: namespace,
-		imports:   []Writable{},
+		usings:    []Writable{},
 		classes:   []Writable{},
 	}
 }
@@ -37,7 +37,7 @@ func Namespace(namespace string) *NamespaceDeclaration {
 func (self *NamespaceDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write("namespace " + self.namespace)
 	writer.Begin()
-	for _, import_ := range self.imports {
+	for _, import_ := range self.usings {
 		import_.WriteCode(writer)
 		writer.Eol()
 	}
