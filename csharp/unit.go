@@ -31,6 +31,12 @@ func (self *UnitDeclaration) Namespace(namespace string) *NamespaceDeclaration {
 	return namespace_
 }
 
+func (self *UnitDeclaration) Code() string {
+	writer := CreateWriter()
+	self.WriteCode(&writer)
+	return writer.Code()
+}
+
 func Unit() *UnitDeclaration {
 	return &UnitDeclaration{
 		usings:     []Writable{},
