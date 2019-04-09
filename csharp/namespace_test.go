@@ -27,6 +27,6 @@ namespace Bla
 		Namespace("Bla").
 			Using("Some.Namespace").
 			Using("Other.Namespace").
-			AddClasses(Class("MyClass"))
+			AddDeclarations(Class("MyClass"))
 	assertCode(t, namespace, expected)
 }

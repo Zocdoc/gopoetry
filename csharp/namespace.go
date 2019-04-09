@@ -1,9 +1,9 @@
 package csharp
 
 type NamespaceDeclaration struct {
-	namespace string
-	usings    []Writable
-	classes   []Writable
+	namespace    string
+	usings       []Writable
+	declarations []Writable
 }
 
 func (self *NamespaceDeclaration) AddUsings(usings ...Writable) *NamespaceDeclaration {
@@ -21,16 +21,16 @@ func (self *NamespaceDeclaration) UsingStatic(namespace string) *NamespaceDeclar
 	return self
 }
 
-func (self *NamespaceDeclaration) AddClasses(classes ...Writable) *NamespaceDeclaration {
-	self.classes = append(self.classes, classes...)
+func (self *NamespaceDeclaration) AddDeclarations(declarations ...Writable) *NamespaceDeclaration {
+	self.declarations = append(self.declarations, declarations...)
 	return self
 }
 
 func Namespace(namespace string) *NamespaceDeclaration {
 	return &NamespaceDeclaration{
-		namespace: namespace,
-		usings:    []Writable{},
-		classes:   []Writable{},
+		namespace:    namespace,
+		usings:       []Writable{},
+		declarations: []Writable{},
 	}
 }
 
@@ -41,7 +41,7 @@ func (self *NamespaceDeclaration) WriteCode(writer CodeWriter) {
 		import_.WriteCode(writer)
 		writer.Eol()
 	}
-	for _, class := range self.classes {
+	for _, class := range self.declarations {
 		writer.Eol()
 		class.WriteCode(writer)
 	}
