@@ -7,6 +7,7 @@ import (
 
 type ClassDeclaration struct {
 	name       string
+	inherits   []string
 	modifiers  []string
 	attributes []Writable
 	members    []Writable
@@ -27,6 +28,11 @@ func (self *ClassDeclaration) Public() *ClassDeclaration {
 
 func (self *ClassDeclaration) Static() *ClassDeclaration {
 	return self.addModifier("static")
+}
+
+func (self *ClassDeclaration) Inherits(types ...string) *ClassDeclaration {
+	self.inherits = append(self.inherits, types...)
+	return self
 }
 
 func (self *ClassDeclaration) AddMembers(members ...Writable) *ClassDeclaration {
@@ -74,6 +80,10 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	declaration := fmt.Sprintf("class %s", self.name)
 	if len(self.modifiers) > 0 {
 		declaration = strings.Join(self.modifiers, " ") + " " + declaration
+	}
+
+	if len(self.inherits) > 0 {
+		declaration += ": "+strings.Join(self.inherits, ", ")
 	}
 
 	for _, attribute := range self.attributes {

@@ -13,6 +13,15 @@ class MyClass
 	assertCode(t, Class("MyClass"), expected)
 }
 
+func TestClassInherits(t *testing.T) {
+	expected := `
+class MyClass: MyParent
+{
+}
+`
+	assertCode(t, Class("MyClass").Inherits("MyParent"), expected)
+}
+
 func TestClassModifier(t *testing.T) {
 	expected := `
 private class MyClass
