@@ -27,7 +27,9 @@ Result MyMethod()
 {
 }
 `
-	assertCode(t, Method("MyMethod").Returns("Result").Body(), expected)
+	method := Method("MyMethod").Returns("Result")
+	method.Body()
+	assertCode(t, method, expected)
 }
 
 func TestMethodAttributed(t *testing.T) {

@@ -11,7 +11,7 @@ type MethodDeclaration struct {
 	modifiers  []string
 	attributes []Writable
 	params     []Writable
-	body       []string
+	body       Writable
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
@@ -50,12 +50,10 @@ func (self *MethodDeclaration) AddParams(params ...Writable) *MethodDeclaration 
 	return self
 }
 
-func (self *MethodDeclaration) Body(lines ...string) *MethodDeclaration {
-	if self.body == nil {
-		self.body = []string{}
-	}
-	self.body = append(self.body, lines...)
-	return self
+func (self *MethodDeclaration) Body(lines ...string) *BlockDeclaration {
+	body := Block(lines...)
+	self.body = body
+	return body
 }
 
 func (self *MethodDeclaration) Param(type_ string, name string) *ParamDeclaration {
@@ -93,12 +91,7 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	}
 	writer.Write(")")
 	if self.body != nil {
-		writer.Begin()
-		for _, line := range self.body {
-			writer.Write(line)
-			writer.Eol()
-		}
-		writer.End()
+		self.body.WriteCode(writer)
 	} else {
 		writer.Write(";")
 		writer.Eol()

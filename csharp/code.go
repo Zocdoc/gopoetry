@@ -28,10 +28,8 @@ func Str(value string) *WritableCode {
 	return Code("\"" + value + "\"")
 }
 
-func True() *WritableCode {
-	return Code("true")
-}
+var True = Code("true")
 
-func False() *WritableCode {
-	return Code("false")
-}
+var False = Code("false")
+
+var Null = Code("null")
