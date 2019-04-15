@@ -32,6 +32,10 @@ func (self *MethodDeclaration) Public() *MethodDeclaration {
 	return self.addModifier("public")
 }
 
+func (self *MethodDeclaration) Async() *MethodDeclaration {
+	return self.addModifier("async")
+}
+
 func (self *MethodDeclaration) AddAttributes(attributes ...Writable) *MethodDeclaration {
 	self.attributes = append(self.attributes, attributes...)
 	return self
