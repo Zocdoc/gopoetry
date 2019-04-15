@@ -93,7 +93,8 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 
 	writer.Write(declaration)
 	writer.Begin()
-	for _, member := range self.members {
+	for index, member := range self.members {
+		if index > 0 { writer.Eol() }
 		member.WriteCode(writer)
 	}
 	writer.End()
