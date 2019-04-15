@@ -2,12 +2,33 @@ package csharp
 
 import (
 	"fmt"
+	"strings"
 )
 
 type InterfaceDeclaration struct {
 	name       string
+	inherits   []string
+	modifiers  []string
 	attributes []Writable
 	members    []Writable
+}
+
+func (self *InterfaceDeclaration) addModifier(modifier string) *InterfaceDeclaration {
+	self.modifiers = append(self.modifiers, modifier)
+	return self
+}
+
+func (self *InterfaceDeclaration) Private() *InterfaceDeclaration {
+	return self.addModifier("private")
+}
+
+func (self *InterfaceDeclaration) Public() *InterfaceDeclaration {
+	return self.addModifier("public")
+}
+
+func (self *InterfaceDeclaration) Inherits(types ...string) *InterfaceDeclaration {
+	self.inherits = append(self.inherits, types...)
+	return self
 }
 
 func (self *InterfaceDeclaration) AddMembers(members ...Writable) *InterfaceDeclaration {
@@ -46,6 +67,14 @@ func Interface(name string) *InterfaceDeclaration {
 
 func (self *InterfaceDeclaration) WriteCode(writer CodeWriter) {
 	declaration := fmt.Sprintf("interface %s", self.name)
+
+	if len(self.modifiers) > 0 {
+		declaration = strings.Join(self.modifiers, " ") + " " + declaration
+	}
+
+	if len(self.inherits) > 0 {
+		declaration += ": "+strings.Join(self.inherits, ", ")
+	}
 
 	for _, attribute := range self.attributes {
 		attribute.WriteCode(writer)
