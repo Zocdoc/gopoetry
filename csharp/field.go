@@ -29,6 +29,10 @@ func (self *FieldDeclaration) Static() *FieldDeclaration {
 	return self.addModifier("static")
 }
 
+func (self *FieldDeclaration) Readonly() *FieldDeclaration {
+	return self.addModifier("readonly")
+}
+
 func (self *FieldDeclaration) Init(init Writable) *FieldDeclaration {
 	self.init = init
 	return self

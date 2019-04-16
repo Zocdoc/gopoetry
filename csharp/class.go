@@ -55,6 +55,12 @@ func (self *ClassDeclaration) Method(name string) *MethodDeclaration {
 	return method
 }
 
+func (self *ClassDeclaration) Constructor() *MethodDeclaration {
+	method := Method(self.name).Returns("")
+	self.AddMembers(method)
+	return method
+}
+
 func (self *ClassDeclaration) Field(type_ string, name string) *FieldDeclaration {
 	field := Field(type_, name)
 	self.AddMembers(field)
