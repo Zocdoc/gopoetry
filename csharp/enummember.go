@@ -29,8 +29,15 @@ func EnumMember(name string) *EnumMemberDeclaration {
 }
 
 func (self *EnumMemberDeclaration) WriteCode(writer CodeWriter) {
-	for _, attribute := range self.attributes {
-		attribute.WriteCode(writer)
+	if len(self.attributes) > 0 {
+		writer.Write("[")
+		for i, attribute := range self.attributes {
+			if i > 0 {
+				writer.Write(", ")
+			}
+			attribute.WriteCode(writer)
+		}
+		writer.Write("]")
 		writer.Eol()
 	}
 	writer.Write(self.name)

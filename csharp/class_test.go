@@ -41,6 +41,16 @@ class MyClass
 	assertCode(t, Class("MyClass").WithAttribute("MyAttribute"), expected)
 }
 
+func TestClassMultipleAttributes(t *testing.T) {
+	expected := `
+[MyAttribute1, MyAttribute2]
+class MyClass
+{
+}
+`
+	assertCode(t, Class("MyClass").WithAttribute("MyAttribute1").WithAttribute("MyAttribute2"), expected)
+}
+
 func TestClassMethod(t *testing.T) {
 	expected := `
 class MyClass

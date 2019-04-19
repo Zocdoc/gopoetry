@@ -57,8 +57,15 @@ func Property(type_ string, name string) *PropertyDeclaration {
 }
 
 func (self *PropertyDeclaration) WriteCode(writer CodeWriter) {
-	for _, attribute := range self.attributes {
-		attribute.WriteCode(writer)
+	if len(self.attributes) > 0 {
+		writer.Write("[")
+		for i, attribute := range self.attributes {
+			if i > 0 {
+				writer.Write(", ")
+			}
+			attribute.WriteCode(writer)
+		}
+		writer.Write("]")
 		writer.Eol()
 	}
 	declaration := fmt.Sprintf("%s %s", self.type_, self.name)

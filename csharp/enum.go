@@ -74,8 +74,15 @@ func (self *EnumDeclaration) WriteCode(writer CodeWriter) {
 		declaration += fmt.Sprintf(": %s", *self.inherits)
 	}
 
-	for _, attribute := range self.attributes {
-		attribute.WriteCode(writer)
+	if len(self.attributes) > 0 {
+		writer.Write("[")
+		for i, attribute := range self.attributes {
+			if i > 0 {
+				writer.Write(", ")
+			}
+			attribute.WriteCode(writer)
+		}
+		writer.Write("]")
 		writer.Eol()
 	}
 

@@ -68,17 +68,25 @@ func (self *MethodDeclaration) Param(type_ string, name string) *ParamDeclaratio
 
 func Method(name string) *MethodDeclaration {
 	return &MethodDeclaration{
-		name:      name,
-		returns:   "void",
-		modifiers: []string{},
-		params:    []Writable{},
-		body:      nil,
+		name:       name,
+		returns:    "void",
+		modifiers:  []string{},
+		attributes: []Writable{},
+		params:     []Writable{},
+		body:       nil,
 	}
 }
 
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
-	for _, attribute := range self.attributes {
-		attribute.WriteCode(writer)
+	if len(self.attributes) > 0 {
+		writer.Write("[")
+		for i, attribute := range self.attributes {
+			if i > 0 {
+				writer.Write(", ")
+			}
+			attribute.WriteCode(writer)
+		}
+		writer.Write("]")
 		writer.Eol()
 	}
 

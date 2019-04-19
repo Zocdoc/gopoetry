@@ -30,6 +30,10 @@ func (self *ClassDeclaration) Static() *ClassDeclaration {
 	return self.addModifier("static")
 }
 
+func (self *ClassDeclaration) Sealed() *ClassDeclaration {
+	return self.addModifier("sealed")
+}
+
 func (self *ClassDeclaration) Inherits(types ...string) *ClassDeclaration {
 	self.inherits = append(self.inherits, types...)
 	return self
@@ -92,8 +96,15 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 		declaration += ": "+strings.Join(self.inherits, ", ")
 	}
 
-	for _, attribute := range self.attributes {
-		attribute.WriteCode(writer)
+	if len(self.attributes) > 0 {
+		writer.Write("[")
+		for i, attribute := range self.attributes {
+			if i > 0 {
+				writer.Write(", ")
+			}
+			attribute.WriteCode(writer)
+		}
+		writer.Write("]")
 		writer.Eol()
 	}
 

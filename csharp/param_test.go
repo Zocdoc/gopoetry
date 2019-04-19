@@ -9,3 +9,7 @@ func TestParamSimple(t *testing.T) {
 func TestParamDefault(t *testing.T) {
 	assertCode(t, Param("int", "intParam").Default(Null), "int intParam = null")
 }
+
+func TestParamAttributed(t *testing.T) {
+	assertCode(t, Param("int", "intParam").Default(Null).WithAttribute("MyAttribute"), "[MyAttribute] int intParam = null")
+}

@@ -11,7 +11,5 @@ func Attribute(code string) *AttributeDeclaration {
 }
 
 func (self *AttributeDeclaration) WriteCode(writer CodeWriter) {
-	writer.Write("[")
 	self.code.WriteCode(writer)
-	writer.Write("]")
 }
