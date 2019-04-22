@@ -37,6 +37,16 @@ func (self *PropertyDeclaration) Set() *MethodDeclaration {
 	return self.setter
 }
 
+func (self *PropertyDeclaration) WithGet() *PropertyDeclaration {
+	self.Get()
+	return self
+}
+
+func (self *PropertyDeclaration) WithSet() *PropertyDeclaration {
+	self.Set()
+	return self
+}
+
 func (self *PropertyDeclaration) AddAttributes(attributes ...Writable) *PropertyDeclaration {
 	self.attributes = append(self.attributes, attributes...)
 	return self
