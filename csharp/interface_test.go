@@ -37,6 +37,8 @@ interface MyInterface
 }
 `
 	iface := Interface("MyInterface")
-	iface.Property("Result", "MyProperty").Get().Set()
+	property := iface.Property("Result", "MyProperty")
+	property.Get()
+	property.Set()
 	assertCode(t, iface, expected)
 }

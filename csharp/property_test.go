@@ -10,7 +10,10 @@ MyType MyProperty
     set;
 }
 `
-	assertCode(t, Property("MyType", "MyProperty").Get().Set(), expected)
+	property := Property("MyType", "MyProperty")
+	property.Get()
+	property.Set()
+	assertCode(t, property, expected)
 }
 
 func TestPropertyPublic(t *testing.T) {
@@ -21,7 +24,24 @@ public MyType MyProperty
     set;
 }
 `
-	assertCode(t, Property("MyType", "MyProperty").Get().Set().Public(), expected)
+	property := Property("MyType", "MyProperty").Public()
+	property.Get()
+	property.Set()
+	assertCode(t, property, expected)
+}
+
+func TestPropertyPrivateSetter(t *testing.T) {
+	expected := `
+MyType MyProperty
+{
+    get;
+    private set;
+}
+`
+	property := Property("MyType", "MyProperty")
+	property.Get()
+	property.Set().Private()
+	assertCode(t, property, expected)
 }
 
 func TestPropertyAttributed(t *testing.T) {
@@ -33,5 +53,8 @@ public MyType MyProperty
     set;
 }
 `
-	assertCode(t, Property("MyType", "MyProperty").Get().Set().Public().WithAttribute("MyAttribute"), expected)
+	property := Property("MyType", "MyProperty").Public().WithAttribute("MyAttribute")
+	property.Get()
+	property.Set()
+	assertCode(t, property, expected)
 }

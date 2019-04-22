@@ -60,9 +60,9 @@ func (self *ClassDeclaration) Method(name string) *MethodDeclaration {
 }
 
 func (self *ClassDeclaration) Constructor() *MethodDeclaration {
-	method := Method(self.name).Returns("")
-	self.AddMembers(method)
-	return method
+	ctor := Constructor(self.name)
+	self.AddMembers(ctor)
+	return ctor
 }
 
 func (self *ClassDeclaration) Field(type_ string, name string) *FieldDeclaration {

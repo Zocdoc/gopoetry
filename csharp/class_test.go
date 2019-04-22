@@ -77,6 +77,8 @@ class MyClass
 }
 `
 	class := Class("MyClass")
-	class.Property("Result", "MyProperty").Get().Set()
+	property := class.Property("Result", "MyProperty")
+	property.Get()
+	property.Set()
 	assertCode(t, class, expected)
 }

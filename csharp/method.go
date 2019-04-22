@@ -1,7 +1,6 @@
 package csharp
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -10,6 +9,7 @@ type MethodDeclaration struct {
 	returns    string
 	modifiers  []string
 	attributes []Writable
+	hasParams  bool
 	params     []Writable
 	body       Writable
 }
@@ -72,6 +72,43 @@ func Method(name string) *MethodDeclaration {
 		returns:    "void",
 		modifiers:  []string{},
 		attributes: []Writable{},
+		hasParams:  true,
+		params:     []Writable{},
+		body:       nil,
+	}
+}
+
+func Constructor(name string) *MethodDeclaration {
+	return &MethodDeclaration{
+		name:       name,
+		returns:    "void",
+		modifiers:  []string{},
+		attributes: []Writable{},
+		hasParams:  true,
+		params:     []Writable{},
+		body:       nil,
+	}
+}
+
+func Get() *MethodDeclaration {
+	return &MethodDeclaration{
+		name:       "get",
+		returns:    "",
+		modifiers:  []string{},
+		attributes: []Writable{},
+		hasParams:  false,
+		params:     []Writable{},
+		body:       nil,
+	}
+}
+
+func Set() *MethodDeclaration {
+	return &MethodDeclaration{
+		name:       "set",
+		returns:    "",
+		modifiers:  []string{},
+		attributes: []Writable{},
+		hasParams:  false,
 		params:     []Writable{},
 		body:       nil,
 	}
@@ -93,15 +130,23 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	if len(self.modifiers) > 0 {
 		writer.Write(strings.Join(self.modifiers, " ") + " ")
 	}
-	writer.Write(fmt.Sprintf("%s %s", self.returns, self.name))
-	writer.Write("(")
-	for i, param := range self.params {
-		param.WriteCode(writer)
-		if i < len(self.params)-1 {
-			writer.Write(", ")
-		}
+	if self.returns != "" {
+		writer.Write(self.returns)
+		writer.Write(" ")
 	}
-	writer.Write(")")
+	writer.Write(self.name)
+
+	if self.hasParams {
+		writer.Write("(")
+		for i, param := range self.params {
+			param.WriteCode(writer)
+			if i < len(self.params)-1 {
+				writer.Write(", ")
+			}
+		}
+		writer.Write(")")
+	}
+
 	if self.body != nil {
 		self.body.WriteCode(writer)
 	} else {

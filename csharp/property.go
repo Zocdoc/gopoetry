@@ -10,8 +10,8 @@ type PropertyDeclaration struct {
 	type_      string
 	modifiers  []string
 	attributes []Writable
-	hasGet     bool
-	hasSet     bool
+	getter     *MethodDeclaration
+	setter     *MethodDeclaration
 }
 
 func (self *PropertyDeclaration) addModifier(modifier string) *PropertyDeclaration {
@@ -27,14 +27,14 @@ func (self *PropertyDeclaration) Public() *PropertyDeclaration {
 	return self.addModifier("public")
 }
 
-func (self *PropertyDeclaration) Get() *PropertyDeclaration {
-	self.hasGet = true
-	return self
+func (self *PropertyDeclaration) Get() *MethodDeclaration {
+	self.getter = Get()
+	return self.getter
 }
 
-func (self *PropertyDeclaration) Set() *PropertyDeclaration {
-	self.hasSet = true
-	return self
+func (self *PropertyDeclaration) Set() *MethodDeclaration {
+	self.setter = Set()
+	return self.setter
 }
 
 func (self *PropertyDeclaration) AddAttributes(attributes ...Writable) *PropertyDeclaration {
@@ -51,8 +51,8 @@ func Property(type_ string, name string) *PropertyDeclaration {
 		name:      name,
 		type_:     type_,
 		modifiers: []string{},
-		hasGet:    false,
-		hasSet:    false,
+		getter:    nil,
+		setter:    nil,
 	}
 }
 
@@ -74,13 +74,11 @@ func (self *PropertyDeclaration) WriteCode(writer CodeWriter) {
 	}
 	writer.Write(declaration)
 	writer.Begin()
-	if self.hasGet {
-		writer.Write("get;")
-		writer.Eol()
+	if self.getter != nil {
+		self.getter.WriteCode(writer)
 	}
-	if self.hasSet {
-		writer.Write("set;")
-		writer.Eol()
+	if self.setter != nil {
+		self.setter.WriteCode(writer)
 	}
 	writer.End()
 }
