@@ -37,12 +37,17 @@ func Namespace(namespace string) *NamespaceDeclaration {
 func (self *NamespaceDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write("namespace " + self.namespace)
 	writer.Begin()
-	for _, import_ := range self.usings {
-		import_.WriteCode(writer)
+	if len(self.usings) > 0 {
+		for _, using := range self.usings {
+			using.WriteCode(writer)
+			writer.Eol()
+		}
 		writer.Eol()
 	}
-	for _, class := range self.declarations {
-		writer.Eol()
+	for index, class := range self.declarations {
+		if index > 0 {
+			writer.Eol()
+		}
 		class.WriteCode(writer)
 	}
 	writer.End()
