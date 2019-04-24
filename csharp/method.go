@@ -81,7 +81,7 @@ func Method(name string) *MethodDeclaration {
 func Constructor(name string) *MethodDeclaration {
 	return &MethodDeclaration{
 		name:       name,
-		returns:    "void",
+		returns:    "",
 		modifiers:  []string{},
 		attributes: []Writable{},
 		hasParams:  true,
