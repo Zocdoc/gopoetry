@@ -42,8 +42,8 @@ func (self *CaseClassDeclaration) WithAttribute(code string) *CaseClassDeclarati
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *CaseClassDeclaration) Field(type_ string, name string) *FieldDeclaration {
-	field := Field(type_, name)
+func (self *CaseClassDeclaration) Param(type_ string, name string) *ValDeclaration {
+	field := Val(type_, name)
 	self.fields = append(self.fields, field)
 	return field
 }

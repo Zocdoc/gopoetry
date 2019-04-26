@@ -61,14 +61,14 @@ func (self *MethodDeclaration) Body(lines ...string) *BlockDeclaration {
 	return body
 }
 
-func (self *MethodDeclaration) Param(type_ string, name string) *FieldDeclaration {
-	param := Field(type_, name)
+func (self *MethodDeclaration) Param(type_ string, name string) *ValDeclaration {
+	param := Val(type_, name)
 	self.AddParams(param)
 	return param
 }
 
-func (self *MethodDeclaration) ImplicitParam(type_ string, name string) *FieldDeclaration {
-	param := Field(type_, name)
+func (self *MethodDeclaration) ImplicitParam(type_ string, name string) *ValDeclaration {
+	param := Val(type_, name)
 	self.AddImplicitParams(param)
 	return param
 }
@@ -123,7 +123,7 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(")")
 	}
 
-		writer.Write(": ")
+	writer.Write(": ")
 	writer.Write(self.returns)
 
 	if self.body != nil {

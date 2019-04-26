@@ -4,28 +4,28 @@ import (
 	"fmt"
 )
 
-type FieldDeclaration struct {
+type ValDeclaration struct {
 	name       string
 	type_      string
 	attributes []Writable
 	init       Writable
 }
 
-func (self *FieldDeclaration) Init(init Writable) *FieldDeclaration {
+func (self *ValDeclaration) Init(init Writable) *ValDeclaration {
 	self.init = init
 	return self
 }
 
-func (self *FieldDeclaration) AddAttributes(attributes ...Writable) *FieldDeclaration {
+func (self *ValDeclaration) AddAttributes(attributes ...Writable) *ValDeclaration {
 	self.attributes = append(self.attributes, attributes...)
 	return self
 }
 
-func (self *FieldDeclaration) WithAttribute(code string) *FieldDeclaration {
+func (self *ValDeclaration) WithAttribute(code string) *ValDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *FieldDeclaration) WriteCode(writer CodeWriter) {
+func (self *ValDeclaration) WriteCode(writer CodeWriter) {
 	if len(self.attributes) > 0 {
 		for i, attribute := range self.attributes {
 			if i > 0 {
@@ -45,8 +45,8 @@ func (self *FieldDeclaration) WriteCode(writer CodeWriter) {
 	}
 }
 
-func Field(type_ string, name string) *FieldDeclaration {
-	return &FieldDeclaration{
+func Val(type_ string, name string) *ValDeclaration {
+	return &ValDeclaration{
 		name:       name,
 		type_:      type_,
 		attributes: []Writable{},
