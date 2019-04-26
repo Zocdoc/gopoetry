@@ -45,7 +45,7 @@ func (self *ValDeclaration) WriteCode(writer CodeWriter) {
 	}
 }
 
-func Val(type_ string, name string) *ValDeclaration {
+func Val(name string, type_ string) *ValDeclaration {
 	return &ValDeclaration{
 		name:       name,
 		type_:      type_,

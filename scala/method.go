@@ -61,14 +61,14 @@ func (self *MethodDeclaration) Body(lines ...string) *BlockDeclaration {
 	return body
 }
 
-func (self *MethodDeclaration) Param(type_ string, name string) *ValDeclaration {
-	param := Val(type_, name)
+func (self *MethodDeclaration) Param(name string, type_ string) *ValDeclaration {
+	param := Val(name, type_)
 	self.AddParams(param)
 	return param
 }
 
-func (self *MethodDeclaration) ImplicitParam(type_ string, name string) *ValDeclaration {
-	param := Val(type_, name)
+func (self *MethodDeclaration) ImplicitParam(name string, type_ string) *ValDeclaration {
+	param := Val(name, type_)
 	self.AddImplicitParams(param)
 	return param
 }

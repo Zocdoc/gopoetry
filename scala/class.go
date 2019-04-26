@@ -46,14 +46,14 @@ func (self *ClassDeclaration) WithAttribute(code string) *ClassDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *ClassDeclaration) Param(type_ string, name string) *ValDeclaration {
-	param := Val(type_, name)
+func (self *ClassDeclaration) Param(name string, type_ string) *ValDeclaration {
+	param := Val(name, type_)
 	self.params = append(self.params, param)
 	return param
 }
 
-func (self *ClassDeclaration) ImplicitParam(type_ string, name string) *ValDeclaration {
-	param := Val(type_, name)
+func (self *ClassDeclaration) ImplicitParam(name string, type_ string) *ValDeclaration {
+	param := Val(name, type_)
 	self.implicitParams = append(self.implicitParams, param)
 	return param
 }
@@ -64,8 +64,8 @@ func (self *ClassDeclaration) Def(name string) *MethodDeclaration {
 	return method
 }
 
-func (self *ClassDeclaration) Val(type_ string, name string) *ValDeclaration {
-	field := Val(type_, name)
+func (self *ClassDeclaration) Val(name string, type_ string) *ValDeclaration {
+	field := Val(name, type_)
 	self.AddDefinitions(field)
 	return field
 }
