@@ -14,7 +14,7 @@ type CodeWriter interface {
 }
 
 func prefix(indentation int) string {
-	tab := strings.Repeat(" ", 4)
+	tab := strings.Repeat(" ", 2)
 	return strings.Repeat(tab, indentation)
 }
 
