@@ -5,6 +5,8 @@ import (
 )
 
 type CodeWriter interface {
+	Indent()
+	Unindent()
 	Begin()
 	End()
 	Eol()
@@ -12,7 +14,7 @@ type CodeWriter interface {
 }
 
 func prefix(indentation int) string {
-	tab := strings.Repeat(" ", 2)
+	tab := strings.Repeat(" ", 4)
 	return strings.Repeat(tab, indentation)
 }
 
@@ -20,6 +22,14 @@ type codeWriter struct {
 	code        strings.Builder
 	indentation int
 	newLine     bool
+}
+
+func (self *codeWriter) Indent() {
+	self.indentation += 1
+}
+
+func (self *codeWriter) Unindent() {
+	self.indentation -= 1
 }
 
 func (self *codeWriter) Begin() {
