@@ -114,9 +114,9 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 
 	if len(self.implicitParams) > 0 {
 		writer.Write("(implicit ")
-		for i, param := range self.params {
+		for i, param := range self.implicitParams {
 			param.WriteCode(writer)
-			if i < len(self.params)-1 {
+			if i < len(self.implicitParams)-1 {
 				writer.Write(", ")
 			}
 		}
