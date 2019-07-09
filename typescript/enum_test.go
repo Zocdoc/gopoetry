@@ -19,7 +19,7 @@ export enum MyEnum
 {
 }
 `
-	assertCode(t, Enum("MyEnum").Exported(), expected)
+	assertCode(t, Enum("MyEnum").Export(), expected)
 }
 
 func TestEnumWithMembers(t *testing.T) {
@@ -45,7 +45,7 @@ enum MyEnum
 }
 `
 	enum := Enum("MyEnum")
-	enum.Member("Member1").Value("'foo'")
+	enum.Member("Member1").Value(Str("foo"))
 	enum.Member("Member2")
 	assertCode(t, enum, expected)
 }

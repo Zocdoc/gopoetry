@@ -23,7 +23,7 @@ func (enum *EnumDeclaration) Const() *EnumDeclaration {
 }
 
 // Exported makes the enum a exported
-func (enum *EnumDeclaration) Exported() *EnumDeclaration {
+func (enum *EnumDeclaration) Export() *EnumDeclaration {
 	return enum.addModifier("export")
 }
 

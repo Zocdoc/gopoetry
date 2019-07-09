@@ -2,9 +2,10 @@ package typescript
 
 // NamespaceDeclaration declares a namespace
 type NamespaceDeclaration struct {
-	namespace    string
-	imports      []Writable
-	declarations []Writable
+	namespace     string
+	imports       []Writable
+	declarations  []Writable
+	referencePath *string
 }
 
 // AddImports adds imports to the namespace
@@ -31,6 +32,12 @@ func (ns *NamespaceDeclaration) AddDeclarations(declarations ...Writable) *Names
 	return ns
 }
 
+// WithReference adds a file reference for namespace compilation
+func (ns *NamespaceDeclaration) WithReference(filePath string) *NamespaceDeclaration {
+	ns.referencePath = &filePath
+	return ns
+}
+
 // Namespace creates a NamespaceDeclaration
 func Namespace(namespace string) *NamespaceDeclaration {
 	return &NamespaceDeclaration{
@@ -42,8 +49,6 @@ func Namespace(namespace string) *NamespaceDeclaration {
 
 // WriteCode writes the namespace to the writer
 func (ns *NamespaceDeclaration) WriteCode(writer CodeWriter) {
-	writer.Write("namespace " + ns.namespace)
-	writer.Begin()
 	if len(ns.imports) > 0 {
 		for _, using := range ns.imports {
 			using.WriteCode(writer)
@@ -51,6 +56,17 @@ func (ns *NamespaceDeclaration) WriteCode(writer CodeWriter) {
 		}
 		writer.Eol()
 	}
+
+	if ns.referencePath != nil {
+		writer.Write("/// <reference path=\"")
+		writer.Write(*ns.referencePath)
+		writer.Write("\" />")
+		writer.Eol()
+	}
+
+	writer.Write("namespace " + ns.namespace)
+	writer.Begin()
+
 	for index, class := range ns.declarations {
 		if index > 0 {
 			writer.Eol()

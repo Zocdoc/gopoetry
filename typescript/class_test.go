@@ -84,7 +84,7 @@ export class MyClass
     }
 }
 `
-	class := Class("MyClass").Exported()
+	class := Class("MyClass").Export()
 	class.Constructor().
 		Param("string", "name").Default(Str("bar")).Private()
 	assertCode(t, class, expected)
@@ -100,7 +100,7 @@ export class MyClass
     }
 }
 `
-	class := Class("MyClass").Exported()
+	class := Class("MyClass").Export()
 	ctor := class.Constructor()
 	ctor.Param("string", "name").Default(Str("bar")).Private()
 

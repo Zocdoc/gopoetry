@@ -3,12 +3,12 @@ package typescript
 // EnumMemberDeclaration declares an enum member
 type EnumMemberDeclaration struct {
 	name  string
-	value *string
+	value *WritableCode
 }
 
 // Value sets the enums value
-func (enum *EnumMemberDeclaration) Value(value string) *EnumMemberDeclaration {
-	enum.value = &value
+func (enum *EnumMemberDeclaration) Value(value *WritableCode) *EnumMemberDeclaration {
+	enum.value = value
 	return enum
 }
 
@@ -25,6 +25,6 @@ func (enum *EnumMemberDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write(enum.name)
 	if enum.value != nil {
 		writer.Write(" = ")
-		writer.Write(*enum.value)
+		writer.Write(enum.value.code)
 	}
 }

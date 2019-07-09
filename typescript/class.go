@@ -25,7 +25,7 @@ func (cls *ClassDeclaration) Private() *ClassDeclaration {
 }
 
 // Exported marks a class as exported
-func (cls *ClassDeclaration) Exported() *ClassDeclaration {
+func (cls *ClassDeclaration) Export() *ClassDeclaration {
 	return cls.addModifier("export")
 }
 
@@ -62,7 +62,7 @@ func (cls *ClassDeclaration) Method(name string) *MethodDeclaration {
 // Constructor starts building a constructor on the class. returns MethodDeclaration
 func (cls *ClassDeclaration) Constructor() *MethodDeclaration {
 	ctor := Constructor()
-	cls.AddMembers(ctor)
+    cls.AddMembers(ctor)
 	return ctor
 }
 

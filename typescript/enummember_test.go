@@ -9,5 +9,5 @@ func TestEnumMemberBasic(t *testing.T) {
 
 func TestEnumMemberInit(t *testing.T) {
 	expected := `MyMember = 1`
-	assertCode(t, EnumMember("MyMember").Value("1"), expected)
+	assertCode(t, EnumMember("MyMember").Value(Int(1)), expected)
 }

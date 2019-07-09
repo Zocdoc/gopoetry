@@ -12,19 +12,19 @@ namespace Bla
 }
 
 func TestNamespaceUsingsAndClasses(t *testing.T) {
-	expected := `
+	expected := `import { foo, bar } from 'bar-package';
+import * as buzz from 'buzz-package';
+
+/// <reference path="foo.ts" />
 namespace Bla
 {
-    import { foo, bar } from 'bar-package';
-    import * as buzz from 'buzz-package';
-    
     class MyClass
     {
     }
 }
 `
 	namespace :=
-		Namespace("Bla").
+		Namespace("Bla").WithReference("foo.ts").
 			NamedImport("bar-package", "foo", "bar").
 			DefaultImport("buzz-package", "buzz").
 			AddDeclarations(Class("MyClass"))

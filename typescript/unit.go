@@ -1,39 +1,46 @@
 package typescript
 
 type UnitDeclaration struct {
-	imports    []Writable
-	namespaces []Writable
+	imports      []Writable
+	namespaces   []Writable
+	declarations []Writable
 }
 
-func (self *UnitDeclaration) AddImports(imports ...Writable) *UnitDeclaration {
-	self.imports = append(self.imports, imports...)
-	return self
+func (unit *UnitDeclaration) AddImports(imports ...Writable) *UnitDeclaration {
+	unit.imports = append(unit.imports, imports...)
+	return unit
 }
 
-func (self *UnitDeclaration) NamedImport(module string, params ...string) *UnitDeclaration {
-	self.AddImports(NamedImport(module, params...))
-	return self
+func (unit *UnitDeclaration) NamedImport(module string, params ...string) *UnitDeclaration {
+	unit.AddImports(NamedImport(module, params...))
+	return unit
 }
 
-func (self *UnitDeclaration) DefaultImport(module string, as string) *UnitDeclaration {
-	self.AddImports(DefaultImport(module, as))
-	return self
+func (unit *UnitDeclaration) DefaultImport(module string, as string) *UnitDeclaration {
+	unit.AddImports(DefaultImport(module, as))
+	return unit
 }
 
-func (self *UnitDeclaration) AddNamespaces(namespaces ...Writable) *UnitDeclaration {
-	self.namespaces = append(self.namespaces, namespaces...)
-	return self
+func (unit *UnitDeclaration) AddNamespaces(namespaces ...Writable) *UnitDeclaration {
+	unit.namespaces = append(unit.namespaces, namespaces...)
+	return unit
 }
 
-func (self *UnitDeclaration) Namespace(namespace string) *NamespaceDeclaration {
+func (unit *UnitDeclaration) Namespace(namespace string) *NamespaceDeclaration {
 	namespace_ := Namespace(namespace)
-	self.AddNamespaces(namespace_)
+	unit.AddNamespaces(namespace_)
 	return namespace_
 }
 
-func (self *UnitDeclaration) Code() string {
+// AddDeclarations adds declarations to the unit
+func (unit *UnitDeclaration) AddDeclarations(declarations ...Writable) *UnitDeclaration {
+	unit.declarations = append(unit.declarations, declarations...)
+	return unit
+}
+
+func (unit *UnitDeclaration) Code() string {
 	writer := CreateWriter()
-	self.WriteCode(&writer)
+	unit.WriteCode(&writer)
 	return writer.Code()
 }
 
@@ -44,13 +51,18 @@ func Unit() *UnitDeclaration {
 	}
 }
 
-func (self *UnitDeclaration) WriteCode(writer CodeWriter) {
-	for _, import_ := range self.imports {
+func (unit *UnitDeclaration) WriteCode(writer CodeWriter) {
+	for _, import_ := range unit.imports {
 		import_.WriteCode(writer)
 		writer.Eol()
 	}
-	for _, namespace := range self.namespaces {
+	for _, namespace := range unit.namespaces {
 		writer.Eol()
 		namespace.WriteCode(writer)
+	}
+
+	for _, class := range unit.declarations {
+		writer.Eol()
+		class.WriteCode(writer)
 	}
 }
