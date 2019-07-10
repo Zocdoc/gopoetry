@@ -1,4 +1,4 @@
-module github.com/vsapronov/poetrycs
+module github.com/zocdoc/gopoetry
 
 go 1.12
 
