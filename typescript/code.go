@@ -33,3 +33,5 @@ var True = Code("true")
 var False = Code("false")
 
 var Null = Code("null")
+
+var Undefined = Code("undefined")
