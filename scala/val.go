@@ -31,7 +31,6 @@ func (self *ValDeclaration) WriteCode(writer CodeWriter) {
 			if i > 0 {
 				writer.Write(" ")
 			}
-			writer.Write("@")
 			attribute.WriteCode(writer)
 		}
 		writer.Write(" ")
