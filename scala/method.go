@@ -6,16 +6,17 @@ import (
 
 type MethodDeclaration struct {
 	name           string
-	returns        string
+	returns        *string
 	modifiers      []string
 	attributes     []Writable
 	params         []Writable
+	noParams       bool
 	implicitParams []Writable
-	body           Writable
+	definition     Writable
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
-	self.returns = returnType
+	self.returns = &returnType
 	return self
 }
 
@@ -55,10 +56,21 @@ func (self *MethodDeclaration) AddImplicitParams(params ...Writable) *MethodDecl
 	return self
 }
 
+func (self *MethodDeclaration) NoParams() *MethodDeclaration {
+	self.noParams = true
+	return self
+}
+
 func (self *MethodDeclaration) Body(lines ...string) *BlockDeclaration {
 	body := Block(lines...)
-	self.body = body
+	self.definition = body
 	return body
+}
+
+func (self *MethodDeclaration) As(lines ...string) *StatementsDeclaration {
+	statements := Statements(lines...)
+	self.definition = statements
+	return statements
 }
 
 func (self *MethodDeclaration) Param(name string, type_ string) *ValDeclaration {
@@ -76,12 +88,12 @@ func (self *MethodDeclaration) ImplicitParam(name string, type_ string) *ValDecl
 func Method(name string) *MethodDeclaration {
 	return &MethodDeclaration{
 		name:           name,
-		returns:        "Unit",
+		returns:        nil,
 		modifiers:      []string{},
 		attributes:     []Writable{},
 		params:         []Writable{},
 		implicitParams: []Writable{},
-		body:           nil,
+		definition:     nil,
 	}
 }
 
@@ -103,31 +115,36 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	}
 	writer.Write("def "+self.name)
 
-	writer.Write("(")
-	for i, param := range self.params {
-		param.WriteCode(writer)
-		if i < len(self.params)-1 {
-			writer.Write(", ")
-		}
-	}
-	writer.Write(")")
-
-	if len(self.implicitParams) > 0 {
-		writer.Write("(implicit ")
-		for i, param := range self.implicitParams {
+	if !self.noParams {
+		writer.Write("(")
+		for i, param := range self.params {
 			param.WriteCode(writer)
-			if i < len(self.implicitParams)-1 {
+			if i < len(self.params)-1 {
 				writer.Write(", ")
 			}
 		}
 		writer.Write(")")
+
+		if len(self.implicitParams) > 0 {
+			writer.Write("(implicit ")
+			for i, param := range self.implicitParams {
+				param.WriteCode(writer)
+				if i < len(self.implicitParams)-1 {
+					writer.Write(", ")
+				}
+			}
+			writer.Write(")")
+		}
 	}
 
-	writer.Write(": ")
-	writer.Write(self.returns)
+	if self.returns != nil {
+		writer.Write(": ")
+		writer.Write(*self.returns)
+	}
 
-	if self.body != nil {
-		self.body.WriteCode(writer)
+	if self.definition != nil {
+		writer.Write(" = ")
+		self.definition.WriteCode(writer)
 	} else {
 		writer.Eol()
 	}
