@@ -125,6 +125,7 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(" extends "+strings.Join(self.inherits, ", "))
 	}
 
+	writer.Write(" ")
 	writer.Begin()
 	for index, member := range self.members {
 		if index > 0 { writer.Eol() }

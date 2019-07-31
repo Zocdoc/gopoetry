@@ -19,7 +19,7 @@ func prefix(indentation int) string {
 }
 
 type codeWriter struct {
-	code        strings.Builder
+	builder     strings.Builder
 	indentation int
 	newLine     bool
 }
@@ -33,7 +33,7 @@ func (self *codeWriter) Unindent() {
 }
 
 func (self *codeWriter) Begin() {
-	self.Write(" {")
+	self.Write("{")
 	self.Eol()
 	self.indentation += 1
 }
@@ -51,16 +51,16 @@ func (self *codeWriter) Eol() {
 
 func (self *codeWriter) Write(code string) {
 	if self.newLine {
-		self.code.WriteString(prefix(self.indentation))
+		self.builder.WriteString(prefix(self.indentation))
 		self.newLine = false
 	}
-	self.code.WriteString(code)
+	self.builder.WriteString(code)
 }
 
 func (self *codeWriter) Code() string {
-	return self.code.String()
+	return self.builder.String()
 }
 
 func CreateWriter() codeWriter {
-	return codeWriter{code: strings.Builder{}, indentation: 0, newLine: true}
+	return codeWriter{builder: strings.Builder{}, indentation: 0, newLine: true}
 }
