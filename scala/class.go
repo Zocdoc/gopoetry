@@ -8,9 +8,10 @@ type ClassDeclaration struct {
 	name           string
 	params         []Writable
 	implicitParams []Writable
-	inherits       []string
+	extends        []string
 	modifiers      []string
 	attributes     []Writable
+	ctorAttributes []Writable
 	members        []Writable
 }
 
@@ -27,8 +28,8 @@ func (self *ClassDeclaration) Public() *ClassDeclaration {
 	return self.addModifier("public")
 }
 
-func (self *ClassDeclaration) Inherits(types ...string) *ClassDeclaration {
-	self.inherits = append(self.inherits, types...)
+func (self *ClassDeclaration) Extends(types ...string) *ClassDeclaration {
+	self.extends = append(self.extends, types...)
 	return self
 }
 
@@ -44,6 +45,15 @@ func (self *ClassDeclaration) AddAttributes(attributes ...Writable) *ClassDeclar
 
 func (self *ClassDeclaration) WithAttribute(code string) *ClassDeclaration {
 	return self.AddAttributes(Attribute(code))
+}
+
+func (self *ClassDeclaration) AddCtorAttributes(attributes ...Writable) *ClassDeclaration {
+	self.ctorAttributes = append(self.ctorAttributes, attributes...)
+	return self
+}
+
+func (self *ClassDeclaration) WithCtorAttribute(code string) *ClassDeclaration {
+	return self.AddCtorAttributes(Attribute(code))
 }
 
 func (self *ClassDeclaration) Param(name string, type_ string) *ValDeclaration {
@@ -72,25 +82,24 @@ func (self *ClassDeclaration) Val(name string, type_ string) *ValDeclaration {
 
 func Class(name string) *ClassDeclaration {
 	return &ClassDeclaration{
-		name:       name,
-		params:     []Writable{},
-		modifiers:  []string{},
-		attributes: []Writable{},
-		members:    []Writable{},
+		name:           name,
+		params:         []Writable{},
+		modifiers:      []string{},
+		attributes:     []Writable{},
+		ctorAttributes: []Writable{},
+		members:        []Writable{},
 	}
 }
 
 func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	if len(self.attributes) > 0 {
-		if len(self.attributes) > 0 {
-			for i, attribute := range self.attributes {
-				if i > 0 {
-					writer.Write(" ")
-				}
-				attribute.WriteCode(writer)
+		for i, attribute := range self.attributes {
+			if i > 0 {
+				writer.Write(" ")
 			}
-			writer.Eol()
+			attribute.WriteCode(writer)
 		}
+		writer.Eol()
 	}
 
 	if len(self.modifiers) > 0 {
@@ -99,7 +108,17 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 
 	writer.Write("class "+self.name)
 
-	if len(self.params) > 0 {
+	if (len(self.params) > 0 || len(self.ctorAttributes) > 0) {
+		if len(self.ctorAttributes) > 0 {
+			writer.Write(" ")
+			for i, attribute := range self.ctorAttributes {
+				if i > 0 {
+					writer.Write(" ")
+				}
+				attribute.WriteCode(writer)
+			}
+		}
+
 		writer.Write("(")
 		for i, param := range self.params {
 			param.WriteCode(writer)
@@ -121,8 +140,8 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(")")
 	}
 
-	if len(self.inherits) > 0 {
-		writer.Write(" extends "+strings.Join(self.inherits, ", "))
+	if len(self.extends) > 0 {
+		writer.Write(" extends "+strings.Join(self.extends, ", "))
 	}
 
 	writer.Write(" ")
