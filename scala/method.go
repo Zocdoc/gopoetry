@@ -40,7 +40,7 @@ func (self *MethodDeclaration) AddAttributes(attributes ...Writable) *MethodDecl
 	return self
 }
 
-func (self *MethodDeclaration) WithAttribute(code string) *MethodDeclaration {
+func (self *MethodDeclaration) Attribute(code string) *MethodDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 

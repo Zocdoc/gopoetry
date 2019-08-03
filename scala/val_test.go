@@ -7,5 +7,5 @@ func TestValSimple(t *testing.T) {
 }
 
 func TestValWithAttribute(t *testing.T) {
-	assertCode(t, Val("prop", "String").WithAttribute("JsonProperty"), `@JsonProperty prop: String`)
+	assertCode(t, Val("prop", "String").Attribute("JsonProperty"), `@JsonProperty prop: String`)
 }
