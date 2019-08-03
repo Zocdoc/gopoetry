@@ -1,8 +1,6 @@
 package scala
 
-import (
-	"strings"
-)
+import "strings"
 
 type MethodDeclaration struct {
 	name           string
@@ -61,14 +59,8 @@ func (self *MethodDeclaration) NoParams() *MethodDeclaration {
 	return self
 }
 
-func (self *MethodDeclaration) Body(lines ...string) *BlockDeclaration {
-	body := Block(lines...)
-	self.definition = body
-	return body
-}
-
-func (self *MethodDeclaration) As(lines ...string) *StatementsDeclaration {
-	statements := Statements(lines...)
+func (self *MethodDeclaration) As() *StatementsDeclaration {
+	statements := Statements()
 	self.definition = statements
 	return statements
 }
@@ -85,6 +77,10 @@ func (self *MethodDeclaration) ImplicitParam(name string, type_ string) *ValDecl
 	return param
 }
 
+func (self *MethodDeclaration) IsConstructor() bool {
+	return self.name == ""
+}
+
 func Method(name string) *MethodDeclaration {
 	return &MethodDeclaration{
 		name:           name,
@@ -99,21 +95,26 @@ func Method(name string) *MethodDeclaration {
 
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	if len(self.attributes) > 0 {
-		if len(self.attributes) > 0 {
-			for i, attribute := range self.attributes {
-				if i > 0 {
-					writer.Write(" ")
-				}
-				attribute.WriteCode(writer)
+		if self.IsConstructor() {
+			writer.Write(" ")
+		}
+		for i, attribute := range self.attributes {
+			if i > 0 {
+				writer.Write(" ")
 			}
+			attribute.WriteCode(writer)
+		}
+		if !self.IsConstructor() {
 			writer.Eol()
 		}
 	}
 
-	if len(self.modifiers) > 0 {
-		writer.Write(strings.Join(self.modifiers, " ") + " ")
+	if !self.IsConstructor() {
+		if len(self.modifiers) > 0 {
+			writer.Write(strings.Join(self.modifiers, " ") + " ")
+		}
+		writer.Write("def "+self.name)
 	}
-	writer.Write("def "+self.name)
 
 	if !self.noParams {
 		writer.Write("(")
@@ -124,17 +125,17 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 			}
 		}
 		writer.Write(")")
+	}
 
-		if len(self.implicitParams) > 0 {
-			writer.Write("(implicit ")
-			for i, param := range self.implicitParams {
-				param.WriteCode(writer)
-				if i < len(self.implicitParams)-1 {
-					writer.Write(", ")
-				}
+	if len(self.implicitParams) > 0 {
+		writer.Write("(implicit ")
+		for i, param := range self.implicitParams {
+			param.WriteCode(writer)
+			if i < len(self.implicitParams)-1 {
+				writer.Write(", ")
 			}
-			writer.Write(")")
 		}
+		writer.Write(")")
 	}
 
 	if self.returns != nil {
@@ -146,6 +147,8 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(" = ")
 		self.definition.WriteCode(writer)
 	} else {
-		writer.Eol()
+		if !self.IsConstructor() {
+			writer.Eol()
+		}
 	}
 }

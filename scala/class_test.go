@@ -46,6 +46,26 @@ class MyClass {
 	assertCode(t, class, expected)
 }
 
+func TestClassWithCtorParam(t *testing.T) {
+	expected := `
+class MyClass(param1: String) {
+}
+`
+	class := Class("MyClass")
+	class.Ctor().Param("param1", "String")
+	assertCode(t, class, expected)
+}
+
+func TestClassWithCtorImplicitParam(t *testing.T) {
+	expected := `
+class MyClass(implicit param1: String) {
+}
+`
+	class := Class("MyClass")
+	class.Ctor().NoParams().ImplicitParam("param1", "String")
+	assertCode(t, class, expected)
+}
+
 func TestClassWithCtorAttribute(t *testing.T) {
 	expected := `
 class MyClass @MyAttribute()() {
@@ -53,7 +73,8 @@ class MyClass @MyAttribute()() {
   }
 }
 `
-	class := Class("MyClass").WithCtorAttribute("MyAttribute()")
+	class := Class("MyClass")
+	class.Ctor().WithAttribute("MyAttribute()")
 	class.Def("MyMethod").Returns("Unit").As().Block()
 	assertCode(t, class, expected)
 }

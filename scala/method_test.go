@@ -20,6 +20,6 @@ def someMethod() = {
 }
 `
 	method := Method("someMethod")
-	method.Body()
+	method.As().Block()
 	assertCode(t, method, expected)
 }
