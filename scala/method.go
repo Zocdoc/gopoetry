@@ -59,7 +59,7 @@ func (self *MethodDeclaration) NoParams() *MethodDeclaration {
 	return self
 }
 
-func (self *MethodDeclaration) As() *StatementsDeclaration {
+func (self *MethodDeclaration) Define() *StatementsDeclaration {
 	statements := Statements()
 	self.definition = statements
 	return statements

@@ -29,7 +29,7 @@ class MyClass {
 }
 `
 	class := Class("MyClass")
-	class.Def("MyMethod").Returns("Unit").As().Block()
+	class.Def("MyMethod").Returns("Unit").Define().Block()
 	assertCode(t, class, expected)
 }
 
@@ -42,7 +42,7 @@ class MyClass {
 }
 `
 	class := Class("MyClass").Attribute("MyAttribute")
-	class.Def("MyMethod").Returns("Unit").As().Block()
+	class.Def("MyMethod").Returns("Unit").Define().Block()
 	assertCode(t, class, expected)
 }
 
@@ -75,6 +75,6 @@ class MyClass @MyAttribute()() {
 `
 	class := Class("MyClass")
 	class.Ctor().Attribute("MyAttribute()")
-	class.Def("MyMethod").Returns("Unit").As().Block()
+	class.Def("MyMethod").Returns("Unit").Define().Block()
 	assertCode(t, class, expected)
 }
