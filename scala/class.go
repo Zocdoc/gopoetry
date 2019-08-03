@@ -41,7 +41,7 @@ func (self *ClassDeclaration) AddAttributes(attributes ...Writable) *ClassDeclar
 	return self
 }
 
-func (self *ClassDeclaration) WithAttribute(code string) *ClassDeclaration {
+func (self *ClassDeclaration) Attribute(code string) *ClassDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 

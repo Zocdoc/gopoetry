@@ -21,7 +21,7 @@ func (self *ValDeclaration) AddAttributes(attributes ...Writable) *ValDeclaratio
 	return self
 }
 
-func (self *ValDeclaration) WithAttribute(code string) *ValDeclaration {
+func (self *ValDeclaration) Attribute(code string) *ValDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
