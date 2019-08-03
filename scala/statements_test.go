@@ -7,7 +7,7 @@ func TestStatementsSimple(t *testing.T) {
 line1()
 line2()
 `
-	assertCode(t, Statements("line1()", "line2()"), expected)
+	assertCode(t, Statements().Lines("line1()", "line2()"), expected)
 }
 
 func TestStatementsWithBlock(t *testing.T) {
@@ -19,9 +19,9 @@ line2 {
 }
 `
 	statements := Statements()
-	statements.AppendLine("line1()")
+	statements.Line("line1()")
 	statements.Append("line2 ")
-	statements.Block(
+	statements.Block().Lines(
 		"nextedLine1()",
 		"nextedLine2()",
 	)

@@ -6,13 +6,11 @@ import (
 
 type ClassDeclaration struct {
 	name           string
-	params         []Writable
-	implicitParams []Writable
 	extends        []string
 	modifiers      []string
 	attributes     []Writable
-	ctorAttributes []Writable
 	members        []Writable
+	ctor           Writable
 }
 
 func (self *ClassDeclaration) addModifier(modifier string) *ClassDeclaration {
@@ -47,25 +45,10 @@ func (self *ClassDeclaration) WithAttribute(code string) *ClassDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *ClassDeclaration) AddCtorAttributes(attributes ...Writable) *ClassDeclaration {
-	self.ctorAttributes = append(self.ctorAttributes, attributes...)
-	return self
-}
-
-func (self *ClassDeclaration) WithCtorAttribute(code string) *ClassDeclaration {
-	return self.AddCtorAttributes(Attribute(code))
-}
-
-func (self *ClassDeclaration) Param(name string, type_ string) *ValDeclaration {
-	param := Val(name, type_)
-	self.params = append(self.params, param)
-	return param
-}
-
-func (self *ClassDeclaration) ImplicitParam(name string, type_ string) *ValDeclaration {
-	param := Val(name, type_)
-	self.implicitParams = append(self.implicitParams, param)
-	return param
+func (self *ClassDeclaration) Ctor() *MethodDeclaration {
+	ctor := Method("")
+	self.ctor = ctor
+	return ctor
 }
 
 func (self *ClassDeclaration) Def(name string) *MethodDeclaration {
@@ -83,11 +66,10 @@ func (self *ClassDeclaration) Val(name string, type_ string) *ValDeclaration {
 func Class(name string) *ClassDeclaration {
 	return &ClassDeclaration{
 		name:           name,
-		params:         []Writable{},
 		modifiers:      []string{},
 		attributes:     []Writable{},
-		ctorAttributes: []Writable{},
 		members:        []Writable{},
+		ctor:           nil,
 	}
 }
 
@@ -108,36 +90,8 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 
 	writer.Write("class "+self.name)
 
-	if (len(self.params) > 0 || len(self.ctorAttributes) > 0) {
-		if len(self.ctorAttributes) > 0 {
-			writer.Write(" ")
-			for i, attribute := range self.ctorAttributes {
-				if i > 0 {
-					writer.Write(" ")
-				}
-				attribute.WriteCode(writer)
-			}
-		}
-
-		writer.Write("(")
-		for i, param := range self.params {
-			param.WriteCode(writer)
-			if i < len(self.params)-1 {
-				writer.Write(", ")
-			}
-		}
-		writer.Write(")")
-	}
-
-	if len(self.implicitParams) > 0 {
-		writer.Write("(implicit ")
-		for i, param := range self.implicitParams {
-			param.WriteCode(writer)
-			if i < len(self.implicitParams)-1 {
-				writer.Write(", ")
-			}
-		}
-		writer.Write(")")
+	if(self.ctor != nil) {
+		self.ctor.WriteCode(writer)
 	}
 
 	if len(self.extends) > 0 {
