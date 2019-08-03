@@ -52,7 +52,7 @@ class MyClass(param1: String) {
 }
 `
 	class := Class("MyClass")
-	class.Ctor().Param("param1", "String")
+	class.Contructor().Param("param1", "String")
 	assertCode(t, class, expected)
 }
 
@@ -62,7 +62,7 @@ class MyClass(implicit param1: String) {
 }
 `
 	class := Class("MyClass")
-	class.Ctor().NoParams().ImplicitParam("param1", "String")
+	class.Contructor().NoParams().ImplicitParam("param1", "String")
 	assertCode(t, class, expected)
 }
 
@@ -74,7 +74,7 @@ class MyClass @MyAttribute()() {
 }
 `
 	class := Class("MyClass")
-	class.Ctor().Attribute("MyAttribute()")
+	class.Contructor().Attribute("MyAttribute()")
 	class.Def("MyMethod").Returns("Unit").Define().Block()
 	assertCode(t, class, expected)
 }
