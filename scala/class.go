@@ -45,7 +45,7 @@ func (self *ClassDeclaration) Attribute(code string) *ClassDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *ClassDeclaration) Ctor() *MethodDeclaration {
+func (self *ClassDeclaration) Contructor() *MethodDeclaration {
 	ctor := Method("")
 	self.ctor = ctor
 	return ctor
