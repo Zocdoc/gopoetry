@@ -66,3 +66,8 @@ class MyClass @MyAttribute()() {
 	class.Def("MyMethod").Returns("Unit").Define().Block()
 	assertCode(t, class, expected)
 }
+
+func TestObjectBasic(t *testing.T) {
+	expected := `object MyObject`
+	assertCode(t, Object("MyObject"), expected)
+}
