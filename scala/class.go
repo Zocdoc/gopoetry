@@ -11,6 +11,7 @@ type ClassDeclaration struct {
 	attributes     []Writable
 	members        []Writable
 	ctor           Writable
+	isObject       bool
 }
 
 func (self *ClassDeclaration) addModifier(modifier string) *ClassDeclaration {
@@ -70,6 +71,18 @@ func Class(name string) *ClassDeclaration {
 		attributes:     []Writable{},
 		members:        []Writable{},
 		ctor:           nil,
+		isObject:       false,
+	}
+}
+
+func Object(name string) *ClassDeclaration {
+	return &ClassDeclaration{
+		name:           name,
+		modifiers:      []string{},
+		attributes:     []Writable{},
+		members:        []Writable{},
+		ctor:           nil,
+		isObject:       true,
 	}
 }
 
@@ -88,7 +101,12 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(strings.Join(self.modifiers, " ") + " ")
 	}
 
-	writer.Write("class "+self.name)
+	if self.isObject {
+		writer.Write("object ")
+	} else {
+		writer.Write("class ")
+	}
+	writer.Write(self.name)
 
 	if(self.ctor != nil) {
 		self.ctor.WriteCode(writer)
