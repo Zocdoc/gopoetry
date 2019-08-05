@@ -23,3 +23,7 @@ def someMethod() = {
 	method.Define().Block()
 	assertCode(t, method, expected)
 }
+
+func TestMethodPrivate(t *testing.T) {
+	assertCode(t, Method("someMethod").Private(), `private def someMethod()`)
+}

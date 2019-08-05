@@ -109,10 +109,15 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		}
 	}
 
-	if !self.IsConstructor() {
-		if len(self.modifiers) > 0 {
-			writer.Write(strings.Join(self.modifiers, " ") + " ")
+	if len(self.modifiers) > 0 {
+		if self.IsConstructor() {
+			writer.Write(" ")
 		}
+		writer.Write(strings.Join(self.modifiers, " "))
+		writer.Write(" ")
+	}
+
+	if !self.IsConstructor() {
 		writer.Write("def "+self.name)
 	}
 

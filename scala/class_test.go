@@ -47,6 +47,14 @@ func TestClassWithCtorParam(t *testing.T) {
 	assertCode(t, class, expected)
 }
 
+func TestClassWithPrivateCtor(t *testing.T) {
+	expected := `class MyClass private (param1: String)`
+	class := Class("MyClass")
+	class.Contructor().Private().Param("param1", "String")
+	assertCode(t, class, expected)
+}
+
+
 func TestClassWithCtorImplicitParam(t *testing.T) {
 	expected := `class MyClass(implicit param1: String)`
 	class := Class("MyClass")
