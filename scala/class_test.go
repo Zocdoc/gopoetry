@@ -5,18 +5,12 @@ import (
 )
 
 func TestClassBasic(t *testing.T) {
-	expected := `
-class MyClass {
-}
-`
+	expected := `class MyClass`
 	assertCode(t, Class("MyClass"), expected)
 }
 
 func TestClassExtends(t *testing.T) {
-	expected := `
-class MyClass extends BaseClass {
-}
-`
+	expected := `class MyClass extends BaseClass`
 	assertCode(t, Class("MyClass").Extends("BaseClass"), expected)
 }
 
@@ -47,20 +41,14 @@ class MyClass {
 }
 
 func TestClassWithCtorParam(t *testing.T) {
-	expected := `
-class MyClass(param1: String) {
-}
-`
+	expected := `class MyClass(param1: String)`
 	class := Class("MyClass")
 	class.Contructor().Param("param1", "String")
 	assertCode(t, class, expected)
 }
 
 func TestClassWithCtorImplicitParam(t *testing.T) {
-	expected := `
-class MyClass(implicit param1: String) {
-}
-`
+	expected := `class MyClass(implicit param1: String)`
 	class := Class("MyClass")
 	class.Contructor().NoParams().ImplicitParam("param1", "String")
 	assertCode(t, class, expected)

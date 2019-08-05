@@ -98,12 +98,16 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(" extends "+strings.Join(self.extends, ", "))
 	}
 
-	writer.Write(" ")
-	writer.Begin()
-	for index, member := range self.members {
-		if index > 0 { writer.Eol() }
-		member.WriteCode(writer)
+	if len(self.members) > 0 {
+		writer.Write(" ")
+		writer.Begin()
+		for index, member := range self.members {
+			if index > 0 {
+				writer.Eol()
+			}
+			member.WriteCode(writer)
+		}
+		writer.End()
 	}
-	writer.End()
 }
 
