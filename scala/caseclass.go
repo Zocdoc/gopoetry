@@ -38,7 +38,7 @@ func (self *CaseClassDeclaration) AddAttributes(attributes ...Writable) *CaseCla
 	return self
 }
 
-func (self *CaseClassDeclaration) Attribute(code string) *CaseClassDeclaration {
+func (self *CaseClassDeclaration) WithAttribute(code string) *CaseClassDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 

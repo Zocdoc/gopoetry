@@ -21,7 +21,7 @@ func (self *ValDeclaration) AddAttributes(attributes ...Writable) *ValDeclaratio
 	return self
 }
 
-func (self *ValDeclaration) Attribute(code string) *ValDeclaration {
+func (self *ValDeclaration) WithAttribute(code string) *ValDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
@@ -31,6 +31,7 @@ func (self *ValDeclaration) WriteCode(writer CodeWriter) {
 			if i > 0 {
 				writer.Write(" ")
 			}
+			writer.Write("@")
 			attribute.WriteCode(writer)
 		}
 		writer.Write(" ")
