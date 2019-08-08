@@ -28,6 +28,16 @@ func Str(value string) *WritableCode {
 	return Code("\"" + value + "\"")
 }
 
+type EolDefinition struct {}
+
+func Eol() *EolDefinition {
+	return &EolDefinition{}
+}
+
+func (self *EolDefinition) WriteCode(writer CodeWriter) {
+	writer.Eol()
+}
+
 var True = Code("true")
 
 var False = Code("false")

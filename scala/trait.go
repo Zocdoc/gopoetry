@@ -27,7 +27,7 @@ func (self *TraitDeclaration) AddAttributes(attributes ...Writable) *TraitDeclar
 	return self
 }
 
-func (self *TraitDeclaration) WithAttribute(code string) *TraitDeclaration {
+func (self *TraitDeclaration) Attribute(code string) *TraitDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
@@ -58,6 +58,7 @@ func (self *TraitDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	writer.Write(declaration)
+	writer.Write(" ")
 	writer.Begin()
 	for _, member := range self.members {
 		member.WriteCode(writer)
