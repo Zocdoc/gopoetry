@@ -1,20 +1,21 @@
 package scala
 
-import "strings"
+import (
+	"strings"
+)
 
 type MethodDeclaration struct {
 	name           string
-	returns        *string
+	returns        string
 	modifiers      []string
 	attributes     []Writable
 	params         []Writable
-	noParams       bool
 	implicitParams []Writable
-	definition     Writable
+	body           Writable
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
-	self.returns = &returnType
+	self.returns = returnType
 	return self
 }
 
@@ -40,7 +41,7 @@ func (self *MethodDeclaration) AddAttributes(attributes ...Writable) *MethodDecl
 	return self
 }
 
-func (self *MethodDeclaration) Attribute(code string) *MethodDeclaration {
+func (self *MethodDeclaration) WithAttribute(code string) *MethodDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
@@ -54,15 +55,10 @@ func (self *MethodDeclaration) AddImplicitParams(params ...Writable) *MethodDecl
 	return self
 }
 
-func (self *MethodDeclaration) NoParams() *MethodDeclaration {
-	self.noParams = true
-	return self
-}
-
-func (self *MethodDeclaration) Define() *StatementsDeclaration {
-	statements := Statements()
-	self.definition = statements
-	return statements
+func (self *MethodDeclaration) Body(lines ...string) *BlockDeclaration {
+	body := Block(lines...)
+	self.body = body
+	return body
 }
 
 func (self *MethodDeclaration) Param(name string, type_ string) *ValDeclaration {
@@ -77,60 +73,44 @@ func (self *MethodDeclaration) ImplicitParam(name string, type_ string) *ValDecl
 	return param
 }
 
-func (self *MethodDeclaration) IsConstructor() bool {
-	return self.name == ""
-}
-
 func Method(name string) *MethodDeclaration {
 	return &MethodDeclaration{
 		name:           name,
-		returns:        nil,
+		returns:        "Unit",
 		modifiers:      []string{},
 		attributes:     []Writable{},
 		params:         []Writable{},
 		implicitParams: []Writable{},
-		definition:     nil,
+		body:           nil,
 	}
 }
 
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	if len(self.attributes) > 0 {
-		if self.IsConstructor() {
-			writer.Write(" ")
-		}
-		for i, attribute := range self.attributes {
-			if i > 0 {
-				writer.Write(" ")
+		if len(self.attributes) > 0 {
+			for i, attribute := range self.attributes {
+				if i > 0 {
+					writer.Write(" ")
+				}
+				attribute.WriteCode(writer)
 			}
-			attribute.WriteCode(writer)
-		}
-		if !self.IsConstructor() {
 			writer.Eol()
 		}
 	}
 
 	if len(self.modifiers) > 0 {
-		if self.IsConstructor() {
-			writer.Write(" ")
-		}
-		writer.Write(strings.Join(self.modifiers, " "))
-		writer.Write(" ")
+		writer.Write(strings.Join(self.modifiers, " ") + " ")
 	}
+	writer.Write("def "+self.name)
 
-	if !self.IsConstructor() {
-		writer.Write("def "+self.name)
-	}
-
-	if !self.noParams {
-		writer.Write("(")
-		for i, param := range self.params {
-			param.WriteCode(writer)
-			if i < len(self.params)-1 {
-				writer.Write(", ")
-			}
+	writer.Write("(")
+	for i, param := range self.params {
+		param.WriteCode(writer)
+		if i < len(self.params)-1 {
+			writer.Write(", ")
 		}
-		writer.Write(")")
 	}
+	writer.Write(")")
 
 	if len(self.implicitParams) > 0 {
 		writer.Write("(implicit ")
@@ -143,17 +123,12 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(")")
 	}
 
-	if self.returns != nil {
-		writer.Write(": ")
-		writer.Write(*self.returns)
-	}
+	writer.Write(": ")
+	writer.Write(self.returns)
 
-	if self.definition != nil {
-		writer.Write(" = ")
-		self.definition.WriteCode(writer)
+	if self.body != nil {
+		self.body.WriteCode(writer)
 	} else {
-		if !self.IsConstructor() {
-			writer.Eol()
-		}
+		writer.Eol()
 	}
 }

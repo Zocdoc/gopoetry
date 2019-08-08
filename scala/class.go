@@ -6,12 +6,12 @@ import (
 
 type ClassDeclaration struct {
 	name           string
-	extends        []string
+	params         []Writable
+	implicitParams []Writable
+	inherits       []string
 	modifiers      []string
 	attributes     []Writable
 	members        []Writable
-	ctor           Writable
-	isObject       bool
 }
 
 func (self *ClassDeclaration) addModifier(modifier string) *ClassDeclaration {
@@ -27,8 +27,8 @@ func (self *ClassDeclaration) Public() *ClassDeclaration {
 	return self.addModifier("public")
 }
 
-func (self *ClassDeclaration) Extends(types ...string) *ClassDeclaration {
-	self.extends = append(self.extends, types...)
+func (self *ClassDeclaration) Inherits(types ...string) *ClassDeclaration {
+	self.inherits = append(self.inherits, types...)
 	return self
 }
 
@@ -42,14 +42,20 @@ func (self *ClassDeclaration) AddAttributes(attributes ...Writable) *ClassDeclar
 	return self
 }
 
-func (self *ClassDeclaration) Attribute(code string) *ClassDeclaration {
+func (self *ClassDeclaration) WithAttribute(code string) *ClassDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *ClassDeclaration) Contructor() *MethodDeclaration {
-	ctor := Method("")
-	self.ctor = ctor
-	return ctor
+func (self *ClassDeclaration) Param(name string, type_ string) *ValDeclaration {
+	param := Val(name, type_)
+	self.params = append(self.params, param)
+	return param
+}
+
+func (self *ClassDeclaration) ImplicitParam(name string, type_ string) *ValDeclaration {
+	param := Val(name, type_)
+	self.implicitParams = append(self.implicitParams, param)
+	return param
 }
 
 func (self *ClassDeclaration) Def(name string) *MethodDeclaration {
@@ -66,66 +72,64 @@ func (self *ClassDeclaration) Val(name string, type_ string) *ValDeclaration {
 
 func Class(name string) *ClassDeclaration {
 	return &ClassDeclaration{
-		name:           name,
-		modifiers:      []string{},
-		attributes:     []Writable{},
-		members:        []Writable{},
-		ctor:           nil,
-		isObject:       false,
-	}
-}
-
-func Object(name string) *ClassDeclaration {
-	return &ClassDeclaration{
-		name:           name,
-		modifiers:      []string{},
-		attributes:     []Writable{},
-		members:        []Writable{},
-		ctor:           nil,
-		isObject:       true,
+		name:       name,
+		params:     []Writable{},
+		modifiers:  []string{},
+		attributes: []Writable{},
+		members:    []Writable{},
 	}
 }
 
 func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	if len(self.attributes) > 0 {
-		for i, attribute := range self.attributes {
-			if i > 0 {
-				writer.Write(" ")
+		if len(self.attributes) > 0 {
+			for i, attribute := range self.attributes {
+				if i > 0 {
+					writer.Write(" ")
+				}
+				attribute.WriteCode(writer)
 			}
-			attribute.WriteCode(writer)
+			writer.Eol()
 		}
-		writer.Eol()
 	}
 
 	if len(self.modifiers) > 0 {
 		writer.Write(strings.Join(self.modifiers, " ") + " ")
 	}
 
-	if self.isObject {
-		writer.Write("object ")
-	} else {
-		writer.Write("class ")
-	}
-	writer.Write(self.name)
+	writer.Write("class "+self.name)
 
-	if(self.ctor != nil) {
-		self.ctor.WriteCode(writer)
-	}
-
-	if len(self.extends) > 0 {
-		writer.Write(" extends "+strings.Join(self.extends, ", "))
-	}
-
-	if len(self.members) > 0 {
-		writer.Write(" ")
-		writer.Begin()
-		for index, member := range self.members {
-			if index > 0 {
-				writer.Eol()
+	if len(self.params) > 0 {
+		writer.Write("(")
+		for i, param := range self.params {
+			param.WriteCode(writer)
+			if i < len(self.params)-1 {
+				writer.Write(", ")
 			}
-			member.WriteCode(writer)
 		}
-		writer.End()
+		writer.Write(")")
 	}
+
+	if len(self.implicitParams) > 0 {
+		writer.Write("(implicit ")
+		for i, param := range self.implicitParams {
+			param.WriteCode(writer)
+			if i < len(self.implicitParams)-1 {
+				writer.Write(", ")
+			}
+		}
+		writer.Write(")")
+	}
+
+	if len(self.inherits) > 0 {
+		writer.Write(" extends "+strings.Join(self.inherits, ", "))
+	}
+
+	writer.Begin()
+	for index, member := range self.members {
+		if index > 0 { writer.Eol() }
+		member.WriteCode(writer)
+	}
+	writer.End()
 }
 
