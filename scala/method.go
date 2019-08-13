@@ -31,6 +31,10 @@ func (self *MethodDeclaration) Public() *MethodDeclaration {
 	return self.addModifier("public")
 }
 
+func (self *MethodDeclaration) Override() *MethodDeclaration {
+	return self.addModifier("override")
+}
+
 func (self *MethodDeclaration) Async() *MethodDeclaration {
 	return self.addModifier("async")
 }
@@ -118,7 +122,7 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	if !self.IsConstructor() {
-		writer.Write("def "+self.name)
+		writer.Write("def " + self.name)
 	}
 
 	if !self.noParams {

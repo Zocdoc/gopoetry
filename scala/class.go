@@ -5,13 +5,13 @@ import (
 )
 
 type ClassDeclaration struct {
-	name           string
-	extends        []string
-	modifiers      []string
-	attributes     []Writable
-	members        []Writable
-	ctor           Writable
-	isObject       bool
+	name       string
+	extends    []string
+	modifiers  []string
+	attributes []Writable
+	members    []Writable
+	ctor       Writable
+	isObject   bool
 }
 
 func (self *ClassDeclaration) addModifier(modifier string) *ClassDeclaration {
@@ -25,6 +25,14 @@ func (self *ClassDeclaration) Private() *ClassDeclaration {
 
 func (self *ClassDeclaration) Public() *ClassDeclaration {
 	return self.addModifier("public")
+}
+
+func (self *ClassDeclaration) Sealed() *ClassDeclaration {
+	return self.addModifier("sealed")
+}
+
+func (self *ClassDeclaration) Case() *ClassDeclaration {
+	return self.addModifier("case")
 }
 
 func (self *ClassDeclaration) Extends(types ...string) *ClassDeclaration {
@@ -66,23 +74,35 @@ func (self *ClassDeclaration) Val(name string, type_ string) *ValDeclaration {
 
 func Class(name string) *ClassDeclaration {
 	return &ClassDeclaration{
-		name:           name,
-		modifiers:      []string{},
-		attributes:     []Writable{},
-		members:        []Writable{},
-		ctor:           nil,
-		isObject:       false,
+		name:       name,
+		modifiers:  []string{},
+		attributes: []Writable{},
+		members:    []Writable{},
+		ctor:       nil,
+		isObject:   false,
 	}
+}
+
+func CaseClass(name string) *ClassDeclaration {
+	klass := &ClassDeclaration{
+		name:       name,
+		modifiers:  []string{},
+		attributes: []Writable{},
+		members:    []Writable{},
+		ctor:       nil,
+		isObject:   false,
+	}
+	return klass.Case()
 }
 
 func Object(name string) *ClassDeclaration {
 	return &ClassDeclaration{
-		name:           name,
-		modifiers:      []string{},
-		attributes:     []Writable{},
-		members:        []Writable{},
-		ctor:           nil,
-		isObject:       true,
+		name:       name,
+		modifiers:  []string{},
+		attributes: []Writable{},
+		members:    []Writable{},
+		ctor:       nil,
+		isObject:   true,
 	}
 }
 
@@ -108,12 +128,12 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	}
 	writer.Write(self.name)
 
-	if(self.ctor != nil) {
+	if self.ctor != nil {
 		self.ctor.WriteCode(writer)
 	}
 
 	if len(self.extends) > 0 {
-		writer.Write(" extends "+strings.Join(self.extends, ", "))
+		writer.Write(" extends " + strings.Join(self.extends, ", "))
 	}
 
 	if len(self.members) > 0 {
@@ -128,4 +148,3 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 		writer.End()
 	}
 }
-

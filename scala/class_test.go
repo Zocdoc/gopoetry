@@ -14,7 +14,6 @@ func TestClassExtends(t *testing.T) {
 	assertCode(t, Class("MyClass").Extends("BaseClass"), expected)
 }
 
-
 func TestClassMethod(t *testing.T) {
 	expected := `
 class MyClass {
@@ -54,7 +53,6 @@ func TestClassWithPrivateCtor(t *testing.T) {
 	assertCode(t, class, expected)
 }
 
-
 func TestClassWithCtorImplicitParam(t *testing.T) {
 	expected := `class MyClass(implicit param1: String)`
 	class := Class("MyClass")
@@ -78,4 +76,14 @@ class MyClass @MyAttribute()() {
 func TestObjectBasic(t *testing.T) {
 	expected := `object MyObject`
 	assertCode(t, Object("MyObject"), expected)
+}
+
+func TestEnumCaseObject(t *testing.T) {
+	expected := `
+case object Yes extends Answer {
+  override def toString = "yes"}
+`
+	object := Object("Yes").Case().Extends("Answer")
+	object.Def("toString").Override().NoParams().Define().Append(`"yes"`)
+	assertCode(t, object, expected)
 }
