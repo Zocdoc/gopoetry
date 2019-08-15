@@ -10,6 +10,11 @@ func Unit() *UnitDeclaration {
 	}
 }
 
+func (self *UnitDeclaration) AddDeclarations(declarations ...Writable) *UnitDeclaration {
+	self.declarations = append(self.declarations, declarations...)
+	return self
+}
+
 func (self *UnitDeclaration) WriteCode(writer CodeWriter) {
 	for index, declaration := range self.declarations {
 		if index > 0 {
