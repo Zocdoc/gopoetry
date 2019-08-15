@@ -19,6 +19,8 @@ func (self *TypeDeclaration) Field(name string, type_ string) *FieldDeclaration 
 }
 
 func (self *TypeDeclaration) WriteCode(writer CodeWriter) {
+	writer.Write("type ")
+	writer.Write(self.name)
 	if len(self.members) > 0 {
 		writer.Write(" ")
 		writer.Begin()
