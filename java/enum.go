@@ -8,14 +8,21 @@ import (
 // ClassDeclaration declares a class
 type EnumDeclaration struct {
 	name        string
-	enumMembers []string
+	enumMembers map[string]string
 	members     []Writable
-	ctor        Writable
+}
+
+func Enum(name string) *EnumDeclaration {
+	return &EnumDeclaration{
+		name:        name,
+		enumMembers: make(map[string]string),
+		members:     []Writable{},
+	}
 }
 
 // AddMembers adds methods to the enum
-func (cls *EnumDeclaration) AddEnumMembers(enumMembers ...string) *EnumDeclaration {
-	cls.enumMembers = append(cls.enumMembers, enumMembers...)
+func (cls *EnumDeclaration) AddEnumMembers(enumMemberInCode string, enumMemberStringValue string) *EnumDeclaration {
+	cls.enumMembers[enumMemberInCode] = enumMemberStringValue
 	return cls
 }
 
@@ -25,7 +32,7 @@ func (cls *EnumDeclaration) AddMembers(members ...Writable) *EnumDeclaration {
 }
 
 func (cls *EnumDeclaration) Constructor() *MethodDeclaration {
-	ctor := Method("")
+	ctor := Method(cls.name)
 	cls.AddMembers(ctor)
 	return ctor
 }
@@ -36,21 +43,24 @@ func (cls *EnumDeclaration) WriteCode(writer CodeWriter) {
 
 	writer.Write(declaration)
 	writer.Begin()
-	for index, member := range cls.enumMembers {
+	index := 0
+	for memberNameInCode, memberNameAsString := range cls.enumMembers {
 		if index > 0 {
 			writer.Eol()
 		}
-		enumElement := fmt.Sprintf("%s(\"%s\")", member, strings.ToLower(member))
+
+		enumElement := fmt.Sprintf("%s(\"%s\")", memberNameInCode, strings.ToLower(memberNameAsString))
 		writer.Write(enumElement)
-		if index < len(cls.members)-1 {
+		if index < len(cls.enumMembers)-1 {
 			writer.Write(",")
 		} else {
 			writer.Write(";")
 		}
 		writer.Eol()
+		index++
 	}
 
-	cls.ctor.WriteCode(writer)
+	writer.Eol()
 
 	for _, member := range cls.members {
 		member.WriteCode(writer)

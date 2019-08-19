@@ -8,7 +8,6 @@ type MethodDeclaration struct {
 	modifiers  []string
 	attributes []Writable
 	params     []Writable
-	noParams   bool
 	definition Writable
 }
 
@@ -34,6 +33,10 @@ func (self *MethodDeclaration) Async() *MethodDeclaration {
 	return self.addModifier("async")
 }
 
+func (self *MethodDeclaration) Static() *MethodDeclaration {
+	return self.addModifier("static")
+}
+
 func (self *MethodDeclaration) AddAttributes(attributes ...Writable) *MethodDeclaration {
 	self.attributes = append(self.attributes, attributes...)
 	return self
@@ -45,11 +48,6 @@ func (self *MethodDeclaration) Attribute(code string) *MethodDeclaration {
 
 func (self *MethodDeclaration) AddParams(params ...Writable) *MethodDeclaration {
 	self.params = append(self.params, params...)
-	return self
-}
-
-func (self *MethodDeclaration) NoParams() *MethodDeclaration {
-	self.noParams = true
 	return self
 }
 
@@ -65,10 +63,6 @@ func (self *MethodDeclaration) Param(name string, type_ string) *ParamDeclaratio
 	return param
 }
 
-func (self *MethodDeclaration) IsConstructor() bool {
-	return self.name == ""
-}
-
 func Method(name string) *MethodDeclaration {
 	return &MethodDeclaration{
 		name:       name,
@@ -81,55 +75,41 @@ func Method(name string) *MethodDeclaration {
 }
 
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
+	writer.Eol()
 	if len(self.attributes) > 0 {
-		if self.IsConstructor() {
-			writer.Write(" ")
-		}
 		for i, attribute := range self.attributes {
 			if i > 0 {
 				writer.Write(" ")
 			}
 			attribute.WriteCode(writer)
 		}
-		if !self.IsConstructor() {
-			writer.Eol()
-		}
+		writer.Eol()
 	}
 
 	if len(self.modifiers) > 0 {
-		if self.IsConstructor() {
-			writer.Write(" ")
-		}
 		writer.Write(strings.Join(self.modifiers, " "))
 		writer.Write(" ")
 	}
 
-	if !self.IsConstructor() {
-		writer.Write("def " + self.name)
-	}
-
-	if !self.noParams {
-		writer.Write("(")
-		for i, param := range self.params {
-			param.WriteCode(writer)
-			if i < len(self.params)-1 {
-				writer.Write(", ")
-			}
-		}
-		writer.Write(")")
-	}
-
 	if self.returns != nil {
-		writer.Write(": ")
 		writer.Write(*self.returns)
+		writer.Write(" ")
 	}
+
+	writer.Write(self.name)
+
+	writer.Write("(")
+	for i, param := range self.params {
+		param.WriteCode(writer)
+		if i < len(self.params)-1 {
+			writer.Write(", ")
+		}
+	}
+	writer.Write(")")
 
 	if self.definition != nil {
-		writer.Write(" = ")
 		self.definition.WriteCode(writer)
 	} else {
-		if !self.IsConstructor() {
-			writer.Eol()
-		}
+		writer.Eol()
 	}
 }

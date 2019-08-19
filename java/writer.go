@@ -12,7 +12,7 @@ type CodeWriter interface {
 }
 
 func prefix(indentation int) string {
-	tab := strings.Repeat(" ", 4)
+	tab := strings.Repeat(" ", 2)
 	return strings.Repeat(tab, indentation)
 }
 
@@ -23,8 +23,7 @@ type codeWriter struct {
 }
 
 func (self *codeWriter) Begin() {
-	self.Eol()
-	self.Write("{")
+	self.Write(" {")
 	self.Eol()
 	self.indentation += 1
 }
@@ -36,6 +35,9 @@ func (self *codeWriter) End() {
 }
 
 func (self *codeWriter) Eol() {
+	if self.newLine {
+		self.newLine = false
+	}
 	self.Write("\n")
 	self.newLine = true
 }
