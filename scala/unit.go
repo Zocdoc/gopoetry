@@ -47,11 +47,9 @@ func (self *UnitDeclaration) WriteCode(writer CodeWriter) {
 			writer.Eol()
 		}
 	}
-	writer.Eol()
-	for index, class := range self.declarations {
-		if index > 0 {
-			writer.Eol()
-		}
+	for _, class := range self.declarations {
+		writer.Eol()
 		class.WriteCode(writer)
+		writer.Eol()
 	}
 }
