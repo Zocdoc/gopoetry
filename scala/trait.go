@@ -1,8 +1,8 @@
 package scala
 
 import (
-"fmt"
-"strings"
+	"fmt"
+	"strings"
 )
 
 type TraitDeclaration struct {
@@ -49,7 +49,7 @@ func (self *TraitDeclaration) WriteCode(writer CodeWriter) {
 	declaration := fmt.Sprintf("trait %s", self.name)
 
 	if len(self.inherits) > 0 {
-		declaration += ": "+strings.Join(self.inherits, ", ")
+		declaration += ": " + strings.Join(self.inherits, ", ")
 	}
 
 	for _, attribute := range self.attributes {
@@ -58,11 +58,12 @@ func (self *TraitDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	writer.Write(declaration)
-	writer.Write(" ")
-	writer.Begin()
-	for _, member := range self.members {
-		member.WriteCode(writer)
+	if len(self.members) > 0 {
+		writer.Write(" ")
+		writer.Begin()
+		for _, member := range self.members {
+			member.WriteCode(writer)
+		}
+		writer.End()
 	}
-	writer.End()
 }
-

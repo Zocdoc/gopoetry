@@ -5,10 +5,7 @@ import (
 )
 
 func TestTraitBasic(t *testing.T) {
-	expected := `
-trait MyTrait {
-}
-`
+	expected := `trait MyTrait`
 	assertCode(t, Trait("MyTrait"), expected)
 }
 
