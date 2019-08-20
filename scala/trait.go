@@ -1,15 +1,32 @@
 package scala
 
 import (
-	"fmt"
 	"strings"
 )
 
 type TraitDeclaration struct {
 	name       string
 	inherits   []string
+	modifiers  []string
 	attributes []Writable
 	members    []Writable
+}
+
+func (self *TraitDeclaration) addModifier(modifier string) *TraitDeclaration {
+	self.modifiers = append(self.modifiers, modifier)
+	return self
+}
+
+func (self *TraitDeclaration) Private() *TraitDeclaration {
+	return self.addModifier("private")
+}
+
+func (self *TraitDeclaration) Public() *TraitDeclaration {
+	return self.addModifier("public")
+}
+
+func (self *TraitDeclaration) Sealed() *TraitDeclaration {
+	return self.addModifier("sealed")
 }
 
 func (self *TraitDeclaration) Inherits(types ...string) *TraitDeclaration {
@@ -46,18 +63,23 @@ func Trait(name string) *TraitDeclaration {
 }
 
 func (self *TraitDeclaration) WriteCode(writer CodeWriter) {
-	declaration := fmt.Sprintf("trait %s", self.name)
-
-	if len(self.inherits) > 0 {
-		declaration += ": " + strings.Join(self.inherits, ", ")
-	}
-
 	for _, attribute := range self.attributes {
 		attribute.WriteCode(writer)
 		writer.Eol()
 	}
 
-	writer.Write(declaration)
+	if len(self.modifiers) > 0 {
+		writer.Write(strings.Join(self.modifiers, " ") + " ")
+	}
+
+	writer.Write("trait ")
+	writer.Write(self.name)
+
+	if len(self.inherits) > 0 {
+		writer.Write(": ")
+		writer.Write(strings.Join(self.inherits, ", "))
+	}
+
 	if len(self.members) > 0 {
 		writer.Write(" ")
 		writer.Begin()

@@ -31,3 +31,9 @@ trait MyTrait {
 	trait.Def("MyMethod").Returns("Unit")
 	assertCode(t, trait, expected)
 }
+
+func TestTraitSealed(t *testing.T) {
+	expected := `sealed trait MyTrait`
+	trait := Trait("MyTrait").Sealed()
+	assertCode(t, trait, expected)
+}
