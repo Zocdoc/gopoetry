@@ -78,7 +78,6 @@ func Method(name string) *MethodDeclaration {
 }
 
 func (self *MethodDeclaration) WriteCode(writer util.CodeWriter) {
-	writer.Eol()
 	if len(self.attributes) > 0 {
 		for i, attribute := range self.attributes {
 			if i > 0 {

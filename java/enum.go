@@ -80,6 +80,7 @@ func (cls *EnumDeclaration) WriteCode(writer util.CodeWriter) {
 	}
 
 	for _, member := range cls.members {
+		writer.Eol()
 		member.WriteCode(writer)
 	}
 
