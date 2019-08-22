@@ -2,6 +2,7 @@ package java
 
 import (
 	"fmt"
+	"github.com/zocdoc/gopoetry/util"
 	"strings"
 )
 
@@ -9,15 +10,29 @@ import (
 type EnumDeclaration struct {
 	name        string
 	enumMembers map[string]string
-	members     []Writable
+	members     []util.Writable
+	modifiers   []string
+}
+
+func (cls *EnumDeclaration) addModifier(modifier string) *EnumDeclaration {
+	cls.modifiers = append(cls.modifiers, modifier)
+	return cls
 }
 
 func Enum(name string) *EnumDeclaration {
 	return &EnumDeclaration{
 		name:        name,
 		enumMembers: make(map[string]string),
-		members:     []Writable{},
+		members:     []util.Writable{},
 	}
+}
+
+func (cls *EnumDeclaration) Private() *EnumDeclaration {
+	return cls.addModifier("private")
+}
+
+func (cls *EnumDeclaration) Public() *EnumDeclaration {
+	return cls.addModifier("public")
 }
 
 // AddMembers adds methods to the enum
@@ -26,7 +41,7 @@ func (cls *EnumDeclaration) AddEnumMembers(enumMemberInCode string, enumMemberSt
 	return cls
 }
 
-func (cls *EnumDeclaration) AddMembers(members ...Writable) *EnumDeclaration {
+func (cls *EnumDeclaration) AddMembers(members ...util.Writable) *EnumDeclaration {
 	cls.members = append(cls.members, members...)
 	return cls
 }
@@ -38,10 +53,14 @@ func (cls *EnumDeclaration) Constructor() *MethodDeclaration {
 }
 
 // WriteCode writes the class to the writer
-func (cls *EnumDeclaration) WriteCode(writer CodeWriter) {
-	declaration := fmt.Sprintf("public enum %s", cls.name)
+func (cls *EnumDeclaration) WriteCode(writer util.CodeWriter) {
+	if len(cls.modifiers) > 0 {
+		writer.Write(strings.Join(cls.modifiers, " ") + " ")
+	}
 
+	declaration := fmt.Sprintf("enum %s", cls.name)
 	writer.Write(declaration)
+
 	writer.Begin()
 	index := 0
 	for memberNameInCode, memberNameAsString := range cls.enumMembers {
@@ -59,8 +78,6 @@ func (cls *EnumDeclaration) WriteCode(writer CodeWriter) {
 		writer.Eol()
 		index++
 	}
-
-	writer.Eol()
 
 	for _, member := range cls.members {
 		member.WriteCode(writer)

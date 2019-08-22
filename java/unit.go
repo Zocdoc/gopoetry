@@ -1,18 +1,21 @@
 package java
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/zocdoc/gopoetry/util"
+)
 
 type UnitDeclaration struct {
 	package_     string
 	imports      []string
-	declarations []Writable
+	declarations []util.Writable
 }
 
 func Unit(package_ string) *UnitDeclaration {
 	return &UnitDeclaration{
 		package_,
 		[]string{},
-		[]Writable{},
+		[]util.Writable{},
 	}
 }
 
@@ -26,18 +29,18 @@ func (self *UnitDeclaration) Import(package_ string) *UnitDeclaration {
 	return self
 }
 
-func (self *UnitDeclaration) AddDeclarations(declarations ...Writable) *UnitDeclaration {
+func (self *UnitDeclaration) AddDeclarations(declarations ...util.Writable) *UnitDeclaration {
 	self.declarations = append(self.declarations, declarations...)
 	return self
 }
 
 func (self *UnitDeclaration) Code() string {
-	writer := CreateWriter()
+	writer := util.CreateWriter(2)
 	self.WriteCode(&writer)
 	return writer.Code()
 }
 
-func (self *UnitDeclaration) WriteCode(writer CodeWriter) {
+func (self *UnitDeclaration) WriteCode(writer util.CodeWriter) {
 	writer.Write(fmt.Sprintf("package %s;", self.package_))
 	writer.Eol()
 	if len(self.imports) > 0 {
