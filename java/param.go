@@ -2,7 +2,7 @@ package java
 
 import (
 	"fmt"
-	"github.com/zocdoc/gopoetry/util"
+	"gopoetry/util"
 )
 
 type ParamDeclaration struct {

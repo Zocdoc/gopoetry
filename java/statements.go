@@ -1,7 +1,7 @@
 package java
 
 import (
-	"github.com/zocdoc/gopoetry/util"
+	"gopoetry/util"
 )
 
 type StatementsDeclaration struct {

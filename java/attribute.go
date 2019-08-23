@@ -1,6 +1,6 @@
 package java
 
-import "github.com/zocdoc/gopoetry/util"
+import "gopoetry/util"
 
 type AttributeDeclaration struct {
 	code util.Writable
