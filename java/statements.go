@@ -1,11 +1,15 @@
 package java
 
+import (
+	"gopoetry/util"
+)
+
 type StatementsDeclaration struct {
-	statements []Writable
+	statements []util.Writable
 	isBlock    bool
 }
 
-func (self *StatementsDeclaration) AppendCode(code Writable) *StatementsDeclaration {
+func (self *StatementsDeclaration) AppendCode(code util.Writable) *StatementsDeclaration {
 	self.statements = append(self.statements, code)
 	return self
 }
@@ -36,14 +40,14 @@ func (self *StatementsDeclaration) Block() *StatementsDeclaration {
 }
 
 func Statements() *StatementsDeclaration {
-	return &StatementsDeclaration{statements: []Writable{}, isBlock: false}
+	return &StatementsDeclaration{statements: []util.Writable{}, isBlock: false}
 }
 
 func Block() *StatementsDeclaration {
-	return &StatementsDeclaration{statements: []Writable{}, isBlock: true}
+	return &StatementsDeclaration{statements: []util.Writable{}, isBlock: true}
 }
 
-func (self *StatementsDeclaration) WriteCode(writer CodeWriter) {
+func (self *StatementsDeclaration) WriteCode(writer util.CodeWriter) {
 	if self.isBlock {
 		writer.Begin()
 	}

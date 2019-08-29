@@ -1,4 +1,4 @@
-package java
+package util
 
 import (
 	"strings"
@@ -11,15 +11,16 @@ type CodeWriter interface {
 	Write(code string)
 }
 
-func prefix(indentation int) string {
-	tab := strings.Repeat(" ", 2)
+func prefix(indentation int, numSpacesIndent int) string {
+	tab := strings.Repeat(" ", numSpacesIndent)
 	return strings.Repeat(tab, indentation)
 }
 
 type codeWriter struct {
-	code        strings.Builder
-	indentation int
-	newLine     bool
+	code              strings.Builder
+	indentation       int
+	newLine           bool
+	numOfSpacesIndent int
 }
 
 func (self *codeWriter) Begin() {
@@ -44,7 +45,7 @@ func (self *codeWriter) Eol() {
 
 func (self *codeWriter) Write(code string) {
 	if self.newLine {
-		self.code.WriteString(prefix(self.indentation))
+		self.code.WriteString(prefix(self.indentation, self.numOfSpacesIndent))
 		self.newLine = false
 	}
 	self.code.WriteString(code)
@@ -54,6 +55,6 @@ func (self *codeWriter) Code() string {
 	return self.code.String()
 }
 
-func CreateWriter() codeWriter {
-	return codeWriter{code: strings.Builder{}, indentation: 0, newLine: true}
+func CreateWriter(numOfSpacesIndent int) codeWriter {
+	return codeWriter{code: strings.Builder{}, indentation: 0, newLine: true, numOfSpacesIndent: numOfSpacesIndent}
 }
