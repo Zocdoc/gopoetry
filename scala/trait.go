@@ -6,7 +6,7 @@ import (
 
 type TraitDeclaration struct {
 	name       string
-	inherits   []string
+	extends    []string
 	modifiers  []string
 	attributes []Writable
 	members    []Writable
@@ -29,8 +29,8 @@ func (self *TraitDeclaration) Sealed() *TraitDeclaration {
 	return self.addModifier("sealed")
 }
 
-func (self *TraitDeclaration) Inherits(types ...string) *TraitDeclaration {
-	self.inherits = append(self.inherits, types...)
+func (self *TraitDeclaration) Extends(types ...string) *TraitDeclaration {
+	self.extends = append(self.extends, types...)
 	return self
 }
 
@@ -75,17 +75,12 @@ func (self *TraitDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write("trait ")
 	writer.Write(self.name)
 
-	if len(self.inherits) > 0 {
-		writer.Write(": ")
-		writer.Write(strings.Join(self.inherits, ", "))
+	if len(self.extends) > 0 {
+		writer.Write(" extends " + strings.Join(self.extends, ", "))
 	}
 
 	if len(self.members) > 0 {
 		writer.Write(" ")
-		writer.Begin()
-		for _, member := range self.members {
-			member.WriteCode(writer)
-		}
-		writer.End()
+		WriteMembers(writer, self.members)
 	}
 }

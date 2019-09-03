@@ -5,11 +5,9 @@ import (
 )
 
 type CodeWriter interface {
-	Indent()
-	Unindent()
-	Begin()
-	End()
 	Eol()
+	Indent()
+	UnIndent()
 	Write(code string)
 }
 
@@ -28,20 +26,8 @@ func (self *codeWriter) Indent() {
 	self.indentation += 1
 }
 
-func (self *codeWriter) Unindent() {
+func (self *codeWriter) UnIndent() {
 	self.indentation -= 1
-}
-
-func (self *codeWriter) Begin() {
-	self.Write("{")
-	self.Eol()
-	self.indentation += 1
-}
-
-func (self *codeWriter) End() {
-	self.indentation -= 1
-	self.Write("}")
-	self.Eol()
 }
 
 func (self *codeWriter) Eol() {

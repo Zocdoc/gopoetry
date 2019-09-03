@@ -2,58 +2,57 @@ package scala
 
 type StatementsDeclaration struct {
 	statements []Writable
-	isBlock    bool
+	block      bool
+	scope      bool
 }
 
-func (self *StatementsDeclaration) AppendCode(code Writable) *StatementsDeclaration {
+func (self *StatementsDeclaration) AddCode(code Writable) *StatementsDeclaration {
 	self.statements = append(self.statements, code)
 	return self
 }
 
-func (self *StatementsDeclaration) Append(code string) *StatementsDeclaration {
+func (self *StatementsDeclaration) Add(code string) *StatementsDeclaration {
 	self.statements = append(self.statements, Code(code))
 	return self
 }
 
-func (self *StatementsDeclaration) Line(code string) *StatementsDeclaration {
+func (self *StatementsDeclaration) AddLn(code string) *StatementsDeclaration {
 	self.
-		AppendCode(Code(code)).
-		AppendCode(Eol())
+		AddCode(Code(code)).
+		AddCode(Eol())
 	return self
 }
 
-func (self *StatementsDeclaration) Lines(lines ...string) *StatementsDeclaration {
-	for _, line := range lines {
-		self.Line(line)
-	}
-	return self
-}
-
-func (self *StatementsDeclaration) Block() *StatementsDeclaration {
-	body := Block()
-	self.AppendCode(body)
+func (self *StatementsDeclaration) Block(scope bool) *StatementsDeclaration {
+	body := Block(scope)
+	self.AddCode(body)
 	return body
 }
 
 func Statements() *StatementsDeclaration {
-	return &StatementsDeclaration{ statements: []Writable{}, isBlock: false}
+	return &StatementsDeclaration{statements: []Writable{}, block: false, scope: false}
 }
 
-func Block() *StatementsDeclaration {
-	return &StatementsDeclaration{ statements: []Writable{}, isBlock: true}
+func Block(scope bool) *StatementsDeclaration {
+	return &StatementsDeclaration{statements: []Writable{}, block: true, scope: scope}
 }
 
 func (self *StatementsDeclaration) WriteCode(writer CodeWriter) {
-	if self.isBlock {
-		writer.Begin()
+	if self.block {
+		if self.scope {
+			writer.Write("{")
+			writer.Eol()
+		}
+		writer.Indent()
 	}
-	for _, line := range self.statements {
-		line.WriteCode(writer)
+	for _, statement := range self.statements {
+		statement.WriteCode(writer)
 	}
-	if self.isBlock {
-		writer.End()
+	if self.block {
+		writer.UnIndent()
+		if self.scope {
+			writer.Write("}")
+			writer.Eol()
+		}
 	}
 }
-
-
-

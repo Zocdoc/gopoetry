@@ -7,7 +7,12 @@ func TestStatementsSimple(t *testing.T) {
 line1()
 line2()
 `
-	assertCode(t, Statements().Lines("line1()", "line2()"), expected)
+	statements :=
+		Statements().
+			AddLn("line1()").
+			AddLn("line2()")
+
+	assertCode(t, statements, expected)
 }
 
 func TestStatementsWithBlock(t *testing.T) {
@@ -19,11 +24,24 @@ line2 {
 }
 `
 	statements := Statements()
-	statements.Line("line1()")
-	statements.Append("line2 ")
-	statements.Block().Lines(
-		"nextedLine1()",
-		"nextedLine2()",
-	)
+	statements.AddLn("line1()")
+	statements.Add("line2 ")
+	statements.Block(true).
+		AddLn("nextedLine1()").
+		AddLn("nextedLine2()")
+	assertCode(t, statements, expected)
+}
+
+func TestStatementsWithBlockNoScope(t *testing.T) {
+	expected := `
+request =>
+  nextedLine1()
+  nextedLine2()
+`
+	statements := Statements()
+	statements.AddLn("request =>")
+	statements.Block(false).
+		AddLn("nextedLine1()").
+		AddLn("nextedLine2()")
 	assertCode(t, statements, expected)
 }

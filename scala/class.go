@@ -83,18 +83,6 @@ func Class(name string) *ClassDeclaration {
 	}
 }
 
-func CaseClass(name string) *ClassDeclaration {
-	klass := &ClassDeclaration{
-		name:       name,
-		modifiers:  []string{},
-		attributes: []Writable{},
-		members:    []Writable{},
-		ctor:       nil,
-		isObject:   false,
-	}
-	return klass.Case()
-}
-
 func Object(name string) *ClassDeclaration {
 	return &ClassDeclaration{
 		name:       name,
@@ -108,10 +96,7 @@ func Object(name string) *ClassDeclaration {
 
 func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	if len(self.attributes) > 0 {
-		for i, attribute := range self.attributes {
-			if i > 0 {
-				writer.Write(" ")
-			}
+		for _, attribute := range self.attributes {
 			attribute.WriteCode(writer)
 		}
 		writer.Eol()
@@ -138,13 +123,6 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 
 	if len(self.members) > 0 {
 		writer.Write(" ")
-		writer.Begin()
-		for index, member := range self.members {
-			if index > 0 {
-				writer.Eol()
-			}
-			member.WriteCode(writer)
-		}
-		writer.End()
+		WriteMembers(writer, self.members)
 	}
 }

@@ -22,7 +22,7 @@ class MyClass {
 }
 `
 	class := Class("MyClass")
-	class.Def("MyMethod").Returns("Unit").Define().Block()
+	class.Def("MyMethod").Returns("Unit").Define().Block(true)
 	assertCode(t, class, expected)
 }
 
@@ -35,7 +35,7 @@ class MyClass {
 }
 `
 	class := Class("MyClass").Attribute("MyAttribute")
-	class.Def("MyMethod").Returns("Unit").Define().Block()
+	class.Def("MyMethod").Returns("Unit").Define().Block(true)
 	assertCode(t, class, expected)
 }
 
@@ -69,7 +69,7 @@ class MyClass @MyAttribute()() {
 `
 	class := Class("MyClass")
 	class.Contructor().Attribute("MyAttribute()")
-	class.Def("MyMethod").Returns("Unit").Define().Block()
+	class.Def("MyMethod").Returns("Unit").Define().Block(true)
 	assertCode(t, class, expected)
 }
 
@@ -84,6 +84,6 @@ case object Yes extends Answer {
   override def toString = "yes"}
 `
 	object := Object("Yes").Case().Extends("Answer")
-	object.Def("toString").Override().NoParams().Define().Append(`"yes"`)
+	object.Def("toString").Override().NoParams().Define().Add(`"yes"`)
 	assertCode(t, object, expected)
 }
