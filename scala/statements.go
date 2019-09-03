@@ -29,6 +29,12 @@ func (self *StatementsDeclaration) Block(scope bool) *StatementsDeclaration {
 	return body
 }
 
+func (self *StatementsDeclaration) Scope(block bool) *StatementsDeclaration {
+	body := Scope(block)
+	self.AddCode(body)
+	return body
+}
+
 func Statements() *StatementsDeclaration {
 	return &StatementsDeclaration{statements: []Writable{}, block: false, scope: false}
 }
@@ -37,12 +43,20 @@ func Block(scope bool) *StatementsDeclaration {
 	return &StatementsDeclaration{statements: []Writable{}, block: true, scope: scope}
 }
 
+func Scope(block bool) *StatementsDeclaration {
+	return &StatementsDeclaration{statements: []Writable{}, block: block, scope: true}
+}
+
 func (self *StatementsDeclaration) WriteCode(writer CodeWriter) {
-	if self.block {
-		if self.scope {
-			writer.Write("{")
+	if self.scope {
+		writer.Write("{")
+		if self.block {
 			writer.Eol()
+		} else {
+			writer.Write(" ")
 		}
+	}
+	if self.block {
 		writer.Indent()
 	}
 	for _, statement := range self.statements {
@@ -50,8 +64,13 @@ func (self *StatementsDeclaration) WriteCode(writer CodeWriter) {
 	}
 	if self.block {
 		writer.UnIndent()
-		if self.scope {
-			writer.Write("}")
+	}
+	if self.scope {
+		if !self.block {
+			writer.Write(" ")
+		}
+		writer.Write("}")
+		if self.block {
 			writer.Eol()
 		}
 	}
