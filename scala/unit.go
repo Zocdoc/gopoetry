@@ -50,6 +50,5 @@ func (self *UnitDeclaration) WriteCode(writer CodeWriter) {
 	for _, class := range self.declarations {
 		writer.Eol()
 		class.WriteCode(writer)
-		writer.Eol()
 	}
 }
