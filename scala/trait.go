@@ -9,7 +9,7 @@ type TraitDeclaration struct {
 	extends    []string
 	modifiers  []string
 	attributes []Writable
-	members    []Writable
+	members    *StatementsDeclaration
 }
 
 func (self *TraitDeclaration) addModifier(modifier string) *TraitDeclaration {
@@ -34,9 +34,9 @@ func (self *TraitDeclaration) Extends(types ...string) *TraitDeclaration {
 	return self
 }
 
-func (self *TraitDeclaration) AddDefinitions(members ...Writable) *TraitDeclaration {
-	self.members = append(self.members, members...)
-	return self
+func (self *TraitDeclaration) Define(block bool) *StatementsDeclaration {
+	self.members = Statements(block, true)
+	return self.members
 }
 
 func (self *TraitDeclaration) AddAttributes(attributes ...Writable) *TraitDeclaration {
@@ -48,17 +48,11 @@ func (self *TraitDeclaration) Attribute(code string) *TraitDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *TraitDeclaration) Def(name string) *MethodDeclaration {
-	method := Method(name)
-	self.AddDefinitions(method)
-	return method
-}
-
 func Trait(name string) *TraitDeclaration {
 	return &TraitDeclaration{
 		name:       name,
 		attributes: []Writable{},
-		members:    []Writable{},
+		members:    nil,
 	}
 }
 
@@ -79,9 +73,9 @@ func (self *TraitDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(" extends " + strings.Join(self.extends, ", "))
 	}
 
-	if len(self.members) > 0 {
+	if self.members != nil {
 		writer.Write(" ")
-		WriteMembers(writer, self.members)
+		self.members.WriteCode(writer)
 	} else {
 		writer.Eol()
 	}

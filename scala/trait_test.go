@@ -16,7 +16,7 @@ trait MyTrait {
 }
 `
 	trait := Trait("MyTrait")
-	trait.Def("MyMethod").Returns("Unit")
+	trait.Define(true).Def("MyMethod").Returns("Unit")
 	assertCode(t, trait, expected)
 }
 
@@ -28,7 +28,7 @@ trait MyTrait {
 }
 `
 	trait := Trait("MyTrait").Attribute("MyAttribute")
-	trait.Def("MyMethod").Returns("Unit")
+	trait.Define(true).Def("MyMethod").Returns("Unit")
 	assertCode(t, trait, expected)
 }
 

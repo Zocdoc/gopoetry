@@ -35,8 +35,20 @@ func (self *StatementsDeclaration) Scope(block bool) *StatementsDeclaration {
 	return body
 }
 
-func Statements() *StatementsDeclaration {
-	return &StatementsDeclaration{statements: []Writable{}, block: false, scope: false}
+func (self *StatementsDeclaration) Def(name string) *MethodDeclaration {
+	method := Method(name)
+	self.AddCode(method)
+	return method
+}
+
+func (self *StatementsDeclaration) Val(name string, type_ string) *ValDeclaration {
+	field := Val(name, type_)
+	self.AddCode(field)
+	return field
+}
+
+func Statements(block bool, scope bool) *StatementsDeclaration {
+	return &StatementsDeclaration{statements: []Writable{}, block: block, scope: scope}
 }
 
 func Block(scope bool) *StatementsDeclaration {
