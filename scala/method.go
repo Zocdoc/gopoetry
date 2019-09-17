@@ -70,7 +70,7 @@ func (self *MethodDeclaration) ParamPerLine() *MethodDeclaration {
 }
 
 func (self *MethodDeclaration) Define() *StatementsDeclaration {
-	statements := Statements()
+	statements := Statements(false, false)
 	self.definition = statements
 	return statements
 }
