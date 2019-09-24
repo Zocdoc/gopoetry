@@ -1,7 +1,6 @@
 package java
 
 import (
-	"gopoetry/util"
 	"testing"
 )
 
@@ -10,7 +9,7 @@ func TestStatementsSimple(t *testing.T) {
 line1()
 line2()
 `
-	util.AssertCode(t, Statements().Lines("line1()", "line2()"), expected)
+	AssertCode(t, Statements().Lines("line1()", "line2()"), expected)
 }
 
 func TestStatementsWithBlock(t *testing.T) {
@@ -28,5 +27,5 @@ line2 {
 		"nextedLine1()",
 		"nextedLine2()",
 	)
-	util.AssertCode(t, statements, expected)
+	AssertCode(t, statements, expected)
 }

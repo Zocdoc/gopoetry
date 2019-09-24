@@ -2,20 +2,19 @@ package java
 
 import (
 	"fmt"
-	"gopoetry/util"
 )
 
 type UnitDeclaration struct {
 	package_     string
 	imports      []string
-	declarations []util.Writable
+	declarations []Writable
 }
 
 func Unit(package_ string) *UnitDeclaration {
 	return &UnitDeclaration{
 		package_,
 		[]string{},
-		[]util.Writable{},
+		[]Writable{},
 	}
 }
 
@@ -29,18 +28,18 @@ func (self *UnitDeclaration) Import(package_ string) *UnitDeclaration {
 	return self
 }
 
-func (self *UnitDeclaration) AddDeclarations(declarations ...util.Writable) *UnitDeclaration {
+func (self *UnitDeclaration) AddDeclarations(declarations ...Writable) *UnitDeclaration {
 	self.declarations = append(self.declarations, declarations...)
 	return self
 }
 
 func (self *UnitDeclaration) Code() string {
-	writer := util.CreateWriter(2)
+	writer := CreateWriter(2)
 	self.WriteCode(&writer)
 	return writer.Code()
 }
 
-func (self *UnitDeclaration) WriteCode(writer util.CodeWriter) {
+func (self *UnitDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write(fmt.Sprintf("package %s;", self.package_))
 	writer.Eol()
 	if len(self.imports) > 0 {

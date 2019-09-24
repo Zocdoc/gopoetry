@@ -1,7 +1,6 @@
 package java
 
 import (
-	"gopoetry/util"
 	"testing"
 )
 
@@ -11,5 +10,5 @@ package com.example;
 
 import com.example.Example;
 `
-	util.AssertCode(t, Unit("com.example").Import("com.example.Example"), expected)
+	AssertCode(t, Unit("com.example").Import("com.example.Example"), expected)
 }

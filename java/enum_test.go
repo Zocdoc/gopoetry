@@ -1,7 +1,6 @@
 package java
 
 import (
-	"gopoetry/util"
 	"testing"
 )
 
@@ -10,7 +9,7 @@ func TestEnumBasic(t *testing.T) {
 enum MyEnum {
 }
 `
-	util.AssertCode(t, Enum("MyEnum"), expected)
+	AssertCode(t, Enum("MyEnum"), expected)
 }
 
 func TestEnumPublic(t *testing.T) {
@@ -18,7 +17,7 @@ func TestEnumPublic(t *testing.T) {
 public enum MyEnum {
 }
 `
-	util.AssertCode(t, Enum("MyEnum").Public(), expected)
+	AssertCode(t, Enum("MyEnum").Public(), expected)
 }
 
 func TestEnumPrivate(t *testing.T) {
@@ -26,7 +25,7 @@ func TestEnumPrivate(t *testing.T) {
 private enum MyEnum {
 }
 `
-	util.AssertCode(t, Enum("MyEnum").Private(), expected)
+	AssertCode(t, Enum("MyEnum").Private(), expected)
 }
 
 func TestEnumWithMembers(t *testing.T) {
@@ -43,7 +42,7 @@ enum MyEnum {
 	method := Method("MyMethod").Returns("void")
 	method.Define().Block()
 	enum.AddMembers(method)
-	util.AssertCode(t, enum, expected)
+	AssertCode(t, enum, expected)
 }
 
 func TestEnumWithConstructor(t *testing.T) {
@@ -60,5 +59,5 @@ enum MyEnum {
 	constructor := enum.Constructor()
 	constructor.Param("input", "String")
 	constructor.Define().Block().Line("String argh = input;")
-	util.AssertCode(t, enum, expected)
+	AssertCode(t, enum, expected)
 }

@@ -2,7 +2,6 @@ package java
 
 import (
 	"fmt"
-	"gopoetry/util"
 )
 
 type ParamDeclaration struct {
@@ -10,7 +9,7 @@ type ParamDeclaration struct {
 	type_ string
 }
 
-func (self *ParamDeclaration) WriteCode(writer util.CodeWriter) {
+func (self *ParamDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write(fmt.Sprintf("%s %s", self.type_, self.name))
 }
 

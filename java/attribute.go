@@ -1,9 +1,7 @@
 package java
 
-import "gopoetry/util"
-
 type AttributeDeclaration struct {
-	code util.Writable
+	code Writable
 }
 
 func Attribute(code string) *AttributeDeclaration {
@@ -12,7 +10,7 @@ func Attribute(code string) *AttributeDeclaration {
 	}
 }
 
-func (self *AttributeDeclaration) WriteCode(writer util.CodeWriter) {
+func (self *AttributeDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write("@")
 	self.code.WriteCode(writer)
 }

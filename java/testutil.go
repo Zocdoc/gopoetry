@@ -1,4 +1,4 @@
-package util
+package java
 
 import (
 	"gotest.tools/assert"
