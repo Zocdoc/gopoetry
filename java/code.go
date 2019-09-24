@@ -1,7 +1,6 @@
 package java
 
 import (
-	"gopoetry/util"
 	"strconv"
 )
 
@@ -9,7 +8,7 @@ type WritableCode struct {
 	code string
 }
 
-func (self *WritableCode) WriteCode(writer util.CodeWriter) {
+func (self *WritableCode) WriteCode(writer CodeWriter) {
 	writer.Write(self.code)
 }
 
@@ -35,7 +34,7 @@ func Eol() *EolDefinition {
 	return &EolDefinition{}
 }
 
-func (self *EolDefinition) WriteCode(writer util.CodeWriter) {
+func (self *EolDefinition) WriteCode(writer CodeWriter) {
 	writer.Eol()
 }
 

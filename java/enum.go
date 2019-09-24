@@ -2,7 +2,6 @@ package java
 
 import (
 	"fmt"
-	"gopoetry/util"
 	"strings"
 )
 
@@ -10,7 +9,7 @@ import (
 type EnumDeclaration struct {
 	name        string
 	enumMembers map[string]string
-	members     []util.Writable
+	members     []Writable
 	modifiers   []string
 }
 
@@ -23,7 +22,7 @@ func Enum(name string) *EnumDeclaration {
 	return &EnumDeclaration{
 		name:        name,
 		enumMembers: make(map[string]string),
-		members:     []util.Writable{},
+		members:     []Writable{},
 	}
 }
 
@@ -41,7 +40,7 @@ func (cls *EnumDeclaration) AddEnumMembers(enumMemberInCode string, enumMemberSt
 	return cls
 }
 
-func (cls *EnumDeclaration) AddMembers(members ...util.Writable) *EnumDeclaration {
+func (cls *EnumDeclaration) AddMembers(members ...Writable) *EnumDeclaration {
 	cls.members = append(cls.members, members...)
 	return cls
 }
@@ -53,7 +52,7 @@ func (cls *EnumDeclaration) Constructor() *MethodDeclaration {
 }
 
 // WriteCode writes the class to the writer
-func (cls *EnumDeclaration) WriteCode(writer util.CodeWriter) {
+func (cls *EnumDeclaration) WriteCode(writer CodeWriter) {
 	if len(cls.modifiers) > 0 {
 		writer.Write(strings.Join(cls.modifiers, " ") + " ")
 	}

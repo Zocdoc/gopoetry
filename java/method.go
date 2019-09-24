@@ -1,7 +1,6 @@
 package java
 
 import (
-	"gopoetry/util"
 	"strings"
 )
 
@@ -9,9 +8,9 @@ type MethodDeclaration struct {
 	name       string
 	returns    *string
 	modifiers  []string
-	attributes []util.Writable
-	params     []util.Writable
-	definition util.Writable
+	attributes []Writable
+	params     []Writable
+	definition Writable
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
@@ -40,7 +39,7 @@ func (self *MethodDeclaration) Static() *MethodDeclaration {
 	return self.addModifier("static")
 }
 
-func (self *MethodDeclaration) AddAttributes(attributes ...util.Writable) *MethodDeclaration {
+func (self *MethodDeclaration) AddAttributes(attributes ...Writable) *MethodDeclaration {
 	self.attributes = append(self.attributes, attributes...)
 	return self
 }
@@ -49,7 +48,7 @@ func (self *MethodDeclaration) Attribute(code string) *MethodDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *MethodDeclaration) AddParams(params ...util.Writable) *MethodDeclaration {
+func (self *MethodDeclaration) AddParams(params ...Writable) *MethodDeclaration {
 	self.params = append(self.params, params...)
 	return self
 }
@@ -71,13 +70,13 @@ func Method(name string) *MethodDeclaration {
 		name:       name,
 		returns:    nil,
 		modifiers:  []string{},
-		attributes: []util.Writable{},
-		params:     []util.Writable{},
+		attributes: []Writable{},
+		params:     []Writable{},
 		definition: nil,
 	}
 }
 
-func (self *MethodDeclaration) WriteCode(writer util.CodeWriter) {
+func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	if len(self.attributes) > 0 {
 		for i, attribute := range self.attributes {
 			if i > 0 {
