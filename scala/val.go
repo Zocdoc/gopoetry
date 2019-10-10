@@ -2,13 +2,32 @@ package scala
 
 import (
 	"fmt"
+	"strings"
 )
 
 type ValDeclaration struct {
 	name       string
 	type_      string
+	modifiers  []string
 	attributes []Writable
 	init       Writable
+}
+
+func (self *ValDeclaration) addModifier(modifier string) *ValDeclaration {
+	self.modifiers = append(self.modifiers, modifier)
+	return self
+}
+
+func (self *ValDeclaration) Val() *ValDeclaration {
+	return self.addModifier("val")
+}
+
+func (self *ValDeclaration) Var() *ValDeclaration {
+	return self.addModifier("var")
+}
+
+func (self *ValDeclaration) Override() *ValDeclaration {
+	return self.addModifier("override")
 }
 
 func (self *ValDeclaration) Init(init Writable) *ValDeclaration {
@@ -34,6 +53,10 @@ func (self *ValDeclaration) WriteCode(writer CodeWriter) {
 			attribute.WriteCode(writer)
 		}
 		writer.Write(" ")
+	}
+
+	if len(self.modifiers) > 0 {
+		writer.Write(strings.Join(self.modifiers, " ") + " ")
 	}
 
 	writer.Write(fmt.Sprintf("%s: %s", self.name, self.type_))
