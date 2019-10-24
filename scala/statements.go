@@ -41,8 +41,14 @@ func (self *StatementsDeclaration) Def(name string) *MethodDeclaration {
 	return method
 }
 
-func (self *StatementsDeclaration) Val(name string, type_ string) *ValDeclaration {
+func (self *StatementsDeclaration) Val(name string, type_ string) *FieldDeclaration {
 	field := Val(name, type_)
+	self.AddCode(field)
+	return field
+}
+
+func (self *StatementsDeclaration) Var(name string, type_ string) *FieldDeclaration {
+	field := Var(name, type_)
 	self.AddCode(field)
 	return field
 }
