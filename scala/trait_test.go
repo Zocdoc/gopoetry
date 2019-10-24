@@ -9,6 +9,16 @@ func TestTraitBasic(t *testing.T) {
 	assertCode(t, Trait("MyTrait"), expected)
 }
 
+func TestTraitExtends(t *testing.T) {
+	expected := `trait MyTrait extends BaseTrait`
+	assertCode(t, Trait("MyTrait").Extends("BaseTrait"), expected)
+}
+
+func TestTraitExtendsMultiple(t *testing.T) {
+	expected := `trait MyTrait extends BaseTrait with BaseTrait2`
+	assertCode(t, Trait("MyTrait").Extends("BaseTrait", "BaseTrait2"), expected)
+}
+
 func TestTraitMethod(t *testing.T) {
 	expected := `
 trait MyTrait {
