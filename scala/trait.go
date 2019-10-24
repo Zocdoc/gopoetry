@@ -70,7 +70,7 @@ func (self *TraitDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write(self.name)
 
 	if len(self.extends) > 0 {
-		writer.Write(" extends " + strings.Join(self.extends, ", "))
+		writer.Write(" extends " + strings.Join(self.extends, " with "))
 	}
 
 	if self.members != nil {
