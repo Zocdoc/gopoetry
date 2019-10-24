@@ -75,14 +75,14 @@ func (self *MethodDeclaration) Define() *StatementsDeclaration {
 	return statements
 }
 
-func (self *MethodDeclaration) Param(name string, type_ string) *ValDeclaration {
-	param := Val(name, type_)
+func (self *MethodDeclaration) Param(name string, type_ string) *FieldDeclaration {
+	param := NewFieldDeclaration(name, type_)
 	self.AddParams(param)
 	return param
 }
 
-func (self *MethodDeclaration) ImplicitParam(name string, type_ string) *ValDeclaration {
-	param := Val(name, type_)
+func (self *MethodDeclaration) ImplicitParam(name string, type_ string) *FieldDeclaration {
+	param := NewFieldDeclaration(name, type_)
 	self.AddImplicitParams(param)
 	return param
 }
