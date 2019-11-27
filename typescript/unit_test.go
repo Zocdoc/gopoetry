@@ -1,0 +1,27 @@
+package typescript
+
+import "testing"
+
+func TestUnitEmpty(t *testing.T) {
+	assertCode(t, Unit(), "")
+}
+
+func TestUnitUsingWithNamespace(t *testing.T) {
+	unit := Unit().NamedImport("modname", "foo")
+	unit.Namespace("Some.Namespace")
+	unit.Namespace("Other.Namespace")
+
+	expected := `
+import { foo } from 'modname';
+
+namespace Some.Namespace
+{
+}
+
+namespace Other.Namespace
+{
+}
+`
+
+	assertCode(t, unit, expected)
+}
