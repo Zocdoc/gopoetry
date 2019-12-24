@@ -2,6 +2,8 @@ package ruby
 
 import "fmt"
 
+// TODO: Require new lines
+
 type RequireDeclaration struct {
 	filename string
 }
