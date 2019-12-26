@@ -110,7 +110,7 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	if len(self.extends) > 0 {
-		writer.Write(" extends " + strings.Join(self.extends, " with "))
+		writer.Write(" extends " + strings.Join(self.extends, ", "))
 	}
 
 	if self.definition != nil {

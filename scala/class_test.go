@@ -14,11 +14,6 @@ func TestClassExtends(t *testing.T) {
 	assertCode(t, Class("MyClass").Extends("BaseClass"), expected)
 }
 
-func TestClassExtendsMultiple(t *testing.T) {
-	expected := `class MyClass extends BaseClass with BaseClass2`
-	assertCode(t, Class("MyClass").Extends("BaseClass", "BaseClass2"), expected)
-}
-
 func TestClassMethod(t *testing.T) {
 	expected := `
 class MyClass {
