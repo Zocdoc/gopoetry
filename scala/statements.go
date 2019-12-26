@@ -82,6 +82,8 @@ func (self *StatementsDeclaration) WriteCode(writer CodeWriter) {
 			writer.Write(" ")
 		}
 		writer.Write("}")
-		writer.Eol()
+		if self.block {
+			writer.Eol()
+		}
 	}
 }
