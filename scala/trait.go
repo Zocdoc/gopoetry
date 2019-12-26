@@ -82,7 +82,5 @@ func (self *TraitDeclaration) WriteCode(writer CodeWriter) {
 	if len(self.members) > 0 {
 		writer.Write(" ")
 		WriteMembers(writer, self.members)
-	} else {
-		writer.Eol()
 	}
 }
