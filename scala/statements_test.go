@@ -8,7 +8,7 @@ line1()
 line2()
 `
 	statements :=
-		Statements(false, false).
+		Statements().
 			AddLn("line1()").
 			AddLn("line2()")
 
@@ -23,7 +23,7 @@ line2 {
   nextedLine2()
 }
 `
-	statements := Statements(false, false)
+	statements := Statements()
 	statements.AddLn("line1()")
 	statements.Add("line2 ")
 	statements.Block(true).
@@ -38,7 +38,7 @@ request =>
   nextedLine1()
   nextedLine2()
 `
-	statements := Statements(false, false)
+	statements := Statements()
 	statements.AddLn("request =>")
 	statements.Block(false).
 		AddLn("nextedLine1()").
@@ -48,7 +48,7 @@ request =>
 
 func TestStatementsWithScopeNoBlock(t *testing.T) {
 	expected := `collection.map { process }`
-	statements := Statements(false, false)
+	statements := Statements()
 	statements.Add("collection.map ").Scope(false).Add("process")
 	assertCode(t, statements, expected)
 }

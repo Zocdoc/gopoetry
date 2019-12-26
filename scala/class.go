@@ -9,7 +9,7 @@ type ClassDeclaration struct {
 	extends    []string
 	modifiers  []string
 	attributes []Writable
-	definition *StatementsDeclaration
+	members    []Writable
 	ctor       Writable
 	isObject   bool
 }
@@ -40,9 +40,9 @@ func (self *ClassDeclaration) Extends(types ...string) *ClassDeclaration {
 	return self
 }
 
-func (self *ClassDeclaration) Define(block bool) *StatementsDeclaration {
-	self.definition = Statements(block, true)
-	return self.definition
+func (self *ClassDeclaration) AddDefinitions(members ...Writable) *ClassDeclaration {
+	self.members = append(self.members, members...)
+	return self
 }
 
 func (self *ClassDeclaration) AddAttributes(attributes ...Writable) *ClassDeclaration {
@@ -60,12 +60,24 @@ func (self *ClassDeclaration) Contructor() *MethodDeclaration {
 	return ctor
 }
 
+func (self *ClassDeclaration) Def(name string) *MethodDeclaration {
+	method := Method(name)
+	self.AddDefinitions(method)
+	return method
+}
+
+func (self *ClassDeclaration) Val(name string, type_ string) *ValDeclaration {
+	field := Val(name, type_)
+	self.AddDefinitions(field)
+	return field
+}
+
 func Class(name string) *ClassDeclaration {
 	return &ClassDeclaration{
 		name:       name,
 		modifiers:  []string{},
 		attributes: []Writable{},
-		definition: nil,
+		members:    []Writable{},
 		ctor:       nil,
 		isObject:   false,
 	}
@@ -76,7 +88,7 @@ func Object(name string) *ClassDeclaration {
 		name:       name,
 		modifiers:  []string{},
 		attributes: []Writable{},
-		definition: nil,
+		members:    []Writable{},
 		ctor:       nil,
 		isObject:   true,
 	}
@@ -109,9 +121,9 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(" extends " + strings.Join(self.extends, ", "))
 	}
 
-	if self.definition != nil {
+	if len(self.members) > 0 {
 		writer.Write(" ")
-		self.definition.WriteCode(writer)
+		WriteMembers(writer, self.members)
 	} else {
 		writer.Eol()
 	}

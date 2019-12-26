@@ -22,8 +22,7 @@ class MyClass {
 }
 `
 	class := Class("MyClass")
-	definition := class.Define(true)
-	definition.Def("MyMethod").Returns("Unit").Define().Block(true)
+	class.Def("MyMethod").Returns("Unit").Define().Block(true)
 	assertCode(t, class, expected)
 }
 
@@ -36,8 +35,7 @@ class MyClass {
 }
 `
 	class := Class("MyClass").Attribute("MyAttribute")
-	definition := class.Define(true)
-	definition.Def("MyMethod").Returns("Unit").Define().Block(true)
+	class.Def("MyMethod").Returns("Unit").Define().Block(true)
 	assertCode(t, class, expected)
 }
 
@@ -71,8 +69,7 @@ class MyClass @MyAttribute()() {
 `
 	class := Class("MyClass")
 	class.Contructor().Attribute("MyAttribute()")
-	definition := class.Define(true)
-	definition.Def("MyMethod").Returns("Unit").Define().Block(true)
+	class.Def("MyMethod").Returns("Unit").Define().Block(true)
 	assertCode(t, class, expected)
 }
 
@@ -83,10 +80,10 @@ func TestObjectBasic(t *testing.T) {
 
 func TestEnumCaseObject(t *testing.T) {
 	expected := `
-case object Yes extends Answer { override def toString = "yes" }
+case object Yes extends Answer {
+  override def toString = "yes"}
 `
 	object := Object("Yes").Case().Extends("Answer")
-	definition := object.Define(false)
-	definition.Def("toString").Override().NoParams().Define().Add(`"yes"`)
+	object.Def("toString").Override().NoParams().Define().Add(`"yes"`)
 	assertCode(t, object, expected)
 }
