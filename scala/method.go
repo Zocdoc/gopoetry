@@ -11,7 +11,6 @@ type MethodDeclaration struct {
 	noParams       bool
 	implicitParams []Writable
 	definition     Writable
-	paramPerLine   bool
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
@@ -64,11 +63,6 @@ func (self *MethodDeclaration) NoParams() *MethodDeclaration {
 	return self
 }
 
-func (self *MethodDeclaration) ParamPerLine() *MethodDeclaration {
-	self.paramPerLine = true
-	return self
-}
-
 func (self *MethodDeclaration) Define() *StatementsDeclaration {
 	statements := Statements()
 	self.definition = statements
@@ -100,7 +94,6 @@ func Method(name string) *MethodDeclaration {
 		params:         []Writable{},
 		implicitParams: []Writable{},
 		definition:     nil,
-		paramPerLine:   false,
 	}
 }
 
@@ -134,25 +127,11 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 
 	if !self.noParams {
 		writer.Write("(")
-		if self.paramPerLine {
-			writer.Indent()
-			writer.Eol()
-		}
 		for i, param := range self.params {
 			param.WriteCode(writer)
 			if i < len(self.params)-1 {
-				writer.Write(",")
+				writer.Write(", ")
 			}
-			if self.paramPerLine {
-				writer.Eol()
-			} else {
-				if i < len(self.params)-1 {
-					writer.Write(" ")
-				}
-			}
-		}
-		if self.paramPerLine {
-			writer.UnIndent()
 		}
 		writer.Write(")")
 	}
