@@ -35,10 +35,6 @@ func (self *ClassDeclaration) Case() *ClassDeclaration {
 	return self.addModifier("case")
 }
 
-func (self *ClassDeclaration) Abstract() *ClassDeclaration {
-	return self.addModifier("abstract")
-}
-
 func (self *ClassDeclaration) Extends(types ...string) *ClassDeclaration {
 	self.extends = append(self.extends, types...)
 	return self
