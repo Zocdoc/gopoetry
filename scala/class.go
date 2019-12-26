@@ -6,7 +6,7 @@ import (
 
 type ClassDeclaration struct {
 	name       string
-	extends    []string
+	extends    *ExtendsDeclaration
 	modifiers  []string
 	attributes []Writable
 	definition *StatementsDeclaration
@@ -39,9 +39,9 @@ func (self *ClassDeclaration) Abstract() *ClassDeclaration {
 	return self.addModifier("abstract")
 }
 
-func (self *ClassDeclaration) Extends(types ...string) *ClassDeclaration {
-	self.extends = append(self.extends, types...)
-	return self
+func (self *ClassDeclaration) Extends(baseClassName string, params ...string) *ExtendsDeclaration {
+	self.extends = Extends(baseClassName, params...)
+	return self.extends
 }
 
 func (self *ClassDeclaration) Define(block bool) *StatementsDeclaration {
@@ -72,6 +72,7 @@ func Class(name string) *ClassDeclaration {
 		definition: nil,
 		ctor:       nil,
 		isObject:   false,
+		extends:    nil,
 	}
 }
 
@@ -83,6 +84,7 @@ func Object(name string) *ClassDeclaration {
 		definition: nil,
 		ctor:       nil,
 		isObject:   true,
+		extends:    nil,
 	}
 }
 
@@ -109,8 +111,9 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 		self.ctor.WriteCode(writer)
 	}
 
-	if len(self.extends) > 0 {
-		writer.Write(" extends " + strings.Join(self.extends, " with "))
+	if self.extends != nil {
+		writer.Write(" ")
+		self.extends.WriteCode(writer)
 	}
 
 	if self.definition != nil {
