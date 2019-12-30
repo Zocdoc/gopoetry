@@ -36,7 +36,6 @@ func Unit() *UnitDeclaration {
 func (self *UnitDeclaration) WriteCode(writer CodeWriter) {
 	for _, require := range self.requirements {
 		require.WriteCode(writer)
-		writer.Eol()
 	}
 	for _, declaration := range self.declarations {
 		declaration.WriteCode(writer)

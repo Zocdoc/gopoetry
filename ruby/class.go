@@ -5,7 +5,6 @@ import (
 )
 
 // TODO: New lines between members
-// TODO: Add code string as a member
 
 type ClassDeclaration struct {
 	name       string
@@ -20,6 +19,11 @@ func (self *ClassDeclaration) Inherits(superClass string) *ClassDeclaration {
 
 func (self *ClassDeclaration) AddMembers(members ...Writable) *ClassDeclaration {
 	self.members = append(self.members, members...)
+	return self
+}
+
+func (self *ClassDeclaration) AddCode(code string) *ClassDeclaration {
+	self.members = append(self.members, Code(code))
 	return self
 }
 
