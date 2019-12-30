@@ -4,8 +4,6 @@ import (
 	"fmt"
 )
 
-// TODO: New lines between members
-
 type ClassDeclaration struct {
 	name       string
 	superClass *string
