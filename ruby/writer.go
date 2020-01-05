@@ -40,11 +40,11 @@ func (self *codeWriter) Eol() {
 func (self *codeWriter) Begin(code string) {
 	self.Write(code)
 	self.Eol()
-	self.indentation += 1
+	self.Indent()
 }
 
 func (self *codeWriter) End() {
-	self.indentation -= 1
+	self.UnIndent()
 	self.Write("end")
 	self.Eol()
 }

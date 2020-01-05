@@ -25,7 +25,7 @@ func (self *ClassDeclaration) AddCode(code string) *ClassDeclaration {
 	return self
 }
 
-func (self *ClassDeclaration) Method(name string) *MethodDeclaration {
+func (self *ClassDeclaration) Def(name string) *MethodDeclaration {
 	method := Method(name)
 	self.AddMembers(method)
 	return method

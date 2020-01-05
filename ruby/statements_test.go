@@ -15,12 +15,13 @@ line2()
 	assertCode(t, statements, expected)
 }
 
-func TestStatementsDef(t *testing.T) {
+func TestStatementsScope(t *testing.T) {
 	expected := `
-def the_method()
-end
+line1()
+  line2()
 `
-	statements := Statements()
-	statements.Def("the_method")
+	statements := Statements().AddLn("line1()")
+	statements.Scope().AddLn("line2()")
+
 	assertCode(t, statements, expected)
 }
