@@ -53,9 +53,9 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	writer.Begin(declaration)
-	for index, member := range self.members {
-		if index > 0 { writer.Eol() }
+	for _, member := range self.members {
 		member.WriteCode(writer)
+		writer.Eol()
 	}
 	writer.End()
 }
