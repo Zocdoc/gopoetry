@@ -11,12 +11,9 @@ func TestClassBasic(t *testing.T) {
 
 func TestClassExtends(t *testing.T) {
 	expected := `class MyClass extends BaseClass`
-	assertCode(t, Class("MyClass").Extends("BaseClass"), expected)
-}
-
-func TestClassExtendsMultiple(t *testing.T) {
-	expected := `class MyClass extends BaseClass with BaseClass2`
-	assertCode(t, Class("MyClass").Extends("BaseClass", "BaseClass2"), expected)
+	result := Class("MyClass")
+	result.Extends("BaseClass")
+	assertCode(t, result, expected)
 }
 
 func TestClassMethod(t *testing.T) {
@@ -90,7 +87,8 @@ func TestEnumCaseObject(t *testing.T) {
 	expected := `
 case object Yes extends Answer { override def toString = "yes" }
 `
-	object := Object("Yes").Case().Extends("Answer")
+	object := Object("Yes").Case()
+	object.Extends("Answer")
 	definition := object.Define(false)
 	definition.Def("toString").Override().NoParams().Define().Add(`"yes"`)
 	assertCode(t, object, expected)
