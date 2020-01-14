@@ -6,7 +6,6 @@ type ExtendsDeclaration struct {
 	className string
 	params    []string
 	withs     []string
-	code      Writable
 }
 
 func Extends(className string, params ...string) *ExtendsDeclaration {
