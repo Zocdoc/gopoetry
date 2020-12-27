@@ -34,14 +34,14 @@ func (self *TraitDeclaration) Extends(types ...string) *TraitDeclaration {
 	return self
 }
 
-func (self *TraitDeclaration) Define() *StatementsDeclaration {
-	self.members = Scope()
-	return self.members
+func (self *TraitDeclaration) Define(members ...Writable) *TraitDeclaration {
+	self.members = Scope(members...)
+	return self
 }
 
-func (self *TraitDeclaration) DefineInline() *StatementsDeclaration {
-	self.members = ScopeInline()
-	return self.members
+func (self *TraitDeclaration) DefineInline(members ...Writable) *TraitDeclaration {
+	self.members = ScopeInline(members...)
+	return self
 }
 
 func (self *TraitDeclaration) AddAttributes(attributes ...Writable) *TraitDeclaration {

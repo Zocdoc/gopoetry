@@ -69,12 +69,13 @@ func (self *MethodDeclaration) ParamPerLine() *MethodDeclaration {
 	return self
 }
 
-func (self *MethodDeclaration) Define(statements *StatementsDeclaration) *MethodDeclaration {
-	if statements != nil {
-		self.definition = statements
-	} else {
-		self.definition = Statements()
-	}
+func (self *MethodDeclaration) Define(statements ...Writable) *MethodDeclaration {
+	self.definition = Scope(statements...)
+	return self
+}
+
+func (self *MethodDeclaration) DefineInline(statement Writable) *MethodDeclaration {
+	self.definition = statement
 	return self
 }
 
