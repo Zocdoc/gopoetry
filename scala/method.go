@@ -78,16 +78,16 @@ func (self *MethodDeclaration) Define(statements *StatementsDeclaration) *Method
 	return self
 }
 
-func (self *MethodDeclaration) Param(name string, type_ string) *FieldDeclaration {
+func (self *MethodDeclaration) Param(name string, type_ string) *MethodDeclaration {
 	param := NewFieldDeclaration(name, type_)
 	self.AddParams(param)
-	return param
+	return self
 }
 
-func (self *MethodDeclaration) ImplicitParam(name string, type_ string) *FieldDeclaration {
+func (self *MethodDeclaration) ImplicitParam(name string, type_ string) *MethodDeclaration {
 	param := NewFieldDeclaration(name, type_)
 	self.AddImplicitParams(param)
-	return param
+	return self
 }
 
 func (self *MethodDeclaration) IsConstructor() bool {

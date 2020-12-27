@@ -18,9 +18,10 @@ func TestMethodParams(t *testing.T) {
 	expected := `
 def someMethod(param1: String, param2: Int)
 `
-	method := Method("someMethod")
-	method.Param("param1", "String")
-	method.Param("param2", "Int")
+	method :=
+		Method("someMethod").
+			Param("param1", "String").
+			Param("param2", "Int")
 	assertCode(t, method, expected)
 }
 
@@ -31,9 +32,10 @@ def someMethod(
   param2: Int
 )
 `
-	method := Method("someMethod").ParamPerLine()
-	method.Param("param1", "String")
-	method.Param("param2", "Int")
+	method :=
+		Method("someMethod").ParamPerLine().
+			Param("param1", "String").
+			Param("param2", "Int")
 	assertCode(t, method, expected)
 }
 
