@@ -56,8 +56,8 @@ request =>
 		Block(
 			Line("nextedLine1()"),
 			Line("nextedLine2()"),
-			),
-		)
+		),
+	)
 	assertCode(t, statements, expected)
 }
 
@@ -66,7 +66,7 @@ func TestStatementsWithScopeNoBlock(t *testing.T) {
 	statements := Statements(
 		Code("collection.map "),
 		ScopeInline(Code("process")),
-		)
+	)
 	assertCode(t, statements, expected)
 }
 
