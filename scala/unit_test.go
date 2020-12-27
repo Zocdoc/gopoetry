@@ -6,8 +6,7 @@ func TestImport(t *testing.T) {
 	expected := `
 package com.example
 
-import com.example.Example
-`
+import com.example.Example`
 	assertCode(t, Unit("com.example").Import("com.example.Example"), expected)
 }
 
@@ -19,9 +18,7 @@ import com.example.Example
 
 trait IExample
 
-object IExample
-
-`
+object IExample`
 	unit := Unit("com.example")
 	unit.Import("com.example.Example")
 	unit.AddDeclarations(Trait("IExample"), Object("IExample"))

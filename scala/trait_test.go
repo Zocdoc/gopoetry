@@ -23,8 +23,7 @@ func TestTraitMethod(t *testing.T) {
 	expected := `
 trait MyTrait {
   def MyMethod(): Unit
-}
-`
+}`
 	trait :=
 		Trait("MyTrait").Define(
 			Method("MyMethod").Returns("Unit"),
@@ -37,8 +36,7 @@ func TestTraitWithAttribute(t *testing.T) {
 @MyAttribute
 trait MyTrait {
   def MyMethod(): Unit
-}
-`
+}`
 	trait :=
 		Trait("MyTrait").Attribute("MyAttribute").Define(
 			Method("MyMethod").Returns("Unit"),

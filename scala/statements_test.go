@@ -14,8 +14,7 @@ var line = Line
 func TestStatementsSimple(t *testing.T) {
 	expected := `
 line1()
-line2()
-`
+line2()`
 	statements :=
 		Statements(
 			line("line1()"),
@@ -31,8 +30,7 @@ line1()
 line2 {
   nextedLine1()
   nextedLine2()
-}
-`
+}`
 	statements :=
 		Statements(
 			line("line1()"),
@@ -49,8 +47,7 @@ func TestStatementsWithBlockNoScope(t *testing.T) {
 	expected := `
 request =>
   nextedLine1()
-  nextedLine2()
-`
+  nextedLine2()`
 	statements := Statements(
 		Line("request =>"),
 		Block(

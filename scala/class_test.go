@@ -19,8 +19,7 @@ func TestClassMethod(t *testing.T) {
 class MyClass {
   def MyMethod(): Unit = {
   }
-}
-`
+}`
 	class :=
 		Class("MyClass").Define(
 			Method("MyMethod").Returns("Unit").Define(),
@@ -34,8 +33,7 @@ func TestClassWithAttribute(t *testing.T) {
 class MyClass {
   def MyMethod(): Unit = {
   }
-}
-`
+}`
 	class :=
 		Class("MyClass").Attribute("MyAttribute").Define(
 			Method("MyMethod").Returns("Unit").Define(),
@@ -69,8 +67,7 @@ func TestClassWithCtorAttribute(t *testing.T) {
 class MyClass @MyAttribute()() {
   def MyMethod(): Unit = {
   }
-}
-`
+}`
 	class :=
 		Class("MyClass").
 			Constructor(Constructor().Attribute("MyAttribute()")).
@@ -86,9 +83,7 @@ func TestObjectBasic(t *testing.T) {
 }
 
 func TestEnumCaseObject(t *testing.T) {
-	expected := `
-case object Yes extends Answer { override def toString = "yes" }
-`
+	expected := `case object Yes extends Answer { override def toString = "yes" }`
 	object :=
 		Object("Yes").Case().Extends("Answer").DefineInline(
 			Method("toString").Override().NoParams().DefineInline(Code(`"yes"`)),

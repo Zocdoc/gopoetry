@@ -15,9 +15,7 @@ func TestMethodZeroParams(t *testing.T) {
 }
 
 func TestMethodParams(t *testing.T) {
-	expected := `
-def someMethod(param1: String, param2: Int)
-`
+	expected := `def someMethod(param1: String, param2: Int)`
 	method :=
 		Method("someMethod").
 			Param("param1", "String").
@@ -30,8 +28,7 @@ func TestMethodParamPerLine(t *testing.T) {
 def someMethod(
   param1: String,
   param2: Int
-)
-`
+)`
 	method :=
 		Method("someMethod").ParamPerLine().
 			Param("param1", "String").
@@ -42,8 +39,7 @@ def someMethod(
 func TestMethodWithBody(t *testing.T) {
 	expected := `
 def someMethod() = {
-}
-`
+}`
 	method := Method("someMethod")
 	method.Define()
 	assertCode(t, method, expected)
