@@ -49,18 +49,14 @@ func (self *ClassDeclaration) With(traitName string) *ClassDeclaration {
 	return self
 }
 
-func (self *ClassDeclaration) Define(definition *StatementsDeclaration) *ClassDeclaration {
-	if definition != nil {
-		self.definition = definition
-	} else {
-		self.definition = Scope()
-	}
+func (self *ClassDeclaration) Define(statements ...Writable) *ClassDeclaration {
+	self.definition = Scope(statements...)
 	return self
 }
 
-func (self *ClassDeclaration) DefineInline() *StatementsDeclaration {
-	self.definition = ScopeInline()
-	return self.definition
+func (self *ClassDeclaration) DefineInline(statements ...Writable) *ClassDeclaration {
+	self.definition = ScopeInline(statements...)
+	return self
 }
 
 func (self *ClassDeclaration) Definition() *StatementsDeclaration {

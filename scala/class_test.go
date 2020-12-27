@@ -23,9 +23,7 @@ class MyClass {
 `
 	class :=
 		Class("MyClass").Define(
-			Scope(
-				Method("MyMethod").Returns("Unit").Define(Scope()),
-			),
+			Method("MyMethod").Returns("Unit").Define(Scope()),
 		)
 	assertCode(t, class, expected)
 }
@@ -38,11 +36,10 @@ class MyClass {
   }
 }
 `
-	class := Class("MyClass").Attribute("MyAttribute").Define(
-		Scope(
+	class :=
+		Class("MyClass").Attribute("MyAttribute").Define(
 			Method("MyMethod").Returns("Unit").Define(Scope()),
-		),
-	)
+		)
 	assertCode(t, class, expected)
 }
 
@@ -78,9 +75,7 @@ class MyClass @MyAttribute()() {
 		Class("MyClass").
 			Constructor(Constructor().Attribute("MyAttribute()")).
 			Define(
-				Scope(
-					Method("MyMethod").Returns("Unit").Define(Scope()),
-				),
+				Method("MyMethod").Returns("Unit").Define(Scope()),
 			)
 	assertCode(t, class, expected)
 }
@@ -94,13 +89,13 @@ func TestEnumCaseObject(t *testing.T) {
 	expected := `
 case object Yes extends Answer { override def toString = "yes" }
 `
-	object := Object("Yes").Case()
-	object.Extends("Answer")
-	definition := object.DefineInline()
-	definition.Def("toString").Override().NoParams().Define(
-		Statements(
-			Code(`"yes"`),
-		),
-	)
+	object :=
+		Object("Yes").Case().Extends("Answer").DefineInline(
+			Method("toString").Override().NoParams().Define(
+				Statements(
+					Code(`"yes"`),
+				),
+			),
+		)
 	assertCode(t, object, expected)
 }
