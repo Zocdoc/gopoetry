@@ -6,18 +6,22 @@ import (
 
 type WritableCode struct {
 	code string
+	eol bool
+}
+
+func Code(code string) *WritableCode {
+	return &WritableCode{code: code, eol: false}
+}
+
+func Line(code string) *WritableCode {
+	return &WritableCode{code: code, eol: true}
 }
 
 func (self *WritableCode) WriteCode(writer CodeWriter) {
 	writer.Write(self.code)
-}
-
-func Code(code string) *WritableCode {
-	return &WritableCode{code: code}
-}
-
-func C(code string) *WritableCode {
-	return Code(code)
+	if self.eol {
+		writer.Eol()
+	}
 }
 
 func Int(value int) *WritableCode {
@@ -26,16 +30,6 @@ func Int(value int) *WritableCode {
 
 func Str(value string) *WritableCode {
 	return Code("\"" + value + "\"")
-}
-
-type EolDefinition struct {}
-
-func Eol() *EolDefinition {
-	return &EolDefinition{}
-}
-
-func (self *EolDefinition) WriteCode(writer CodeWriter) {
-	writer.Eol()
 }
 
 var True = Code("true")

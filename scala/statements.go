@@ -6,63 +6,49 @@ type StatementsDeclaration struct {
 	scope      bool
 }
 
-func (self *StatementsDeclaration) AddCode(code Writable) *StatementsDeclaration {
+func (self *StatementsDeclaration) Add(code Writable) *StatementsDeclaration {
 	self.statements = append(self.statements, code)
 	return self
 }
 
-func (self *StatementsDeclaration) Add(code string) *StatementsDeclaration {
-	self.statements = append(self.statements, Code(code))
-	return self
-}
-
-func (self *StatementsDeclaration) AddLn(code string) *StatementsDeclaration {
-	self.
-		AddCode(Code(code)).
-		AddCode(Eol())
-	return self
-}
-
-func (self *StatementsDeclaration) Block(scope bool) *StatementsDeclaration {
-	body := Block(scope)
-	self.AddCode(body)
-	return body
-}
-
-func (self *StatementsDeclaration) Scope(block bool) *StatementsDeclaration {
-	body := Scope(block)
-	self.AddCode(body)
+func (self *StatementsDeclaration) Scope() *StatementsDeclaration {
+	body := Scope()
+	self.Add(body)
 	return body
 }
 
 func (self *StatementsDeclaration) Def(name string) *MethodDeclaration {
 	method := Method(name)
-	self.AddCode(method)
+	self.Add(method)
 	return method
 }
 
 func (self *StatementsDeclaration) Val(name string, type_ string) *FieldDeclaration {
 	field := Val(name, type_)
-	self.AddCode(field)
+	self.Add(field)
 	return field
 }
 
 func (self *StatementsDeclaration) Var(name string, type_ string) *FieldDeclaration {
 	field := Var(name, type_)
-	self.AddCode(field)
+	self.Add(field)
 	return field
 }
 
-func Statements(block bool, scope bool) *StatementsDeclaration {
-	return &StatementsDeclaration{statements: []Writable{}, block: block, scope: scope}
+func Statements(statements ...Writable) *StatementsDeclaration {
+	return &StatementsDeclaration{statements: statements, block: false, scope: false}
 }
 
-func Block(scope bool) *StatementsDeclaration {
-	return &StatementsDeclaration{statements: []Writable{}, block: true, scope: scope}
+func Block(statements ...Writable) *StatementsDeclaration {
+	return &StatementsDeclaration{statements: statements, block: true, scope: false}
 }
 
-func Scope(block bool) *StatementsDeclaration {
-	return &StatementsDeclaration{statements: []Writable{}, block: block, scope: true}
+func Scope(statements ...Writable) *StatementsDeclaration {
+	return &StatementsDeclaration{statements: statements, block: true, scope: true}
+}
+
+func ScopeInline(statements ...Writable) *StatementsDeclaration {
+	return &StatementsDeclaration{statements: statements, block: false, scope: true}
 }
 
 func (self *StatementsDeclaration) WriteCode(writer CodeWriter) {

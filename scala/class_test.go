@@ -24,8 +24,8 @@ class MyClass {
 }
 `
 	class := Class("MyClass")
-	definition := class.Define(true)
-	definition.Def("MyMethod").Returns("Unit").Define().Block(true)
+	definition := class.Define()
+	definition.Def("MyMethod").Returns("Unit").Define().Scope()
 	assertCode(t, class, expected)
 }
 
@@ -38,8 +38,8 @@ class MyClass {
 }
 `
 	class := Class("MyClass").Attribute("MyAttribute")
-	definition := class.Define(true)
-	definition.Def("MyMethod").Returns("Unit").Define().Block(true)
+	definition := class.Define()
+	definition.Def("MyMethod").Returns("Unit").Define().Scope()
 	assertCode(t, class, expected)
 }
 
@@ -73,8 +73,8 @@ class MyClass @MyAttribute()() {
 `
 	class := Class("MyClass")
 	class.Contructor().Attribute("MyAttribute()")
-	definition := class.Define(true)
-	definition.Def("MyMethod").Returns("Unit").Define().Block(true)
+	definition := class.Define()
+	definition.Def("MyMethod").Returns("Unit").Define().Scope()
 	assertCode(t, class, expected)
 }
 
@@ -89,7 +89,7 @@ case object Yes extends Answer { override def toString = "yes" }
 `
 	object := Object("Yes").Case()
 	object.Extends("Answer")
-	definition := object.Define(false)
-	definition.Def("toString").Override().NoParams().Define().Add(`"yes"`)
+	definition := object.DefineInline()
+	definition.Def("toString").Override().NoParams().Define().Add(Code(`"yes"`))
 	assertCode(t, object, expected)
 }

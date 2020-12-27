@@ -44,8 +44,13 @@ func (self *ClassDeclaration) Extends(baseClassName string, params ...string) *E
 	return self.extends
 }
 
-func (self *ClassDeclaration) Define(block bool) *StatementsDeclaration {
-	self.definition = Statements(block, true)
+func (self *ClassDeclaration) Define() *StatementsDeclaration {
+	self.definition = Scope()
+	return self.definition
+}
+
+func (self *ClassDeclaration) DefineInline() *StatementsDeclaration {
+	self.definition = ScopeInline()
 	return self.definition
 }
 

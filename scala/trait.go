@@ -34,8 +34,13 @@ func (self *TraitDeclaration) Extends(types ...string) *TraitDeclaration {
 	return self
 }
 
-func (self *TraitDeclaration) Define(block bool) *StatementsDeclaration {
-	self.members = Statements(block, true)
+func (self *TraitDeclaration) Define() *StatementsDeclaration {
+	self.members = Scope()
+	return self.members
+}
+
+func (self *TraitDeclaration) DefineInline() *StatementsDeclaration {
+	self.members = ScopeInline()
 	return self.members
 }
 

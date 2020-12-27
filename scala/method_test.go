@@ -43,7 +43,7 @@ def someMethod() = {
 }
 `
 	method := Method("someMethod")
-	method.Define().Block(true)
+	method.Define().Scope()
 	assertCode(t, method, expected)
 }
 
