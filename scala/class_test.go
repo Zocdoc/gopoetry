@@ -10,10 +10,8 @@ func TestClassBasic(t *testing.T) {
 }
 
 func TestClassExtends(t *testing.T) {
-	expected := `class MyClass extends BaseClass`
-	result := Class("MyClass")
-	result.Extends("BaseClass")
-	assertCode(t, result, expected)
+	expected := `class MyClass extends BaseClass with Trait`
+	assertCode(t, Class("MyClass").Extends("BaseClass").With("Trait"), expected)
 }
 
 func TestClassMethod(t *testing.T) {

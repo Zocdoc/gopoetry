@@ -39,9 +39,14 @@ func (self *ClassDeclaration) Abstract() *ClassDeclaration {
 	return self.addModifier("abstract")
 }
 
-func (self *ClassDeclaration) Extends(baseClassName string, params ...string) *ExtendsDeclaration {
+func (self *ClassDeclaration) Extends(baseClassName string, params ...string) *ClassDeclaration {
 	self.extends = Extends(baseClassName, params...)
-	return self.extends
+	return self
+}
+
+func (self *ClassDeclaration) With(traitName string) *ClassDeclaration {
+	self.extends.With(traitName)
+	return self
 }
 
 func (self *ClassDeclaration) Define(definition *StatementsDeclaration) *ClassDeclaration {
