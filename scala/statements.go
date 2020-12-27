@@ -11,12 +11,6 @@ func (self *StatementsDeclaration) Add(code Writable) *StatementsDeclaration {
 	return self
 }
 
-func (self *StatementsDeclaration) Scope() *StatementsDeclaration {
-	body := Scope()
-	self.Add(body)
-	return body
-}
-
 func (self *StatementsDeclaration) Def(name string) *MethodDeclaration {
 	method := Method(name)
 	self.Add(method)

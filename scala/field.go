@@ -86,6 +86,10 @@ func (self *FieldDeclaration) WriteCode(writer CodeWriter) {
 	}
 }
 
+func Param(name string, type_ string) *FieldDeclaration {
+	return NewFieldDeclaration(name, type_)
+}
+
 func NewFieldDeclaration(name string, type_ string) *FieldDeclaration {
 	return &FieldDeclaration{
 		name:       name,

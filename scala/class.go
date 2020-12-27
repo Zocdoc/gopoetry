@@ -44,13 +44,21 @@ func (self *ClassDeclaration) Extends(baseClassName string, params ...string) *E
 	return self.extends
 }
 
-func (self *ClassDeclaration) Define() *StatementsDeclaration {
-	self.definition = Scope()
-	return self.definition
+func (self *ClassDeclaration) Define(definition *StatementsDeclaration) *ClassDeclaration {
+	if definition != nil {
+		self.definition = definition
+	} else {
+		self.definition = Scope()
+	}
+	return self
 }
 
 func (self *ClassDeclaration) DefineInline() *StatementsDeclaration {
 	self.definition = ScopeInline()
+	return self.definition
+}
+
+func (self *ClassDeclaration) Definition() *StatementsDeclaration {
 	return self.definition
 }
 
@@ -63,10 +71,9 @@ func (self *ClassDeclaration) Attribute(code string) *ClassDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *ClassDeclaration) Contructor() *MethodDeclaration {
-	ctor := Method("")
+func (self *ClassDeclaration) Constructor(ctor *MethodDeclaration) *ClassDeclaration {
 	self.ctor = ctor
-	return ctor
+	return self
 }
 
 func Class(name string) *ClassDeclaration {

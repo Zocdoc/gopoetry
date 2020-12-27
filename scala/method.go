@@ -69,10 +69,13 @@ func (self *MethodDeclaration) ParamPerLine() *MethodDeclaration {
 	return self
 }
 
-func (self *MethodDeclaration) Define() *StatementsDeclaration {
-	statements := Statements()
-	self.definition = statements
-	return statements
+func (self *MethodDeclaration) Define(statements *StatementsDeclaration) *MethodDeclaration {
+	if statements != nil {
+		self.definition = statements
+	} else {
+		self.definition = Statements()
+	}
+	return self
 }
 
 func (self *MethodDeclaration) Param(name string, type_ string) *FieldDeclaration {
@@ -102,6 +105,10 @@ func Method(name string) *MethodDeclaration {
 		definition:     nil,
 		paramPerLine:   false,
 	}
+}
+
+func Constructor() *MethodDeclaration {
+	return Method("")
 }
 
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {

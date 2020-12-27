@@ -23,9 +23,12 @@ class MyClass {
   }
 }
 `
-	class := Class("MyClass")
-	definition := class.Define()
-	definition.Def("MyMethod").Returns("Unit").Define().Scope()
+	class :=
+		Class("MyClass").Define(
+			Scope(
+				Method("MyMethod").Returns("Unit").Define(Scope()),
+			),
+		)
 	assertCode(t, class, expected)
 }
 
@@ -37,30 +40,32 @@ class MyClass {
   }
 }
 `
-	class := Class("MyClass").Attribute("MyAttribute")
-	definition := class.Define()
-	definition.Def("MyMethod").Returns("Unit").Define().Scope()
+	class := Class("MyClass").Attribute("MyAttribute").Define(
+		Scope(
+			Method("MyMethod").Returns("Unit").Define(Scope()),
+		),
+	)
 	assertCode(t, class, expected)
 }
 
 func TestClassWithCtorParam(t *testing.T) {
 	expected := `class MyClass(param1: String)`
 	class := Class("MyClass")
-	class.Contructor().Param("param1", "String")
+	class.Constructor(Constructor().AddParams(Param("param1", "String")))
 	assertCode(t, class, expected)
 }
 
 func TestClassWithPrivateCtor(t *testing.T) {
 	expected := `class MyClass private (param1: String)`
 	class := Class("MyClass")
-	class.Contructor().Private().Param("param1", "String")
+	class.Constructor(Constructor().Private().AddParams(Param("param1", "String")))
 	assertCode(t, class, expected)
 }
 
 func TestClassWithCtorImplicitParam(t *testing.T) {
 	expected := `class MyClass(implicit param1: String)`
 	class := Class("MyClass")
-	class.Contructor().NoParams().ImplicitParam("param1", "String")
+	class.Constructor(Constructor().NoParams().AddImplicitParams(Param("param1", "String")))
 	assertCode(t, class, expected)
 }
 
@@ -71,10 +76,14 @@ class MyClass @MyAttribute()() {
   }
 }
 `
-	class := Class("MyClass")
-	class.Contructor().Attribute("MyAttribute()")
-	definition := class.Define()
-	definition.Def("MyMethod").Returns("Unit").Define().Scope()
+	class :=
+		Class("MyClass").
+			Constructor(Constructor().Attribute("MyAttribute()")).
+			Define(
+				Scope(
+					Method("MyMethod").Returns("Unit").Define(Scope()),
+				),
+			)
 	assertCode(t, class, expected)
 }
 
@@ -90,6 +99,10 @@ case object Yes extends Answer { override def toString = "yes" }
 	object := Object("Yes").Case()
 	object.Extends("Answer")
 	definition := object.DefineInline()
-	definition.Def("toString").Override().NoParams().Define().Add(Code(`"yes"`))
+	definition.Def("toString").Override().NoParams().Define(
+		Statements(
+			Code(`"yes"`),
+		),
+	)
 	assertCode(t, object, expected)
 }
