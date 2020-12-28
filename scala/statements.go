@@ -12,7 +12,7 @@ func (self *StatementsDeclaration) Add(code ...Writable) *StatementsDeclaration 
 }
 
 func (self *StatementsDeclaration) Def(name string) *MethodDeclaration {
-	method := Method(name)
+	method := Def(name)
 	self.Add(method)
 	return method
 }

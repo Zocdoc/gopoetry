@@ -103,7 +103,7 @@ func (self *MethodDeclaration) IsConstructor() bool {
 	return self.name == ""
 }
 
-func Method(name string) *MethodDeclaration {
+func Def(name string) *MethodDeclaration {
 	return &MethodDeclaration{
 		name:           name,
 		returns:        nil,
@@ -117,7 +117,7 @@ func Method(name string) *MethodDeclaration {
 }
 
 func Constructor() *MethodDeclaration {
-	return Method("")
+	return Def("")
 }
 
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {

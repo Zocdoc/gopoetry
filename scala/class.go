@@ -9,7 +9,7 @@ type ClassDeclaration struct {
 	extends    *ExtendsDeclaration
 	modifiers  []string
 	attributes []Writable
-	definition *StatementsDeclaration
+	members    *StatementsDeclaration
 	ctor       Writable
 	isObject   bool
 }
@@ -49,18 +49,18 @@ func (self *ClassDeclaration) With(traitName string) *ClassDeclaration {
 	return self
 }
 
-func (self *ClassDeclaration) Define(statements ...Writable) *ClassDeclaration {
-	self.definition = Scope(statements...)
+func (self *ClassDeclaration) Members(statements ...Writable) *ClassDeclaration {
+	self.members = Scope(statements...)
 	return self
 }
 
-func (self *ClassDeclaration) DefineInline(statements ...Writable) *ClassDeclaration {
-	self.definition = ScopeInline(statements...)
+func (self *ClassDeclaration) MembersInline(statements ...Writable) *ClassDeclaration {
+	self.members = ScopeInline(statements...)
 	return self
 }
 
 func (self *ClassDeclaration) Definition() *StatementsDeclaration {
-	return self.definition
+	return self.members
 }
 
 func (self *ClassDeclaration) AddAttributes(attributes ...Writable) *ClassDeclaration {
@@ -82,7 +82,7 @@ func Class(name string) *ClassDeclaration {
 		name:       name,
 		modifiers:  []string{},
 		attributes: []Writable{},
-		definition: nil,
+		members:    nil,
 		ctor:       nil,
 		isObject:   false,
 		extends:    nil,
@@ -94,7 +94,7 @@ func Object(name string) *ClassDeclaration {
 		name:       name,
 		modifiers:  []string{},
 		attributes: []Writable{},
-		definition: nil,
+		members:    nil,
 		ctor:       nil,
 		isObject:   true,
 		extends:    nil,
@@ -129,9 +129,9 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 		self.extends.WriteCode(writer)
 	}
 
-	if self.definition != nil {
+	if self.members != nil {
 		writer.Write(" ")
-		self.definition.WriteCode(writer)
+		self.members.WriteCode(writer)
 	} else {
 		writer.Eol()
 	}

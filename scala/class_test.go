@@ -21,8 +21,8 @@ class MyClass {
   }
 }`
 	class :=
-		Class("MyClass").Define(
-			Method("MyMethod").Returns("Unit").Body(),
+		Class("MyClass").Members(
+			Def("MyMethod").Returns("Unit").Body(),
 		)
 	assertCode(t, class, expected)
 }
@@ -35,8 +35,8 @@ class MyClass {
   }
 }`
 	class :=
-		Class("MyClass").Attribute("MyAttribute").Define(
-			Method("MyMethod").Returns("Unit").Body(),
+		Class("MyClass").Attribute("MyAttribute").Members(
+			Def("MyMethod").Returns("Unit").Body(),
 		)
 	assertCode(t, class, expected)
 }
@@ -71,8 +71,8 @@ class MyClass @MyAttribute()() {
 	class :=
 		Class("MyClass").
 			Constructor(Constructor().Attribute("MyAttribute()")).
-			Define(
-				Method("MyMethod").Returns("Unit").Body(),
+			Members(
+				Def("MyMethod").Returns("Unit").Body(),
 			)
 	assertCode(t, class, expected)
 }
@@ -85,8 +85,8 @@ func TestObjectBasic(t *testing.T) {
 func TestEnumCaseObject(t *testing.T) {
 	expected := `case object Yes extends Answer { override def toString = "yes" }`
 	object :=
-		Object("Yes").Case().Extends("Answer").DefineInline(
-			Method("toString").Override().NoParams().BodyInline(Code(`"yes"`)),
+		Object("Yes").Case().Extends("Answer").MembersInline(
+			Def("toString").Override().NoParams().BodyInline(Code(`"yes"`)),
 		)
 	assertCode(t, object, expected)
 }
