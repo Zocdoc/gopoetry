@@ -58,7 +58,9 @@ func (self *StatementsDeclaration) WriteCode(writer CodeWriter) {
 		writer.Indent()
 	}
 	for _, statement := range self.statements {
-		statement.WriteCode(writer)
+		if statement != nil {
+			statement.WriteCode(writer)
+		}
 	}
 	if self.block {
 		writer.UnIndent()
