@@ -6,8 +6,8 @@ type StatementsDeclaration struct {
 	scope      bool
 }
 
-func (self *StatementsDeclaration) Add(code Writable) *StatementsDeclaration {
-	self.statements = append(self.statements, code)
+func (self *StatementsDeclaration) Add(code ...Writable) *StatementsDeclaration {
+	self.statements = append(self.statements, code...)
 	return self
 }
 

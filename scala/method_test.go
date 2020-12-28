@@ -41,7 +41,7 @@ func TestMethodWithBody(t *testing.T) {
 def someMethod() = {
 }`
 	method := Method("someMethod")
-	method.Define()
+	method.Body()
 	assertCode(t, method, expected)
 }
 

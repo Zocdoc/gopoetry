@@ -10,7 +10,7 @@ type MethodDeclaration struct {
 	params         []Writable
 	noParams       bool
 	implicitParams []Writable
-	definition     Writable
+	body           *StatementsDeclaration
 	paramPerLine   bool
 }
 
@@ -69,13 +69,21 @@ func (self *MethodDeclaration) ParamPerLine() *MethodDeclaration {
 	return self
 }
 
-func (self *MethodDeclaration) Define(statements ...Writable) *MethodDeclaration {
-	self.definition = Scope(statements...)
+func (self *MethodDeclaration) Body(statements ...Writable) *MethodDeclaration {
+	self.body = Scope(statements...)
 	return self
 }
 
-func (self *MethodDeclaration) DefineInline(statement Writable) *MethodDeclaration {
-	self.definition = statement
+func (self *MethodDeclaration) BodyInline(statement Writable) *MethodDeclaration {
+	self.body = Statements(statement)
+	return self
+}
+
+func (self *MethodDeclaration) AddStatements(statements ...Writable) *MethodDeclaration {
+	if self.body == nil {
+		self.body = Statements()
+	}
+	self.body.Add(statements...)
 	return self
 }
 
@@ -103,7 +111,7 @@ func Method(name string) *MethodDeclaration {
 		attributes:     []Writable{},
 		params:         []Writable{},
 		implicitParams: []Writable{},
-		definition:     nil,
+		body:           nil,
 		paramPerLine:   false,
 	}
 }
@@ -181,9 +189,9 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(*self.returns)
 	}
 
-	if self.definition != nil {
+	if self.body != nil {
 		writer.Write(" = ")
-		self.definition.WriteCode(writer)
+		self.body.WriteCode(writer)
 	} else {
 		if !self.IsConstructor() {
 			writer.Eol()
