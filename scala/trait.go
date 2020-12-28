@@ -45,6 +45,9 @@ func (self *TraitDeclaration) MembersInline(members ...Writable) *TraitDeclarati
 }
 
 func (self *TraitDeclaration) AddMembers(members ...Writable) *TraitDeclaration {
+	if self.members == nil {
+		self.members = Scope()
+	}
 	self.members.Add(members...)
 	return self
 }
