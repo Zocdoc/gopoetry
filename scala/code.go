@@ -1,27 +1,55 @@
 package scala
 
 import (
-"strconv"
+	"fmt"
+	"strconv"
 )
 
 type WritableCode struct {
 	code string
-	eol bool
+	eol  int
 }
 
-func Code(code string) *WritableCode {
-	return &WritableCode{code: code, eol: false}
+func Code(codeFormat string, args ...interface{}) *WritableCode {
+	return &WritableCode{code: fmt.Sprintf(codeFormat, args...), eol: 0}
 }
 
-func Line(code string) *WritableCode {
-	return &WritableCode{code: code, eol: true}
+func Line(codeFormat string, args ...interface{}) *WritableCode {
+	return Code(codeFormat, args...).Eol()
+}
+
+func CodeIf(condition bool, codeFormat string, args ...interface{}) *WritableCode {
+	if condition {
+		return Code(codeFormat, args...)
+	} else {
+		return NoCode()
+	}
+}
+
+func LineIf(condition bool, codeFormat string, args ...interface{}) *WritableCode {
+	if condition {
+		return Line(codeFormat, args...)
+	} else {
+		return NoCode()
+	}
+}
+
+func (self *WritableCode) Eol() *WritableCode {
+	self.eol = self.eol + 1
+	return self
 }
 
 func (self *WritableCode) WriteCode(writer CodeWriter) {
-	writer.Write(self.code)
-	if self.eol {
+	if self.code != "" {
+		writer.Write(self.code)
+	}
+	for i := 0; i < self.eol; i++ {
 		writer.Eol()
 	}
+}
+
+func NoCode() *WritableCode {
+	return &WritableCode{code: "", eol: 0}
 }
 
 func Int(value int) *WritableCode {

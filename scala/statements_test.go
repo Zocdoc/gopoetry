@@ -67,6 +67,12 @@ func TestStatementsWithScopeNoBlock(t *testing.T) {
 	assertCode(t, statements, expected)
 }
 
+func TestStatementsAddNil(t *testing.T) {
+	expected := `some code`
+	statements := Statements(Code("some code"), nil)
+	assertCode(t, statements, expected)
+}
+
 var expectedCode = `
 params match {
   case Failure(ex) => Future { BadRequest }
