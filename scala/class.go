@@ -59,8 +59,9 @@ func (self *ClassDeclaration) MembersInline(statements ...Writable) *ClassDeclar
 	return self
 }
 
-func (self *ClassDeclaration) Definition() *StatementsDeclaration {
-	return self.members
+func (self *ClassDeclaration) AddMembers(members ...Writable) *ClassDeclaration {
+	self.members.Add(members...)
+	return self
 }
 
 func (self *ClassDeclaration) AddAttributes(attributes ...Writable) *ClassDeclaration {
