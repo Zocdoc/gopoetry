@@ -41,7 +41,7 @@ func (self *MethodDeclaration) Async() *MethodDeclaration {
 }
 
 func (self *MethodDeclaration) AddAttributes(attributes ...Writable) *MethodDeclaration {
-	self.attributes = append(self.attributes, attributes...)
+	self.attributes = append(self.attributes, filterNils(attributes)...)
 	return self
 }
 
@@ -50,12 +50,12 @@ func (self *MethodDeclaration) Attribute(code string) *MethodDeclaration {
 }
 
 func (self *MethodDeclaration) AddParams(params ...Writable) *MethodDeclaration {
-	self.params = append(self.params, params...)
+	self.params = append(self.params, filterNils(params)...)
 	return self
 }
 
 func (self *MethodDeclaration) AddImplicitParams(params ...Writable) *MethodDeclaration {
-	self.implicitParams = append(self.implicitParams, params...)
+	self.implicitParams = append(self.implicitParams, filterNils(params)...)
 	return self
 }
 

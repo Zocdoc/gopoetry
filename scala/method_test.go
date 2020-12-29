@@ -17,9 +17,21 @@ func TestMethodZeroParams(t *testing.T) {
 func TestMethodParams(t *testing.T) {
 	expected := `def someMethod(param1: String, param2: Int)`
 	method :=
-		Def("someMethod").
-			Param("param1", "String").
-			Param("param2", "Int")
+		Def("someMethod").AddParams(
+			Param("param1", "String"),
+			Param("param2", "Int"),
+		)
+	assertCode(t, method, expected)
+}
+
+func TestMethodParamsNil(t *testing.T) {
+	expected := `def someMethod(param1: String, param2: Int)`
+	method :=
+		Def("someMethod").AddParams(
+			Param("param1", "String"),
+			nil,
+			Param("param2", "Int"),
+		)
 	assertCode(t, method, expected)
 }
 
