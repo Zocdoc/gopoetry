@@ -1,7 +1,5 @@
 package scala
 
-type StatementsGetter func() *StatementsDeclaration
-
 type StatementsDeclaration struct {
 	statements []Writable
 	block      bool
