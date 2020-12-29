@@ -11,6 +11,18 @@ func (self *StatementsDeclaration) Add(code ...Writable) *StatementsDeclaration 
 	return self
 }
 
+func (self *StatementsDeclaration) Code(codeFormat string, args ...interface{}) *WritableCode {
+	code := Code(codeFormat, args...)
+	self.Add(code)
+	return code
+}
+
+func (self *StatementsDeclaration) Line(codeFormat string, args ...interface{}) *WritableCode {
+	line := Line(codeFormat, args...)
+	self.Add(line)
+	return line
+}
+
 func (self *StatementsDeclaration) Def(name string) *MethodDeclaration {
 	method := Def(name)
 	self.Add(method)
@@ -28,6 +40,13 @@ func (self *StatementsDeclaration) Var(name string, type_ string) *FieldDeclarat
 	self.Add(field)
 	return field
 }
+
+func (self *StatementsDeclaration) Eol() *EolDefinition {
+	eol := Eol()
+	self.Add(eol)
+	return eol
+}
+
 
 func Statements(statements ...Writable) *StatementsDeclaration {
 	return &StatementsDeclaration{statements: statements, block: false, scope: false}

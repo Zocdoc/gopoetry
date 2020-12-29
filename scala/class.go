@@ -59,7 +59,7 @@ func (self *ClassDeclaration) MembersInline(statements ...Writable) *ClassDeclar
 	return self
 }
 
-func (self *ClassDeclaration) AddMembers(members ...Writable) *ClassDeclaration {
+func (self *ClassDeclaration) Add(members ...Writable) *ClassDeclaration {
 	if self.members == nil {
 		self.members = Scope()
 	}

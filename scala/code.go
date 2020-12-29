@@ -18,22 +18,6 @@ func Line(codeFormat string, args ...interface{}) *WritableCode {
 	return Code(codeFormat, args...).Eol()
 }
 
-func CodeIf(condition bool, codeFormat string, args ...interface{}) *WritableCode {
-	if condition {
-		return Code(codeFormat, args...)
-	} else {
-		return NoCode()
-	}
-}
-
-func LineIf(condition bool, codeFormat string, args ...interface{}) *WritableCode {
-	if condition {
-		return Line(codeFormat, args...)
-	} else {
-		return NoCode()
-	}
-}
-
 func (self *WritableCode) Eol() *WritableCode {
 	self.eol = self.eol + 1
 	return self
@@ -46,10 +30,6 @@ func (self *WritableCode) WriteCode(writer CodeWriter) {
 	for i := 0; i < self.eol; i++ {
 		writer.Eol()
 	}
-}
-
-func NoCode() *WritableCode {
-	return &WritableCode{code: "", eol: 0}
 }
 
 func Int(value int) *WritableCode {
