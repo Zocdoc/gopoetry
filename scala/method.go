@@ -74,8 +74,8 @@ func (self *MethodDeclaration) Body(statements ...Writable) *MethodDeclaration {
 	return self
 }
 
-func (self *MethodDeclaration) BodyInline(statement Writable) *MethodDeclaration {
-	self.body = Statements(statement)
+func (self *MethodDeclaration) BodyInline(statements ...Writable) *MethodDeclaration {
+	self.body = Statements(statements...)
 	return self
 }
 
