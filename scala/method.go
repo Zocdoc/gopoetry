@@ -81,7 +81,7 @@ func (self *MethodDeclaration) BodyInline(statements ...Writable) *MethodDeclara
 
 func (self *MethodDeclaration) AddStatements(statements ...Writable) *MethodDeclaration {
 	if self.body == nil {
-		self.body = Statements()
+		self.body = Scope()
 	}
 	self.body.Add(statements...)
 	return self
