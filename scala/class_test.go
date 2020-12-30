@@ -58,7 +58,7 @@ func TestClassWithPrivateCtor(t *testing.T) {
 func TestClassWithCtorImplicitParam(t *testing.T) {
 	expected := `class MyClass(implicit param1: String)`
 	class := Class("MyClass")
-	class.Constructor(Constructor().NoParams().AddImplicitParams(Param("param1", "String")))
+	class.Constructor(Constructor().AddImplicitParams(Param("param1", "String")))
 	assertCode(t, class, expected)
 }
 
@@ -85,8 +85,25 @@ func TestObjectBasic(t *testing.T) {
 func TestEnumCaseObject(t *testing.T) {
 	expected := `case object Yes extends Answer { override def toString = "yes" }`
 	object :=
-		Object("Yes").Case().Extends("Answer").MembersInline(
+		CaseObject("Yes").Extends("Answer").MembersInline(
 			Def("toString").Override().NoParams().BodyInline(Code(`"yes"`)),
 		)
 	assertCode(t, object, expected)
+}
+
+func TestCaseClass(t *testing.T) {
+	expected := `
+case class SomeClass(
+  field1: Int,
+  field2: String
+)`
+	class :=
+		CaseClass(`SomeClass`).
+			CtorParamPerLine().
+			CtorParams(
+				Param(`field1`, `Int`),
+				Param(`field2`, `String`),
+			)
+
+	assertCode(t, class, expected)
 }

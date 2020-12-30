@@ -10,8 +10,9 @@ type ClassDeclaration struct {
 	modifiers  []string
 	attributes []Writable
 	members    *StatementsDeclaration
-	ctor       Writable
+	ctor       *CtorDeclaration
 	isObject   bool
+	isCase     bool
 }
 
 func (self *ClassDeclaration) addModifier(modifier string) *ClassDeclaration {
@@ -32,7 +33,8 @@ func (self *ClassDeclaration) Sealed() *ClassDeclaration {
 }
 
 func (self *ClassDeclaration) Case() *ClassDeclaration {
-	return self.addModifier("case")
+	self.isCase = true
+	return self
 }
 
 func (self *ClassDeclaration) Abstract() *ClassDeclaration {
@@ -46,6 +48,37 @@ func (self *ClassDeclaration) Extends(baseClassName string, params ...string) *C
 
 func (self *ClassDeclaration) With(traitName string) *ClassDeclaration {
 	self.extends.With(traitName)
+	return self
+}
+
+func (self *ClassDeclaration) addConstructor() {
+	if self.ctor == nil {
+		self.ctor = Constructor()
+	}
+}
+
+
+func (self *ClassDeclaration) CtorParamPerLine() *ClassDeclaration {
+	self.addConstructor()
+	self.ctor.ParamPerLine()
+	return self
+}
+
+func (self *ClassDeclaration) CtorParams(params ...Writable) *ClassDeclaration {
+	self.addConstructor()
+	self.ctor.AddParams(params...)
+	return self
+}
+
+func (self *ClassDeclaration) CtorImplicitParams(params ...Writable) *ClassDeclaration {
+	self.addConstructor()
+	self.ctor.AddImplicitParams(params...)
+	return self
+}
+
+func (self *ClassDeclaration) CtorAttributes(attributes ...Writable) *ClassDeclaration {
+	self.addConstructor()
+	self.ctor.AddAttributes(attributes...)
 	return self
 }
 
@@ -76,7 +109,7 @@ func (self *ClassDeclaration) Attribute(code string) *ClassDeclaration {
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *ClassDeclaration) Constructor(ctor *MethodDeclaration) *ClassDeclaration {
+func (self *ClassDeclaration) Constructor(ctor *CtorDeclaration) *ClassDeclaration {
 	self.ctor = ctor
 	return self
 }
@@ -105,6 +138,14 @@ func Object(name string) *ClassDeclaration {
 	}
 }
 
+func CaseClass(name string) *ClassDeclaration {
+	return Class(name).Case()
+}
+
+func CaseObject(name string) *ClassDeclaration {
+	return Object(name).Case()
+}
+
 func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	if len(self.attributes) > 0 {
 		for _, attribute := range self.attributes {
@@ -117,6 +158,9 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(strings.Join(self.modifiers, " ") + " ")
 	}
 
+	if self.isCase {
+		writer.Write("case ")
+	}
 	if self.isObject {
 		writer.Write("object ")
 	} else {

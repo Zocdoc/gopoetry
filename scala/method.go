@@ -99,10 +99,6 @@ func (self *MethodDeclaration) ImplicitParam(name string, type_ string) *MethodD
 	return self
 }
 
-func (self *MethodDeclaration) IsConstructor() bool {
-	return self.name == ""
-}
-
 func Def(name string) *MethodDeclaration {
 	return &MethodDeclaration{
 		name:           name,
@@ -116,37 +112,23 @@ func Def(name string) *MethodDeclaration {
 	}
 }
 
-func Constructor() *MethodDeclaration {
-	return Def("")
-}
-
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	if len(self.attributes) > 0 {
-		if self.IsConstructor() {
-			writer.Write(" ")
-		}
 		for i, attribute := range self.attributes {
 			if i > 0 {
 				writer.Write(" ")
 			}
 			attribute.WriteCode(writer)
 		}
-		if !self.IsConstructor() {
-			writer.Eol()
-		}
+		writer.Eol()
 	}
 
 	if len(self.modifiers) > 0 {
-		if self.IsConstructor() {
-			writer.Write(" ")
-		}
 		writer.Write(strings.Join(self.modifiers, " "))
 		writer.Write(" ")
 	}
 
-	if !self.IsConstructor() {
-		writer.Write("def " + self.name)
-	}
+	writer.Write("def " + self.name)
 
 	if !self.noParams {
 		writer.Write("(")
@@ -193,8 +175,6 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(" = ")
 		self.body.WriteCode(writer)
 	} else {
-		if !self.IsConstructor() {
-			writer.Eol()
-		}
+		writer.Eol()
 	}
 }
