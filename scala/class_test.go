@@ -91,7 +91,7 @@ func TestEnumCaseObject(t *testing.T) {
 	assertCode(t, object, expected)
 }
 
-func TestCaseClass(t *testing.T) {
+func TestCaseClassParamPerLine(t *testing.T) {
 	expected := `
 case class SomeClass(
   field1: Int,
@@ -104,6 +104,21 @@ case class SomeClass(
 				AddParams(
 					Param(`field1`, `Int`),
 					Param(`field2`, `String`),
+				),
+			)
+
+	assertCode(t, class, expected)
+}
+
+func TestCaseClassConstructor(t *testing.T) {
+	expected := `
+case class SomeClass()(implicit field1: Int)`
+
+	class :=
+		CaseClass(`SomeClass`).
+			Constructor(Constructor().
+				AddImplicitParams(
+					Param(`field1`, `Int`),
 				),
 			)
 

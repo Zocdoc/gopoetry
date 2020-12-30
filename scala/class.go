@@ -90,6 +90,9 @@ func (self *ClassDeclaration) Attribute(code string) *ClassDeclaration {
 
 func (self *ClassDeclaration) Constructor(ctor *CtorDeclaration) *ClassDeclaration {
 	self.ctor = ctor
+	if self.isCase && !self.isObject {
+		self.ctor.ForCaseClass()
+	}
 	return self
 }
 
