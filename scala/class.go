@@ -57,31 +57,6 @@ func (self *ClassDeclaration) addConstructor() {
 	}
 }
 
-
-func (self *ClassDeclaration) CtorParamPerLine() *ClassDeclaration {
-	self.addConstructor()
-	self.ctor.ParamPerLine()
-	return self
-}
-
-func (self *ClassDeclaration) CtorParams(params ...Writable) *ClassDeclaration {
-	self.addConstructor()
-	self.ctor.AddParams(params...)
-	return self
-}
-
-func (self *ClassDeclaration) CtorImplicitParams(params ...Writable) *ClassDeclaration {
-	self.addConstructor()
-	self.ctor.AddImplicitParams(params...)
-	return self
-}
-
-func (self *ClassDeclaration) CtorAttributes(attributes ...Writable) *ClassDeclaration {
-	self.addConstructor()
-	self.ctor.AddAttributes(attributes...)
-	return self
-}
-
 func (self *ClassDeclaration) Members(statements ...Writable) *ClassDeclaration {
 	self.members = Scope(statements...)
 	return self

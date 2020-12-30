@@ -52,6 +52,18 @@ func (self *CtorDeclaration) Param(name string, type_ string) *CtorDeclaration {
 	return self
 }
 
+func (self *CtorDeclaration) Val(name string, type_ string) *CtorDeclaration {
+	param := Val(name, type_)
+	self.AddParams(param)
+	return self
+}
+
+func (self *CtorDeclaration) Var(name string, type_ string) *CtorDeclaration {
+	param := Var(name, type_)
+	self.AddParams(param)
+	return self
+}
+
 func (self *CtorDeclaration) ImplicitParam(name string, type_ string) *CtorDeclaration {
 	param := NewFieldDeclaration(name, type_)
 	self.AddImplicitParams(param)

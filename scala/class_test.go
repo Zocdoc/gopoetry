@@ -99,10 +99,12 @@ case class SomeClass(
 )`
 	class :=
 		CaseClass(`SomeClass`).
-			CtorParamPerLine().
-			CtorParams(
-				Param(`field1`, `Int`),
-				Param(`field2`, `String`),
+			Constructor(Constructor().
+				ParamPerLine().
+				AddParams(
+					Param(`field1`, `Int`),
+					Param(`field2`, `String`),
+				),
 			)
 
 	assertCode(t, class, expected)
