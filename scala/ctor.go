@@ -8,6 +8,7 @@ type CtorDeclaration struct {
 	params         []Writable
 	implicitParams []Writable
 	paramPerLine   bool
+	forCaseClass   bool
 }
 
 func (self *CtorDeclaration) addModifier(modifier string) *CtorDeclaration {
@@ -75,6 +76,11 @@ func (self *CtorDeclaration) ParamPerLine() *CtorDeclaration {
 	return self
 }
 
+func (self *CtorDeclaration) ForCaseClass() *CtorDeclaration {
+	self.forCaseClass = true
+	return self
+}
+
 func Constructor() *CtorDeclaration {
 	return &CtorDeclaration{
 		modifiers:      []string{},
@@ -98,7 +104,7 @@ func (self *CtorDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(" ")
 	}
 
-	if len(self.params) > 0 || len(self.attributes) > 0 || len(self.modifiers) > 0 {
+	if self.forCaseClass || len(self.params) > 0 || len(self.attributes) > 0 || len(self.modifiers) > 0 {
 		writer.Write("(")
 		if self.paramPerLine {
 			writer.Indent()

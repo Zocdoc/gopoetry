@@ -34,6 +34,10 @@ func (self *ClassDeclaration) Sealed() *ClassDeclaration {
 
 func (self *ClassDeclaration) Case() *ClassDeclaration {
 	self.isCase = true
+	if !self.isObject {
+		self.addConstructor()
+		self.ctor.ForCaseClass()
+	}
 	return self
 }
 
