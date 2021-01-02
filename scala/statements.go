@@ -52,6 +52,12 @@ func Statements(statements ...Writable) *StatementsDeclaration {
 	return &StatementsDeclaration{statements: statements, block: false, scope: false}
 }
 
+func StatementsDynamic(dynamic func (*StatementsDeclaration)) *StatementsDeclaration {
+	statements := &StatementsDeclaration{statements: []Writable{}, block: false, scope: false}
+	dynamic(statements)
+	return statements
+}
+
 func Block(statements ...Writable) *StatementsDeclaration {
 	return &StatementsDeclaration{statements: statements, block: true, scope: false}
 }

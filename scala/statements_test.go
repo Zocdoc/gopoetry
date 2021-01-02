@@ -101,3 +101,16 @@ func TestBla(t *testing.T) {
 	code := writer.Code()
 	assert.Equal(t, code, strings.TrimPrefix(expectedCode, "\n"))
 }
+
+func TestStatementsDynamic(t *testing.T) {
+	expected := `
+line1()
+line2()`
+	statements :=
+		StatementsDynamic(func (code *StatementsDeclaration) { code.Add(
+			line("line1()"),
+			line("line2()"),
+		)})
+
+	assertCode(t, statements, expected)
+}
