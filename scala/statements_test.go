@@ -107,10 +107,10 @@ func TestStatementsDynamic(t *testing.T) {
 line1()
 line2()`
 	statements :=
-		StatementsDynamic(func (code *StatementsDeclaration) { code.Add(
+		Statements(Dynamic(func (code *WritableList) { code.Add(
 			line("line1()"),
 			line("line2()"),
-		)})
+		)})...)
 
 	assertCode(t, statements, expected)
 }
