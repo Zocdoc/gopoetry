@@ -67,7 +67,7 @@ func (cls *EnumDeclaration) WriteCode(writer CodeWriter) {
 			writer.Eol()
 		}
 
-		enumElement := fmt.Sprintf("%s(\"%s\")", memberNameInCode, strings.ToLower(memberNameAsString))
+		enumElement := fmt.Sprintf("%s(\"%s\")", memberNameInCode, memberNameAsString)
 		writer.Write(enumElement)
 		if index < len(cls.enumMembers)-1 {
 			writer.Write(",")
