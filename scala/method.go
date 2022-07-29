@@ -3,15 +3,16 @@ package scala
 import "strings"
 
 type MethodDeclaration struct {
-	name           string
-	returns        *string
-	modifiers      []string
-	attributes     []Writable
-	params         []Writable
-	noParams       bool
-	implicitParams []Writable
-	body           *StatementsDeclaration
-	paramPerLine   bool
+	name               string
+	returns            *string
+	modifiers          []string
+	attributes         []Writable
+	params             []Writable
+	noParams           bool
+	implicitParams     []Writable
+	body               *StatementsDeclaration
+	paramPerLine       bool
+	implicitsOnNewLine bool
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
@@ -66,6 +67,16 @@ func (self *MethodDeclaration) NoParams() *MethodDeclaration {
 
 func (self *MethodDeclaration) ParamPerLine() *MethodDeclaration {
 	self.paramPerLine = true
+	return self
+}
+
+func (self *MethodDeclaration) ImplicitsOnNewLine() *MethodDeclaration {
+	self.implicitsOnNewLine = true
+	return self
+}
+
+func (self *MethodDeclaration) ImplicitsOnSingleLine() *MethodDeclaration {
+	self.implicitsOnNewLine = false
 	return self
 }
 
@@ -134,6 +145,7 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write("(")
 		if self.paramPerLine {
 			writer.Indent()
+			writer.Indent()
 			writer.Eol()
 		}
 		for i, param := range self.params {
@@ -151,18 +163,34 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		}
 		if self.paramPerLine {
 			writer.UnIndent()
+			writer.UnIndent()
 		}
 		writer.Write(")")
 	}
 
 	if len(self.implicitParams) > 0 {
-		writer.Write("(implicit ")
+		writer.Write("(")
+
+		if self.implicitsOnNewLine {
+			writer.Eol()
+			writer.Indent()
+			writer.Indent()
+		}
+
+		writer.Write("implicit ")
 		for i, param := range self.implicitParams {
 			param.WriteCode(writer)
 			if i < len(self.implicitParams)-1 {
 				writer.Write(", ")
 			}
 		}
+
+		if self.implicitsOnNewLine {
+			writer.Eol()
+			writer.UnIndent()
+			writer.UnIndent()
+		}
+
 		writer.Write(")")
 	}
 

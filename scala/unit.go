@@ -42,9 +42,12 @@ func (self *UnitDeclaration) WriteCode(writer CodeWriter) {
 	writer.Eol()
 	if len(self.imports) > 0 {
 		writer.Eol()
-		for _, import_ := range self.imports {
+		for i, import_ := range self.imports {
 			writer.Write(fmt.Sprintf("import %s", import_))
 			writer.Eol()
+			if i+1 != len(self.imports) {
+				writer.Eol()
+			}
 		}
 	}
 	for _, class := range self.declarations {
