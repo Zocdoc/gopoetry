@@ -5,10 +5,15 @@ import (
 	"strings"
 )
 
-// ClassDeclaration declares a class
+
+type EnumValue struct {
+    name string
+    value string
+}
+
 type EnumDeclaration struct {
 	name        string
-	enumMembers map[string]string
+	enumMembers []EnumValue
 	members     []Writable
 	modifiers   []string
 }
@@ -21,7 +26,7 @@ func (cls *EnumDeclaration) addModifier(modifier string) *EnumDeclaration {
 func Enum(name string) *EnumDeclaration {
 	return &EnumDeclaration{
 		name:        name,
-		enumMembers: make(map[string]string),
+		enumMembers: make([]EnumValue, 0),
 		members:     []Writable{},
 	}
 }
@@ -34,9 +39,11 @@ func (cls *EnumDeclaration) Public() *EnumDeclaration {
 	return cls.addModifier("public")
 }
 
-// AddMembers adds methods to the enum
 func (cls *EnumDeclaration) AddEnumMembers(enumMemberInCode string, enumMemberStringValue string) *EnumDeclaration {
-	cls.enumMembers[enumMemberInCode] = enumMemberStringValue
+	cls.enumMembers = append(cls.enumMembers, EnumValue{
+        name:  enumMemberInCode,
+        value: enumMemberStringValue,
+    })
 	return cls
 }
 
@@ -51,7 +58,6 @@ func (cls *EnumDeclaration) Constructor() *MethodDeclaration {
 	return ctor
 }
 
-// WriteCode writes the class to the writer
 func (cls *EnumDeclaration) WriteCode(writer CodeWriter) {
 	if len(cls.modifiers) > 0 {
 		writer.Write(strings.Join(cls.modifiers, " ") + " ")
@@ -62,12 +68,12 @@ func (cls *EnumDeclaration) WriteCode(writer CodeWriter) {
 
 	writer.Begin()
 	index := 0
-	for memberNameInCode, memberNameAsString := range cls.enumMembers {
+	for _, enum := range cls.enumMembers {
 		if index > 0 {
 			writer.Eol()
 		}
 
-		enumElement := fmt.Sprintf("%s(\"%s\")", memberNameInCode, memberNameAsString)
+		enumElement := fmt.Sprintf("%s(\"%s\")", enum.name, enum.value)
 		writer.Write(enumElement)
 		if index < len(cls.enumMembers)-1 {
 			writer.Write(",")
