@@ -108,9 +108,9 @@ func (self *CtorDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write("(")
 		if self.paramPerLine {
 			if self.forCaseClass {
-                writer.Indent()
-            }
-            writer.Indent()
+				writer.Indent()
+			}
+			writer.Indent()
 			writer.Eol()
 		}
 		for i, param := range self.params {
@@ -127,10 +127,10 @@ func (self *CtorDeclaration) WriteCode(writer CodeWriter) {
 			}
 		}
 		if self.paramPerLine {
-            if self.forCaseClass {
-                writer.UnIndent()
-            }
-            writer.UnIndent()
+			if self.forCaseClass {
+				writer.UnIndent()
+			}
+			writer.UnIndent()
 		}
 		writer.Write(")")
 	}

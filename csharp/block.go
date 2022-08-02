@@ -1,7 +1,7 @@
 package csharp
 
 type BlockDeclaration struct {
-	lines       []Writable
+	lines []Writable
 }
 
 func (self *BlockDeclaration) AppendCode(code Writable) *BlockDeclaration {
@@ -19,7 +19,7 @@ func Block(lines ...string) *BlockDeclaration {
 	for _, line := range lines {
 		codeLines = append(codeLines, Code(line))
 	}
-	return &BlockDeclaration{ lines: codeLines }
+	return &BlockDeclaration{lines: codeLines}
 }
 
 func (self *BlockDeclaration) WriteCode(writer CodeWriter) {
@@ -30,5 +30,3 @@ func (self *BlockDeclaration) WriteCode(writer CodeWriter) {
 	}
 	writer.End()
 }
-
-

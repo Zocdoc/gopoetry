@@ -11,10 +11,10 @@ type ParamDeclaration struct {
 
 func Param(type_ string, name string) *ParamDeclaration {
 	return &ParamDeclaration{
-		name:  name,
-		type_: type_,
+		name:         name,
+		type_:        type_,
 		defaultValue: nil,
-		attributes: []Writable{},
+		attributes:   []Writable{},
 	}
 }
 

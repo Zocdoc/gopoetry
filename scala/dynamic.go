@@ -9,7 +9,7 @@ func (self *WritableList) Add(writable ...Writable) {
 }
 
 func Dynamic(dynamic func(code *WritableList)) []Writable {
-	code := &WritableList{ list: []Writable{} }
+	code := &WritableList{list: []Writable{}}
 	dynamic(code)
 	return code.list
 }

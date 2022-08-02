@@ -5,10 +5,9 @@ import (
 	"strings"
 )
 
-
 type EnumValue struct {
-    name string
-    value string
+	name  string
+	value string
 }
 
 type EnumDeclaration struct {
@@ -41,9 +40,9 @@ func (cls *EnumDeclaration) Public() *EnumDeclaration {
 
 func (cls *EnumDeclaration) AddEnumMembers(enumMemberInCode string, enumMemberStringValue string) *EnumDeclaration {
 	cls.enumMembers = append(cls.enumMembers, EnumValue{
-        name:  enumMemberInCode,
-        value: enumMemberStringValue,
-    })
+		name:  enumMemberInCode,
+		value: enumMemberStringValue,
+	})
 	return cls
 }
 

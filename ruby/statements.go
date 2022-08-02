@@ -23,7 +23,7 @@ func (self *StatementsDeclaration) AddLn(code string) *StatementsDeclaration {
 func (self *StatementsDeclaration) Scope() *StatementsDeclaration {
 	scope := &StatementsDeclaration{
 		statements: []Writable{},
-		scope: true,
+		scope:      true,
 	}
 	self.AddCode(scope).AddCode(Eol())
 	return scope
@@ -32,7 +32,7 @@ func (self *StatementsDeclaration) Scope() *StatementsDeclaration {
 func Statements() *StatementsDeclaration {
 	return &StatementsDeclaration{
 		statements: []Writable{},
-		scope: false,
+		scope:      false,
 	}
 }
 

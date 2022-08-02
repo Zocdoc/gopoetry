@@ -19,4 +19,3 @@ MyMember
 `
 	assertCode(t, EnumMember("MyMember").WithAttribute("MyAttribute"), expected)
 }
-

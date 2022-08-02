@@ -73,7 +73,7 @@ func (self *InterfaceDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	if len(self.inherits) > 0 {
-		declaration += ": "+strings.Join(self.inherits, ", ")
+		declaration += ": " + strings.Join(self.inherits, ", ")
 	}
 
 	for _, attribute := range self.attributes {

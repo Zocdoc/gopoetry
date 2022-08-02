@@ -5,14 +5,15 @@ import (
 )
 
 type ClassDeclaration struct {
-	name       string
-	extends    *ExtendsDeclaration
-	modifiers  []string
-	attributes []Writable
-	members    *StatementsDeclaration
-	ctor       *CtorDeclaration
-	isObject   bool
-	isCase     bool
+	name           string
+	extends        *ExtendsDeclaration
+	modifiers      []string
+	attributes     []Writable
+	members        *StatementsDeclaration
+	ctor           *CtorDeclaration
+	isObject       bool
+	isCase         bool
+	extendsNewLine bool
 }
 
 func (self *ClassDeclaration) addModifier(modifier string) *ClassDeclaration {
@@ -47,6 +48,11 @@ func (self *ClassDeclaration) Abstract() *ClassDeclaration {
 
 func (self *ClassDeclaration) Extends(baseClassName string, params ...string) *ClassDeclaration {
 	self.extends = Extends(baseClassName, params...)
+	return self
+}
+
+func (self *ClassDeclaration) ExtendsOnNewLine(extendsNewLine bool) *ClassDeclaration {
+	self.extendsNewLine = extendsNewLine
 	return self
 }
 
@@ -155,8 +161,18 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	if self.extends != nil {
-		writer.Write(" ")
+		if self.extendsNewLine {
+			writer.Eol()
+			writer.Indent()
+			writer.Indent()
+		} else {
+			writer.Write(" ")
+		}
 		self.extends.WriteCode(writer)
+		if self.extendsNewLine {
+			writer.UnIndent()
+			writer.UnIndent()
+		}
 	}
 
 	if self.members != nil {

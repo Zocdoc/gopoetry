@@ -28,7 +28,7 @@ func Str(value string) *WritableCode {
 	return Code("'" + value + "'")
 }
 
-type EolDefinition struct {}
+type EolDefinition struct{}
 
 func Eol() *EolDefinition {
 	return &EolDefinition{}

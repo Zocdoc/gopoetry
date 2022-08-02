@@ -93,7 +93,7 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	if len(self.inherits) > 0 {
-		declaration += ": "+strings.Join(self.inherits, ", ")
+		declaration += ": " + strings.Join(self.inherits, ", ")
 	}
 
 	if len(self.attributes) > 0 {
@@ -111,7 +111,9 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write(declaration)
 	writer.Begin()
 	for index, member := range self.members {
-		if index > 0 { writer.Eol() }
+		if index > 0 {
+			writer.Eol()
+		}
 		member.WriteCode(writer)
 	}
 	writer.End()

@@ -47,7 +47,6 @@ func (self *StatementsDeclaration) Eol() *EolDefinition {
 	return eol
 }
 
-
 func Statements(statements ...Writable) *StatementsDeclaration {
 	return &StatementsDeclaration{statements: statements, block: false, scope: false}
 }

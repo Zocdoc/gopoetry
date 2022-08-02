@@ -12,4 +12,3 @@ func TestCodePrimitives(t *testing.T) {
 	assertCode(t, False, "false")
 	assertCode(t, Null, "null")
 }
-

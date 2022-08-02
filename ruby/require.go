@@ -16,4 +16,3 @@ func (self *RequireDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write(fmt.Sprintf("require \"%s\"", self.filename))
 	writer.Eol()
 }
-

@@ -59,4 +59,3 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	}
 	writer.End()
 }
-

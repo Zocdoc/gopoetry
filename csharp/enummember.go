@@ -3,7 +3,7 @@ package csharp
 type EnumMemberDeclaration struct {
 	name       string
 	attributes []Writable
-	value       *string
+	value      *string
 }
 
 func (self *EnumMemberDeclaration) Value(value string) *EnumMemberDeclaration {
@@ -24,7 +24,7 @@ func EnumMember(name string) *EnumMemberDeclaration {
 	return &EnumMemberDeclaration{
 		name:       name,
 		attributes: []Writable{},
-		value:       nil,
+		value:      nil,
 	}
 }
 

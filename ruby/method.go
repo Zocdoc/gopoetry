@@ -86,4 +86,3 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 
 	writer.End()
 }
-

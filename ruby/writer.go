@@ -1,7 +1,7 @@
 package ruby
 
 import (
-"strings"
+	"strings"
 )
 
 type CodeWriter interface {
@@ -64,4 +64,3 @@ func (self *codeWriter) Code() string {
 func CreateWriter() codeWriter {
 	return codeWriter{builder: strings.Builder{}, indentation: 0, newLine: true}
 }
-

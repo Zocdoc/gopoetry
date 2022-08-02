@@ -1,8 +1,8 @@
 package ruby
 
 type ModuleDeclaration struct {
-	name           string
-	declarations   []Writable
+	name         string
+	declarations []Writable
 }
 
 func (self *ModuleDeclaration) AddDeclarations(declarations ...Writable) *ModuleDeclaration {
@@ -18,11 +18,12 @@ func Module(name string) *ModuleDeclaration {
 }
 
 func (self *ModuleDeclaration) WriteCode(writer CodeWriter) {
-	writer.Begin("module "+self.name)
+	writer.Begin("module " + self.name)
 	for index, declaration := range self.declarations {
-		if index > 0 { writer.Eol() }
+		if index > 0 {
+			writer.Eol()
+		}
 		declaration.WriteCode(writer)
 	}
 	writer.End()
 }
-

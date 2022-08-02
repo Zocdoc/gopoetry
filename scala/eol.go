@@ -1,6 +1,6 @@
 package scala
 
-type EolDefinition struct {}
+type EolDefinition struct{}
 
 func Eol() *EolDefinition {
 	return &EolDefinition{}
@@ -9,4 +9,3 @@ func Eol() *EolDefinition {
 func (self *EolDefinition) WriteCode(writer CodeWriter) {
 	writer.Eol()
 }
-
