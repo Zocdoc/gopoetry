@@ -11,10 +11,11 @@ type EnumValue struct {
 }
 
 type EnumDeclaration struct {
-	name        string
-	enumMembers []EnumValue
-	members     []Writable
-	modifiers   []string
+	name            string
+	enumMembers     []EnumValue
+	members         []Writable
+	modifiers       []string
+	paramsOnNewLine bool
 }
 
 func (cls *EnumDeclaration) addModifier(modifier string) *EnumDeclaration {
@@ -48,6 +49,11 @@ func (cls *EnumDeclaration) AddEnumMembers(enumMemberInCode string, enumMemberSt
 
 func (cls *EnumDeclaration) AddMembers(members ...Writable) *EnumDeclaration {
 	cls.members = append(cls.members, members...)
+	return cls
+}
+
+func (cls *EnumDeclaration) ParamsOneNewLine() *EnumDeclaration {
+	cls.paramsOnNewLine = true
 	return cls
 }
 

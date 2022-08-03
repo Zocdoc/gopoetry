@@ -13,6 +13,7 @@ type MethodDeclaration struct {
 	body               *StatementsDeclaration
 	paramPerLine       bool
 	implicitsOnNewLine bool
+	inlineOnNewLine    bool
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
@@ -77,6 +78,16 @@ func (self *MethodDeclaration) ImplicitsOnNewLine() *MethodDeclaration {
 
 func (self *MethodDeclaration) ImplicitsOnSingleLine() *MethodDeclaration {
 	self.implicitsOnNewLine = false
+	return self
+}
+
+func (self *MethodDeclaration) InlineBodyOnNewLine() *MethodDeclaration {
+	self.inlineOnNewLine = true
+	return self
+}
+
+func (self *MethodDeclaration) InlineBodyOnSingleLine() *MethodDeclaration {
+	self.inlineOnNewLine = false
 	return self
 }
 
@@ -200,7 +211,11 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	if self.body != nil {
-		writer.Write(" = ")
+		if self.inlineOnNewLine {
+			writer.Write(" =")
+		} else {
+			writer.Write(" = ")
+		}
 		self.body.WriteCode(writer)
 	} else {
 		writer.Eol()

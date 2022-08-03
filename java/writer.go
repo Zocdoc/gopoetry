@@ -9,6 +9,8 @@ type CodeWriter interface {
 	End()
 	Eol()
 	Write(code string)
+	Indent()
+	UnIndent()
 }
 
 func prefix(indentation int, numSpacesIndent int) string {
@@ -49,6 +51,14 @@ func (self *codeWriter) Write(code string) {
 		self.newLine = false
 	}
 	self.code.WriteString(code)
+}
+
+func (self *codeWriter) Indent() {
+	self.indentation += 1
+}
+
+func (self *codeWriter) UnIndent() {
+	self.indentation -= 1
 }
 
 func (self *codeWriter) Code() string {

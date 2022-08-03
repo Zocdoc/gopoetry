@@ -5,12 +5,13 @@ import (
 )
 
 type MethodDeclaration struct {
-	name       string
-	returns    *string
-	modifiers  []string
-	attributes []Writable
-	params     []Writable
-	definition Writable
+	name         string
+	returns      *string
+	modifiers    []string
+	attributes   []Writable
+	params       []Writable
+	definition   Writable
+	paramPerLine bool
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
@@ -65,6 +66,11 @@ func (self *MethodDeclaration) Param(name string, type_ string) *ParamDeclaratio
 	return param
 }
 
+func (self *MethodDeclaration) ParamPerLine() *MethodDeclaration {
+	self.paramPerLine = true
+	return self
+}
+
 func Method(name string) *MethodDeclaration {
 	return &MethodDeclaration{
 		name:       name,
@@ -100,11 +106,24 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write(self.name)
 
 	writer.Write("(")
+	if self.paramPerLine {
+		writer.Eol()
+		writer.Indent()
+		writer.Indent()
+	}
 	for i, param := range self.params {
 		param.WriteCode(writer)
 		if i < len(self.params)-1 {
 			writer.Write(", ")
+			if self.paramPerLine {
+				writer.Eol()
+			}
 		}
+	}
+
+	if self.paramPerLine {
+		writer.UnIndent()
+		writer.UnIndent()
 	}
 	writer.Write(")")
 
