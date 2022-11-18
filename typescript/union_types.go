@@ -46,6 +46,11 @@ func UnionType(refs ...string) *UnionTypeRef {
 	}
 }
 
+func (utr *UnionTypeRef) Union(ref Writable) *UnionTypeRef {
+	utr.typeRefs = append(utr.typeRefs, ref)
+	return utr
+}
+
 // WriteCode writes the union type ref to the writer
 func (utr *UnionTypeRef) WriteCode(writer CodeWriter) {
 	for i, ref := range utr.typeRefs {
