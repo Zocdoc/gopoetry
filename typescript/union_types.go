@@ -47,8 +47,9 @@ func UnionType(refs ...string) *UnionTypeRef {
 }
 
 func (utr *UnionTypeRef) Union(ref Writable) *UnionTypeRef {
-	utr.typeRefs = append(utr.typeRefs, ref)
-	return utr
+	return &UnionTypeRef{
+		typeRefs: append(utr.typeRefs, ref),
+	}
 }
 
 // WriteCode writes the union type ref to the writer
