@@ -6,18 +6,12 @@ type ObjectType struct {
 	typeMembers []Writable
 }
 
-func NewObjectType(name string, typeAnnotation Writable) *ObjectType {
-	ot := ObjectType{}
-	ot.AddMember(name, typeAnnotation)
-	return &ot
+func NewObjectType() *ObjectType {
+	return &ObjectType{}
 }
 
-func (o *ObjectType) AddMember(name string, typeAnnotation Writable) *ObjectType {
-	o.typeMembers = append(o.typeMembers, &PropertySig{
-		name:           name,
-		typeAnnotation: typeAnnotation,
-	})
-
+func (o *ObjectType) AddProp(prop *PropertySig) *ObjectType {
+	o.typeMembers = append(o.typeMembers, prop)
 	return o
 }
 
@@ -34,11 +28,17 @@ var _ Writable = &PropertySig{}
 
 type PropertySig struct {
 	name           string
+	optional       bool
 	typeAnnotation Writable
 }
 
 func (ps *PropertySig) WriteCode(writer CodeWriter) {
-	writer.Write(ps.name + ": ")
+	name := ps.name
+	if ps.optional {
+		name += "?"
+	}
+
+	writer.Write(name + ": ")
 	ps.typeAnnotation.WriteCode(writer)
 	writer.Write(";")
 	writer.Eol()

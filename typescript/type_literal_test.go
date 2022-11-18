@@ -10,7 +10,10 @@ type MyType = {
 	`
 
 	ot := &ObjectType{}
-	ot.AddMember("foo", Code("string"))
+	ot.AddProp(&PropertySig{
+		name:           "foo",
+		typeAnnotation: Code("string"),
+	})
 
 	assertCode(t, DeclareType("MyType", ot), expected)
 }
@@ -21,17 +24,25 @@ type MyType = {
     foo: {
         foo: string;
     };
-    bar: 'test';
+    bar?: 'test';
 };
 `
 
 	objectTypeDecl := DeclareType(
 		"MyType",
-		NewObjectType(
-			"foo",
-			NewObjectType("foo", Code("string")),
-		).
-			AddMember("bar", Str("test")),
+		NewObjectType().
+			AddProp(&PropertySig{
+				name: "foo",
+				typeAnnotation: NewObjectType().AddProp(&PropertySig{
+					name:           "foo",
+					typeAnnotation: Code("string"),
+				}),
+			}).
+			AddProp(&PropertySig{
+				name:           "bar",
+				optional:       true,
+				typeAnnotation: Str("test"),
+			}),
 	)
 
 	assertCode(t, objectTypeDecl, expected)
