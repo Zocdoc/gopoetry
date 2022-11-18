@@ -9,6 +9,8 @@ type CodeWriter interface {
 	End()
 	Eol()
 	Write(code string)
+	OpenBlock()
+	CloseBlock()
 }
 
 func prefix(indentation int) string {
@@ -24,9 +26,18 @@ type codeWriter struct {
 
 func (self *codeWriter) Begin() {
 	self.Eol()
+	self.OpenBlock()
+}
+
+func (self *codeWriter) OpenBlock() {
 	self.Write("{")
 	self.Eol()
 	self.indentation += 1
+}
+
+func (self *codeWriter) CloseBlock() {
+	self.indentation -= 1
+	self.Write("}")
 }
 
 func (self *codeWriter) End() {
