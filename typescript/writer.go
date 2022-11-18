@@ -41,8 +41,7 @@ func (self *codeWriter) CloseBlock() {
 }
 
 func (self *codeWriter) End() {
-	self.indentation -= 1
-	self.Write("}")
+	self.CloseBlock()
 	self.Eol()
 }
 
