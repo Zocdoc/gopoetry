@@ -20,7 +20,6 @@ type TypeDeclaration struct {
 
 // WriteCode writes the type declaration to the writer
 func (td *TypeDeclaration) WriteCode(writer CodeWriter) {
-	writer.Eol()
 	writer.Write(fmt.Sprintf("type %s = ", td.name))
 	td.typeReference.WriteCode(writer)
 	writer.Write(";")
