@@ -8,8 +8,12 @@ type WritableCode struct {
 	code string
 }
 
-func (self *WritableCode) WriteCode(writer CodeWriter) {
-	writer.Write(self.code)
+func (wc *WritableCode) WriteCode(writer CodeWriter) {
+	writer.Write(wc.code)
+}
+
+func (wc *WritableCode) String() string {
+	return wc.code
 }
 
 func Code(code string) *WritableCode {
