@@ -11,8 +11,8 @@ type MyType = {
 
 	ot := &ObjectType{}
 	ot.AddProp(&PropertySig{
-		name:           "foo",
-		typeAnnotation: Code("string"),
+		Name:           "foo",
+		TypeAnnotation: Code("string"),
 	})
 
 	assertCode(t, DeclareType("MyType", ot), expected)
@@ -32,16 +32,16 @@ type MyType = {
 		"MyType",
 		NewObjectType().
 			AddProp(&PropertySig{
-				name: "foo",
-				typeAnnotation: NewObjectType().AddProp(&PropertySig{
-					name:           "foo",
-					typeAnnotation: Code("string"),
+				Name: "foo",
+				TypeAnnotation: NewObjectType().AddProp(&PropertySig{
+					Name:           "foo",
+					TypeAnnotation: Code("string"),
 				}),
 			}).
 			AddProp(&PropertySig{
-				name:           "bar",
-				optional:       true,
-				typeAnnotation: Str("test"),
+				Name:           "bar",
+				Optional:       true,
+				TypeAnnotation: Str("test"),
 			}),
 	)
 

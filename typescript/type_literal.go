@@ -27,19 +27,19 @@ func (t *ObjectType) WriteCode(writer CodeWriter) {
 var _ Writable = &PropertySig{}
 
 type PropertySig struct {
-	name           string
-	optional       bool
-	typeAnnotation Writable
+	Name           string
+	Optional       bool
+	TypeAnnotation Writable
 }
 
 func (ps *PropertySig) WriteCode(writer CodeWriter) {
-	name := ps.name
-	if ps.optional {
+	name := ps.Name
+	if ps.Optional {
 		name += "?"
 	}
 
 	writer.Write(name + ": ")
-	ps.typeAnnotation.WriteCode(writer)
+	ps.TypeAnnotation.WriteCode(writer)
 	writer.Write(";")
 	writer.Eol()
 }
