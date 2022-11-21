@@ -3,7 +3,7 @@ package typescript
 var _ Writable = &ObjectType{}
 
 type ObjectType struct {
-	typeMembers []Writable
+	BlockDeclaration
 }
 
 func NewObjectType() *ObjectType {
@@ -11,14 +11,14 @@ func NewObjectType() *ObjectType {
 }
 
 func (o *ObjectType) AddProp(prop *PropertySig) *ObjectType {
-	o.typeMembers = append(o.typeMembers, prop)
+	o.AppendCode(prop)
 	return o
 }
 
 // WriteCode implements Writable
 func (t *ObjectType) WriteCode(writer CodeWriter) {
 	writer.OpenBlock()
-	for _, member := range t.typeMembers {
+	for _, member := range t.lines {
 		member.WriteCode(writer)
 	}
 	writer.CloseBlock()
