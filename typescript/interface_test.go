@@ -50,12 +50,12 @@ export interface MyInterface
 `
 	iface := Interface("MyInterface").Export()
 	iface.AddMembers(&PropertySig{
-		name: "paths",
-		typeAnnotation: NewObjectType().AddProp(&PropertySig{
-			name: "foo",
-			typeAnnotation: NewObjectType().AddProp(&PropertySig{
-				name:           "get",
-				typeAnnotation: Code("string"),
+		Name: "paths",
+		TypeAnnotation: NewObjectType().AddProp(&PropertySig{
+			Name: "foo",
+			TypeAnnotation: NewObjectType().AddProp(&PropertySig{
+				Name:           "get",
+				TypeAnnotation: Code("string"),
 			}),
 		}),
 	})
