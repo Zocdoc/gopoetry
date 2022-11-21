@@ -36,3 +36,29 @@ export interface MyInterface extends IfaceOne, IfaceTwo
 	_ = iface.Property("Result", "MyProperty").Optional()
 	assertCode(t, iface, expected)
 }
+
+func TestTypeLiteralInterface(t *testing.T) {
+	expected := `
+export interface MyInterface
+{
+    paths: {
+        foo: {
+            get: string;
+        };
+    };
+}
+`
+	iface := Interface("MyInterface").Export()
+	iface.AddMembers(&PropertySig{
+		name: "paths",
+		typeAnnotation: NewObjectType().AddProp(&PropertySig{
+			name: "foo",
+			typeAnnotation: NewObjectType().AddProp(&PropertySig{
+				name:           "get",
+				typeAnnotation: Code("string"),
+			}),
+		}),
+	})
+
+	assertCode(t, iface, expected)
+}
