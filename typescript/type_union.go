@@ -16,11 +16,22 @@ func DeclareType(name string, typeRef Writable) *TypeDeclaration {
 type TypeDeclaration struct {
 	name          string
 	typeReference Writable
+	export        bool
+}
+
+func (td *TypeDeclaration) Export() *TypeDeclaration {
+	td.export = true
+	return td
 }
 
 // WriteCode writes the type declaration to the writer
 func (td *TypeDeclaration) WriteCode(writer CodeWriter) {
-	writer.Write(fmt.Sprintf("type %s = ", td.name))
+	exportMod := ""
+	if td.export {
+		exportMod = "export " // trailing space is intentional
+	}
+
+	writer.Write(fmt.Sprintf("%stype %s = ", exportMod, td.name))
 	td.typeReference.WriteCode(writer)
 	writer.Write(";")
 	writer.Eol()
