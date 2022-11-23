@@ -37,6 +37,12 @@ var _ Writable = &PropertySig{}
 
 // WriteCode implements Writable
 func (ps *PropertySig) WriteCode(writer CodeWriter) {
+	ps.writeIdAndTypeAnnotation(writer)
+	writer.Write(";")
+	writer.Eol()
+}
+
+func (ps *PropertySig) writeIdAndTypeAnnotation(writer CodeWriter) {
 	name := ps.Name
 	if ps.Optional {
 		name += "?"
@@ -44,6 +50,4 @@ func (ps *PropertySig) WriteCode(writer CodeWriter) {
 
 	writer.Write(name + ": ")
 	ps.TypeAnnotation.WriteCode(writer)
-	writer.Write(";")
-	writer.Eol()
 }
