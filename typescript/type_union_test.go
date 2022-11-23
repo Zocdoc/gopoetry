@@ -35,6 +35,13 @@ type DiningType = 'in_door' | 'out_door' | 'underwater' | 'up_in_the_air';
 	doors := UnionType("'in_door'", "'out_door'")
 
 	typeDec := DeclareType("DiningType", doors.Union(elements))
+	assertCode(t, typeDec, expected)
+}
 
+func TestExportUnion(t *testing.T) {
+	expected := `
+export type DiningType = 'always';
+`
+	typeDec := DeclareType("DiningType", Str("always")).Export()
 	assertCode(t, typeDec, expected)
 }
