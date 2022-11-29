@@ -1,15 +1,17 @@
 package typescript
 
-var _ Writable = &ObjectType{}
-
+// ObjectType represents the object literal type
 type ObjectType struct {
 	BlockDeclaration
 }
+
+var _ Writable = &ObjectType{}
 
 func NewObjectType() *ObjectType {
 	return &ObjectType{}
 }
 
+// AddProp adds a property to the object type
 func (o *ObjectType) AddProp(prop *PropertySig) *ObjectType {
 	o.AppendCode(prop)
 	return o
@@ -24,14 +26,16 @@ func (t *ObjectType) WriteCode(writer CodeWriter) {
 	writer.CloseBlock()
 }
 
-var _ Writable = &PropertySig{}
-
+// PropertySig represents named type properties of object literal types
 type PropertySig struct {
 	Name           string
 	Optional       bool
 	TypeAnnotation Writable
 }
 
+var _ Writable = &PropertySig{}
+
+// WriteCode implements Writable
 func (ps *PropertySig) WriteCode(writer CodeWriter) {
 	name := ps.Name
 	if ps.Optional {
