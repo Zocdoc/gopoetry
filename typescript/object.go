@@ -5,8 +5,17 @@ type ObjectValue struct {
 	BlockDeclaration
 }
 
+func NewObjectValue() *ObjectValue {
+	return &ObjectValue{}
+}
+
 // WriteCode implements Writable
 func (t *ObjectValue) WriteCode(writer CodeWriter) {
+	if len(t.lines) == 0 {
+		writer.Write("{}")
+		return
+	}
+
 	writer.OpenBlock()
 	for _, member := range t.lines {
 		member.WriteCode(writer)
@@ -30,8 +39,11 @@ type ObjProp struct {
 }
 
 func (ps *ObjProp) WriteCode(writer CodeWriter) {
-	writer.Write(ps.Name + ": ")
-	ps.Value.WriteCode(writer)
+	writer.Write(ps.Name)
+	if ps.Value != nil {
+		writer.Write(": ")
+		ps.Value.WriteCode(writer)
+	}
 	writer.Write(",")
 	writer.Eol()
 }

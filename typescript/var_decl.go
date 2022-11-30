@@ -55,7 +55,6 @@ func (d *VarDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	writer.Write(";")
-	writer.Eol()
 }
 
 // declFact is a factory function for creating variables, parameterized by declaration type.
