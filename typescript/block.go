@@ -1,11 +1,16 @@
 package typescript
 
 type BlockDeclaration struct {
-	lines       []Writable
+	lines []Writable
 }
 
-func (self *BlockDeclaration) AppendCode(code Writable) *BlockDeclaration {
-	self.lines = append(self.lines, code)
+// Len returns the number of lines defined in the block
+func (b *BlockDeclaration) Len() int {
+	return len(b.lines)
+}
+
+func (self *BlockDeclaration) AppendCode(code ...Writable) *BlockDeclaration {
+	self.lines = append(self.lines, code...)
 	return self
 }
 
@@ -19,7 +24,7 @@ func Block(lines ...string) *BlockDeclaration {
 	for _, line := range lines {
 		codeLines = append(codeLines, Code(line))
 	}
-	return &BlockDeclaration{ lines: codeLines }
+	return &BlockDeclaration{lines: codeLines}
 }
 
 func (self *BlockDeclaration) WriteCode(writer CodeWriter) {
@@ -30,5 +35,3 @@ func (self *BlockDeclaration) WriteCode(writer CodeWriter) {
 	}
 	writer.End()
 }
-
-
