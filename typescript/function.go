@@ -3,13 +3,23 @@ package typescript
 // FunctionDecl represents a top level declaration.
 type FunctionDecl struct {
 	Name     string
-	exported bool
-	Function
+	Exported bool
+	FunctionExpression
+}
+
+// DeclareFunction returns a new function with the specified name
+func DeclareFunction(name string) *FunctionDecl {
+	return &FunctionDecl{Name: name}
+}
+
+// GetExpression returns the associated function expression
+func (fd *FunctionDecl) GetExpression() *FunctionExpression {
+	return &fd.FunctionExpression
 }
 
 // Export exports the function declaration
 func (f *FunctionDecl) Export() *FunctionDecl {
-	f.exported = true
+	f.Exported = true
 	return f
 }
 
@@ -21,7 +31,7 @@ func (f *FunctionDecl) AddParams(params ...ParamDeclaration) *FunctionDecl {
 
 // WriteCode implements Writable
 func (f *FunctionDecl) WriteCode(writer CodeWriter) {
-	if f.exported {
+	if f.Exported {
 		writer.Write("export ")
 	}
 
@@ -36,42 +46,71 @@ func (f *FunctionDecl) WriteCode(writer CodeWriter) {
 	writer.Eol()
 }
 
-// Function represents the function as an expression
-type Function struct {
+// FunctionExpression represents the function as an expression
+type FunctionExpression struct {
 	async           bool
-	arrowSyntax     bool
+	arrow           bool
 	body            BlockDeclaration
 	params          []ParamDeclaration
 	returnType      Writable
 	typeConstructor Writable
 }
 
-// Async marks the function as async
-func (f *Function) Async() *Function {
+// NewFunctionExpression crates a new function expression struct
+func NewFunctionExpression() *FunctionExpression {
+	return &FunctionExpression{}
+}
+
+// AddParams add parameters to function expression call signature
+func (f *FunctionExpression) AddParams(params ...ParamDeclaration) *FunctionExpression {
+	f.params = append(f.params, params...)
+	return f
+}
+
+// Async configures function expression to be async
+func (f *FunctionExpression) Async() *FunctionExpression {
 	f.async = true
 	return f
 }
 
-// Arrow use arrow syntax for function
-func (f *Function) Arrow() *Function {
-	f.arrowSyntax = true
+// SetAsync configures function expression use arrow syntax
+func (f *FunctionExpression) Arrow() *FunctionExpression {
+	f.arrow = true
+	return f
+}
+
+// AppendToBody appends lines of code to the body of the function expression
+func (f *FunctionExpression) AppendToBody(lines ...Writable) *FunctionExpression {
+	f.body.AppendCode(lines...)
+	return f
+}
+
+// TypeConstructor sets the type constructor for the function expression
+func (f *FunctionExpression) TypeConstructor(typeConstructor Writable) *FunctionExpression {
+	f.typeConstructor = typeConstructor
+	return f
+}
+
+// ReturnType sets the type constructor for the function expression
+func (f *FunctionExpression) ReturnType(returnType Writable) *FunctionExpression {
+	f.returnType = returnType
 	return f
 }
 
 // WriteCode implements Writable
-func (f *Function) WriteCode(writer CodeWriter) {
+func (f *FunctionExpression) WriteCode(writer CodeWriter) {
 	if f.async {
 		writer.Write("async ")
 	}
 
-	if !f.arrowSyntax {
+	if !f.arrow {
 		writer.Write("function ")
 	}
 
 	f.writeCallSig(writer)
 
 	sep := " "
-	if f.arrowSyntax {
+	if f.arrow {
 		sep = " => "
 	}
 
@@ -81,7 +120,7 @@ func (f *Function) WriteCode(writer CodeWriter) {
 
 // writeCallSig writes functions call signature.
 // This includes any type constructors, parameters, and return types
-func (f *Function) writeCallSig(writer CodeWriter) {
+func (f *FunctionExpression) writeCallSig(writer CodeWriter) {
 	if f.typeConstructor != nil {
 		writer.Write("<")
 		f.typeConstructor.WriteCode(writer)
@@ -104,7 +143,7 @@ func (f *Function) writeCallSig(writer CodeWriter) {
 }
 
 // writeBody write function body
-func (f *Function) writeBody(writer CodeWriter) {
+func (f *FunctionExpression) writeBody(writer CodeWriter) {
 	writer.OpenBlock()
 	for _, ln := range f.body.lines {
 		ln.WriteCode(writer)
