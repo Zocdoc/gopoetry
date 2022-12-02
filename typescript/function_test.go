@@ -8,10 +8,7 @@ function myFunction() {
 }
   `
 
-	fn := &FunctionDecl{
-		Name: "myFunction",
-	}
-
+	fn := DeclareFunction("myFunction")
 	assertCode(t, fn, expected)
 }
 
@@ -21,15 +18,11 @@ function add(x: number, y: number) {
 }
   `
 
-	fn := &FunctionDecl{
-		Name: "add",
-		Function: Function{
-			params: []ParamDeclaration{
-				*Param("number", "x"),
-				*Param("number", "y"),
-			},
-		},
-	}
+	fn := DeclareFunction("add")
+	fn.GetExpression().AddParams(
+		*Param("number", "x"),
+		*Param("number", "y"),
+	)
 
 	assertCode(t, fn, expected)
 }
@@ -40,12 +33,8 @@ function add(): void {
 }
   `
 
-	fn := &FunctionDecl{
-		Name: "add",
-		Function: Function{
-			returnType: Code("void"),
-		},
-	}
+	fn := DeclareFunction("add")
+	fn.GetExpression().ReturnType(C("void"))
 
 	assertCode(t, fn, expected)
 }
@@ -56,13 +45,8 @@ async function asyncFunc() {
 }
 `
 
-	fn := &FunctionDecl{
-		Name: "asyncFunc",
-		Function: Function{
-			async: true,
-		},
-	}
-
+	fn := DeclareFunction("asyncFunc")
+	fn.GetExpression().Async()
 	assertCode(t, fn, expected)
 }
 
@@ -74,12 +58,13 @@ export function add(): void {
 
 	fn := &FunctionDecl{
 		Name: "add",
-		Function: Function{
+		FunctionExpression: FunctionExpression{
 			returnType: Code("void"),
 		},
 	}
 
-	fn.Export()
+	fn = DeclareFunction("add").Export()
+	fn.GetExpression().ReturnType(C("void"))
 
 	assertCode(t, fn, expected)
 }
@@ -91,23 +76,14 @@ export function add(x: number, y: number): number {
 }
   `
 
-	fn := &FunctionDecl{
-		Name: "add",
-		Function: Function{
-			params: []ParamDeclaration{
-				*Param("number", "x"),
-				*Param("number", "y"),
-			},
-			returnType: Code("number"),
-			body: BlockDeclaration{
-				lines: []Writable{
-					Code("return x + y;"),
-				},
-			},
-		},
-	}
-
-	fn.Export()
+	fn := DeclareFunction("add").Export()
+	fn.GetExpression().
+		AddParams(
+			*Param("number", "x"),
+			*Param("number", "y"),
+		).
+		ReturnType(C("number")).
+		AppendToBody(C("return x + y;"))
 
 	assertCode(t, fn, expected)
 }
@@ -118,22 +94,13 @@ function id<T>(thing: T): T {
     return thing;
 }
   `
+	fn := DeclareFunction("id")
+	fn.GetExpression().
+		TypeConstructor(C("T")).
+		AddParams(*Param("T", "thing")).
+		ReturnType(C("T")).
+		AppendToBody(C("return thing;"))
 
-	fn := &FunctionDecl{
-		Name: "id",
-		Function: Function{
-			typeConstructor: Code("T"),
-			params: []ParamDeclaration{
-				*Param("T", "thing"),
-			},
-			returnType: Code("T"),
-			body: BlockDeclaration{
-				lines: []Writable{
-					Code("return thing;"),
-				},
-			},
-		},
-	}
 	assertCode(t, fn, expected)
 }
 
@@ -143,13 +110,9 @@ const myFunc = function () {
     return 42;
 };
 `
-	functionExperssion := &Function{
-		body: BlockDeclaration{
-			lines: []Writable{
-				Code("return 42;"),
-			},
-		},
-	}
+
+	functionExperssion := NewFunctionExpression().
+		AppendToBody(C("return 42;"))
 
 	funcConst := Const("myFunc", nil, functionExperssion)
 	assertCode(t, funcConst, expected)
@@ -161,17 +124,14 @@ const add = function (a: number, b: number) {
     return a + b;
 };
 `
-	functionExperssion := &Function{
-		params: []ParamDeclaration{
+	functionExperssion := NewFunctionExpression().
+		AddParams(
 			*Param("number", "a"),
 			*Param("number", "b"),
-		},
-		body: BlockDeclaration{
-			lines: []Writable{
-				Code("return a + b;"),
-			},
-		},
-	}
+		).
+		AppendToBody(
+			C("return a + b;"),
+		)
 
 	funcConst := Const("add", nil, functionExperssion)
 	assertCode(t, funcConst, expected)
@@ -183,18 +143,14 @@ const add = function (a: number, b: number): number {
     return a + b;
 };
 `
-	functionExperssion := &Function{
-		params: []ParamDeclaration{
+
+	functionExperssion := NewFunctionExpression().
+		AddParams(
 			*Param("number", "a"),
 			*Param("number", "b"),
-		},
-		returnType: Code("number"),
-		body: BlockDeclaration{
-			lines: []Writable{
-				Code("return a + b;"),
-			},
-		},
-	}
+		).
+		ReturnType(C("number")).
+		AppendToBody(C("return a + b;"))
 
 	funcConst := Const("add", nil, functionExperssion)
 	assertCode(t, funcConst, expected)
@@ -206,18 +162,12 @@ const id = function <T>(x: T): T {
     return x;
 };
 `
-	functionExperssion := &Function{
-		typeConstructor: Code("T"),
-		params: []ParamDeclaration{
-			*Param("T", "x"),
-		},
-		returnType: Code("T"),
-		body: BlockDeclaration{
-			lines: []Writable{
-				Code("return x;"),
-			},
-		},
-	}
+
+	functionExperssion := NewFunctionExpression().
+		TypeConstructor(C("T")).
+		AddParams(*Param("T", "x")).
+		ReturnType(C("T")).
+		AppendToBody(C("return x;"))
 
 	funcConst := Const("id", nil, functionExperssion)
 	assertCode(t, funcConst, expected)
@@ -230,19 +180,12 @@ const f = <T>(_x: T): number => {
 };
 `
 
-	functionExperssion := &Function{
-		typeConstructor: Code("T"),
-		arrowSyntax:     true,
-		params: []ParamDeclaration{
-			*Param("T", "_x"),
-		},
-		returnType: Code("number"),
-		body: BlockDeclaration{
-			lines: []Writable{
-				Code("return 2;"),
-			},
-		},
-	}
+	functionExperssion := NewFunctionExpression().
+		TypeConstructor(C("T")).
+		Arrow().
+		AddParams(*Param("T", "_x")).
+		ReturnType(C("number")).
+		AppendToBody(C("return 2;"))
 
 	funcConst := Const("f", nil, functionExperssion)
 	assertCode(t, funcConst, expected)
@@ -254,8 +197,7 @@ const f = () => {
 };
 `
 
-	functionExperssion := &Function{}
-	functionExperssion.Arrow()
+	functionExperssion := NewFunctionExpression().Arrow()
 
 	funcConst := Const("f", nil, functionExperssion)
 	assertCode(t, funcConst, expected)
@@ -267,9 +209,10 @@ const asyncF = async () => {
 };
 `
 
-	functionExperssion := &Function{}
-	functionExperssion.Arrow()
-	functionExperssion.Async()
+	functionExperssion := NewFunctionExpression().
+		Arrow().
+		Async()
+
 	funcConst := Const("asyncF", nil, functionExperssion)
 	assertCode(t, funcConst, expected)
 }
@@ -281,19 +224,13 @@ const f = async function <T>(f: () => T): T {
 };
 `
 
-	functionExperssion := &Function{
-		typeConstructor: C("T"),
-		params: []ParamDeclaration{
-			*Param("() => T", "f"),
-		},
-		returnType: C("T"),
-		body: BlockDeclaration{
-			lines: []Writable{
-				Code("return f();"),
-			},
-		},
-	}
-	functionExperssion.Async()
+	functionExperssion := NewFunctionExpression().
+		Async().
+		TypeConstructor(C("T")).
+		AddParams(*Param("() => T", "f")).
+		ReturnType(C("T")).
+		AppendToBody(C("return f();"))
+
 	funcConst := Const("f", nil, functionExperssion)
 	assertCode(t, funcConst, expected)
 }
