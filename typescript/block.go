@@ -35,3 +35,18 @@ func (self *BlockDeclaration) WriteCode(writer CodeWriter) {
 	}
 	writer.End()
 }
+
+// OTBSBlock
+// https://en.wikipedia.org/wiki/Indentation_style#Variant:_1TBS_.28OTBS.29
+type OTBSBlock struct {
+	BlockDeclaration
+}
+
+func (b *OTBSBlock) WriteCode(writer CodeWriter) {
+	writer.OpenBlock()
+	for _, line := range b.lines {
+		line.WriteCode(writer)
+		writer.Eol()
+	}
+	writer.CloseBlock()
+}
