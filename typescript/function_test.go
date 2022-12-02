@@ -273,3 +273,27 @@ const asyncF = async () => {
 	funcConst := Const("asyncF", nil, functionExperssion)
 	assertCode(t, funcConst, expected)
 }
+
+func TestAsyncArrowFuncArg(t *testing.T) {
+	expected := `
+const f = async function <T>(f: () => T): T {
+    return f();
+};
+`
+
+	functionExperssion := &Function{
+		typeConstructor: C("T"),
+		params: []ParamDeclaration{
+			*Param("() => T", "f"),
+		},
+		returnType: C("T"),
+		body: BlockDeclaration{
+			lines: []Writable{
+				Code("return f();"),
+			},
+		},
+	}
+	functionExperssion.Async()
+	funcConst := Const("f", nil, functionExperssion)
+	assertCode(t, funcConst, expected)
+}
