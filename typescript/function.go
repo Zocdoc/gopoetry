@@ -42,7 +42,7 @@ func (f *FunctionDecl) WriteCode(writer CodeWriter) {
 	writer.Write("function " + f.Name)
 	f.writeCallSig(writer)
 	writer.Write(" ")
-	f.writeBody(writer)
+	f.body.WriteCode(writer)
 	writer.Eol()
 }
 
@@ -50,7 +50,7 @@ func (f *FunctionDecl) WriteCode(writer CodeWriter) {
 type FunctionExpression struct {
 	async           bool
 	arrow           bool
-	body            BlockDeclaration
+	body            OTBSBlock
 	params          []ParamDeclaration
 	returnType      Writable
 	typeConstructor Writable
@@ -115,7 +115,7 @@ func (f *FunctionExpression) WriteCode(writer CodeWriter) {
 	}
 
 	writer.Write(sep)
-	f.writeBody(writer)
+	f.body.WriteCode(writer)
 }
 
 // writeCallSig writes functions call signature.
@@ -140,14 +140,4 @@ func (f *FunctionExpression) writeCallSig(writer CodeWriter) {
 		writer.Write(": ")
 		f.returnType.WriteCode(writer)
 	}
-}
-
-// writeBody write function body
-func (f *FunctionExpression) writeBody(writer CodeWriter) {
-	writer.OpenBlock()
-	for _, ln := range f.body.lines {
-		ln.WriteCode(writer)
-		writer.Eol()
-	}
-	writer.CloseBlock()
 }
