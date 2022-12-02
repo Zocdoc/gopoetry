@@ -3,7 +3,7 @@ package typescript
 // FunctionDecl represents a top level declaration.
 type FunctionDecl struct {
 	Name     string
-	Exported bool
+	exported bool
 	FunctionExpression
 }
 
@@ -19,7 +19,7 @@ func (fd *FunctionDecl) GetExpression() *FunctionExpression {
 
 // Export exports the function declaration
 func (f *FunctionDecl) Export() *FunctionDecl {
-	f.Exported = true
+	f.exported = true
 	return f
 }
 
@@ -31,7 +31,7 @@ func (f *FunctionDecl) AddParams(params ...ParamDeclaration) *FunctionDecl {
 
 // WriteCode implements Writable
 func (f *FunctionDecl) WriteCode(writer CodeWriter) {
-	if f.Exported {
+	if f.exported {
 		writer.Write("export ")
 	}
 
