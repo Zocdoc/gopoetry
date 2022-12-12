@@ -40,6 +40,11 @@ func (method *MethodDeclaration) Async() *MethodDeclaration {
 	return method.addModifier("async")
 }
 
+// Async marks the method as static
+func (method *MethodDeclaration) Static() *MethodDeclaration {
+	return method.addModifier("static")
+}
+
 // AddParams adds parameters to the method
 func (method *MethodDeclaration) AddParams(params ...Writable) *MethodDeclaration {
 	method.params = append(method.params, params...)
