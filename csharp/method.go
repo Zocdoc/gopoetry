@@ -12,6 +12,8 @@ type MethodDeclaration struct {
 	hasParams  bool
 	params     []Writable
 	body       Writable
+	hasBase    bool
+	base       *BaseStatement
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
@@ -66,6 +68,11 @@ func (self *MethodDeclaration) Param(type_ string, name string) *ParamDeclaratio
 	return param
 }
 
+func (self *MethodDeclaration) WithBase(args ...string) *MethodDeclaration {
+	self.base = Base(args)
+	return self
+}
+
 func Method(name string) *MethodDeclaration {
 	return &MethodDeclaration{
 		name:       name,
@@ -75,6 +82,8 @@ func Method(name string) *MethodDeclaration {
 		hasParams:  true,
 		params:     []Writable{},
 		body:       nil,
+		hasBase:    false,
+		base:       nil,
 	}
 }
 
@@ -87,6 +96,8 @@ func Constructor(name string) *MethodDeclaration {
 		hasParams:  true,
 		params:     []Writable{},
 		body:       nil,
+		hasBase:    true,
+		base:       nil,
 	}
 }
 
@@ -99,6 +110,8 @@ func Get() *MethodDeclaration {
 		hasParams:  false,
 		params:     []Writable{},
 		body:       nil,
+		hasBase:    false,
+		base:       nil,
 	}
 }
 
@@ -111,6 +124,8 @@ func Set() *MethodDeclaration {
 		hasParams:  false,
 		params:     []Writable{},
 		body:       nil,
+		hasBase:    false,
+		base:       nil,
 	}
 }
 
@@ -145,6 +160,10 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 			}
 		}
 		writer.Write(")")
+
+		if self.hasBase && self.base != nil {
+			self.base.WriteCode(writer)
+		}
 	}
 
 	if self.body != nil {

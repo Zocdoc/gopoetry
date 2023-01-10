@@ -39,3 +39,29 @@ void MyMethod();
 `
 	assertCode(t, Method("MyMethod").WithAttribute("MyAttribute"), expected)
 }
+
+func TestConstructor(t *testing.T) {
+	expected := `
+MyType(string myString)
+{
+}
+`
+	ctor := Constructor("MyType")
+	ctor.Param("string", "myString")
+	ctor.Body()
+	assertCode(t, ctor, expected)
+}
+
+func TestConstructorWithBase(t *testing.T) {
+	expected := `
+MyType(string myString, bool myBool) : base(myString)
+{
+}
+`
+	ctor := Constructor("MyType")
+	ctor.Param("string", "myString")
+	ctor.Param("bool", "myBool")
+	ctor.WithBase("myString")
+	ctor.Body()
+	assertCode(t, ctor, expected)
+}
