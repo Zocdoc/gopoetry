@@ -16,6 +16,20 @@ MyType MyProperty
 	assertCode(t, property, expected)
 }
 
+func TestPropertyGetWithInitalizer(t *testing.T) {
+	expected := `
+string MyProperty
+{
+    get;
+}
+ = "foo";
+`
+	property := Property("string", "MyProperty")
+	property.Get()
+	property.Init(Str("foo"))
+	assertCode(t, property, expected)
+}
+
 func TestPropertyPublic(t *testing.T) {
 	expected := `
 public MyType MyProperty

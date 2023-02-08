@@ -12,6 +12,7 @@ type PropertyDeclaration struct {
 	attributes []Writable
 	getter     *MethodDeclaration
 	setter     *MethodDeclaration
+	init       Writable
 }
 
 func (self *PropertyDeclaration) addModifier(modifier string) *PropertyDeclaration {
@@ -56,6 +57,11 @@ func (self *PropertyDeclaration) WithAttribute(code string) *PropertyDeclaration
 	return self.AddAttributes(Attribute(code))
 }
 
+func (self *PropertyDeclaration) Init(init Writable) *PropertyDeclaration {
+	self.init = init
+	return self
+}
+
 func Property(type_ string, name string) *PropertyDeclaration {
 	return &PropertyDeclaration{
 		name:      name,
@@ -91,4 +97,10 @@ func (self *PropertyDeclaration) WriteCode(writer CodeWriter) {
 		self.setter.WriteCode(writer)
 	}
 	writer.End()
+
+	if self.init != nil {
+		writer.Write(" = ")
+		self.init.WriteCode(writer)
+		writer.Write(";")
+	}
 }
