@@ -11,7 +11,7 @@ func Base(args []string) *BaseStatement {
 }
 
 func (self *BaseStatement) WriteCode(writer CodeWriter) {
-	writer.Write(" : base(")
+	writer.Write("base(")
 	for i, arg := range self.arguments {
 		writer.Write(arg)
 		if i < len(self.arguments)-1 {

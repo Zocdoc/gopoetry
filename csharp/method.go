@@ -162,6 +162,7 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(")")
 
 		if self.hasBase && self.base != nil {
+			writer.Write(" : ")
 			self.base.WriteCode(writer)
 		}
 	}
