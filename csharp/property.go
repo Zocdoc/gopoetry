@@ -102,5 +102,6 @@ func (self *PropertyDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(" = ")
 		self.init.WriteCode(writer)
 		writer.Write(";")
+		writer.Eol()
 	}
 }

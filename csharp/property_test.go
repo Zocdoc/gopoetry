@@ -16,7 +16,7 @@ MyType MyProperty
 	assertCode(t, property, expected)
 }
 
-func TestPropertyGetWithInitalizer(t *testing.T) {
+func TestPropertyGetWithInitializer(t *testing.T) {
 	expected := `
 string MyProperty
 {
