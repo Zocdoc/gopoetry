@@ -14,10 +14,14 @@ type MethodDeclaration struct {
 	body       Writable
 	hasBase    bool
 	base       *BaseStatement
+	summary    *SummaryDeclaration
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
 	self.returns = returnType
+	if self.summary != nil {
+		self.summary.AddReturnType(returnType)
+	}
 	return self
 }
 
@@ -62,14 +66,34 @@ func (self *MethodDeclaration) Body(lines ...string) *BlockDeclaration {
 	return body
 }
 
+func (self *MethodDeclaration) addParamDescription(name string, description string) *MethodDeclaration {
+	if self.summary != nil {
+		self.summary.AddParam(name, description)
+	}
+	return self
+}
+
 func (self *MethodDeclaration) Param(type_ string, name string) *ParamDeclaration {
 	param := Param(type_, name)
 	self.AddParams(param)
+	self.addParamDescription(name, "")
+	return param
+}
+
+func (self *MethodDeclaration) ParamWithDescription(type_ string, name string, description string) *ParamDeclaration {
+	param := Param(type_, name)
+	self.AddParams(param)
+	self.addParamDescription(name, description)
 	return param
 }
 
 func (self *MethodDeclaration) WithBase(args ...string) *MethodDeclaration {
 	self.base = Base(args)
+	return self
+}
+
+func (self *MethodDeclaration) Summary(summary string) *MethodDeclaration {
+	self.summary = Summary(summary)
 	return self
 }
 
@@ -84,6 +108,7 @@ func Method(name string) *MethodDeclaration {
 		body:       nil,
 		hasBase:    false,
 		base:       nil,
+		summary:    nil,
 	}
 }
 
@@ -98,6 +123,7 @@ func Constructor(name string) *MethodDeclaration {
 		body:       nil,
 		hasBase:    true,
 		base:       nil,
+		summary:    nil,
 	}
 }
 
@@ -112,6 +138,7 @@ func Get() *MethodDeclaration {
 		body:       nil,
 		hasBase:    false,
 		base:       nil,
+		summary:    nil,
 	}
 }
 
@@ -126,10 +153,15 @@ func Set() *MethodDeclaration {
 		body:       nil,
 		hasBase:    false,
 		base:       nil,
+		summary:    nil,
 	}
 }
 
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
+	if self.summary != nil {
+		self.summary.WriteCode(writer)
+	}
+
 	if len(self.attributes) > 0 {
 		writer.Write("[")
 		for i, attribute := range self.attributes {
