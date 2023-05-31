@@ -72,3 +72,20 @@ public MyType MyProperty
 	property.Set()
 	assertCode(t, property, expected)
 }
+
+func TestPropertyWithSummary(t *testing.T) {
+	expected := `
+/// <summary>
+/// my property summary
+/// </summary>
+public int intParam
+{
+    get;
+    set;
+}
+`
+	property := Property("int", "intParam").Public().Summary("my property summary")
+	property.Get()
+	property.Set()
+	assertCode(t, property, expected)
+}
