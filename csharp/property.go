@@ -13,7 +13,7 @@ type PropertyDeclaration struct {
 	getter     *MethodDeclaration
 	setter     *MethodDeclaration
 	init       Writable
-	summary    *SummaryDeclaration
+	summary    SummaryDeclaration
 }
 
 func (self *PropertyDeclaration) addModifier(modifier string) *PropertyDeclaration {
@@ -75,14 +75,12 @@ func Property(type_ string, name string) *PropertyDeclaration {
 		modifiers: []string{},
 		getter:    nil,
 		setter:    nil,
-		summary:   nil,
+		summary:   SummaryDeclaration{},
 	}
 }
 
 func (self *PropertyDeclaration) WriteCode(writer CodeWriter) {
-	if self.summary != nil {
-		self.summary.WriteCode(writer)
-	}
+	self.summary.WriteCode(writer)
 
 	if len(self.attributes) > 0 {
 		writer.Write("[")

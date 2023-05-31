@@ -14,14 +14,12 @@ type MethodDeclaration struct {
 	body       Writable
 	hasBase    bool
 	base       *BaseStatement
-	summary    *SummaryDeclaration
+	summary    SummaryDeclaration
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
 	self.returns = returnType
-	if self.summary != nil {
-		self.summary.AddReturnType(returnType)
-	}
+	self.summary.AddReturnType(returnType)
 	return self
 }
 
@@ -67,9 +65,7 @@ func (self *MethodDeclaration) Body(lines ...string) *BlockDeclaration {
 }
 
 func (self *MethodDeclaration) addParamDescription(name string, description string) *MethodDeclaration {
-	if self.summary != nil {
-		self.summary.AddParam(name, description)
-	}
+	self.summary.AddParam(name, description)
 	return self
 }
 
@@ -108,7 +104,7 @@ func Method(name string) *MethodDeclaration {
 		body:       nil,
 		hasBase:    false,
 		base:       nil,
-		summary:    nil,
+		summary:    SummaryDeclaration{},
 	}
 }
 
@@ -123,7 +119,7 @@ func Constructor(name string) *MethodDeclaration {
 		body:       nil,
 		hasBase:    true,
 		base:       nil,
-		summary:    nil,
+		summary:    SummaryDeclaration{},
 	}
 }
 
@@ -138,7 +134,7 @@ func Get() *MethodDeclaration {
 		body:       nil,
 		hasBase:    false,
 		base:       nil,
-		summary:    nil,
+		summary:    SummaryDeclaration{},
 	}
 }
 
@@ -153,14 +149,12 @@ func Set() *MethodDeclaration {
 		body:       nil,
 		hasBase:    false,
 		base:       nil,
-		summary:    nil,
+		summary:    SummaryDeclaration{},
 	}
 }
 
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
-	if self.summary != nil {
-		self.summary.WriteCode(writer)
-	}
+	self.summary.WriteCode(writer)
 
 	if len(self.attributes) > 0 {
 		writer.Write("[")

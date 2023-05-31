@@ -5,11 +5,11 @@ import "fmt"
 type SummaryDeclaration struct {
 	description string
 	params      []map[string]string
-	returnType  *string
+	returnType  string
 }
 
-func Summary(description string) *SummaryDeclaration {
-	return &SummaryDeclaration{
+func Summary(description string) SummaryDeclaration {
+	return SummaryDeclaration{
 		description: description,
 	}
 }
@@ -20,17 +20,24 @@ func (self *SummaryDeclaration) AddParam(name string, description string) *Summa
 }
 
 func (self *SummaryDeclaration) AddReturnType(returnType string) *SummaryDeclaration {
-	self.returnType = &returnType
+	self.returnType = returnType
 	return self
 }
 
-func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
-	writer.Write("/// <summary>")
-	writer.Eol()
-	writer.Write(fmt.Sprintf("/// %s", self.description))
-	writer.Eol()
-	writer.Write("/// </summary>")
-	writer.Eol()
+func (self SummaryDeclaration) WriteCode(writer CodeWriter) {
+	isEmpty := self.description == "" && len(self.params) == 0 && self.returnType == ""
+	if isEmpty {
+		return
+	}
+
+	if self.description != "" {
+		writer.Write("/// <summary>")
+		writer.Eol()
+		writer.Write(fmt.Sprintf("/// %s", self.description))
+		writer.Eol()
+		writer.Write("/// </summary>")
+		writer.Eol()
+	}
 
 	for _, param := range self.params {
 		for name, description := range param {
@@ -39,8 +46,8 @@ func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
 		}
 	}
 
-	if self.returnType != nil {
-		writer.Write(fmt.Sprintf("/// <returns>%s</returns>", *self.returnType))
+	if self.returnType != "" {
+		writer.Write(fmt.Sprintf("/// <returns>%s</returns>", self.returnType))
 		writer.Eol()
 	}
 }

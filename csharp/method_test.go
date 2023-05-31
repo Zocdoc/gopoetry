@@ -1,13 +1,19 @@
 package csharp
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestMethodVoid(t *testing.T) {
 	assertCode(t, Method("MyMethod"), "void MyMethod();")
 }
 
 func TestMethodReturns(t *testing.T) {
-	assertCode(t, Method("MyMethod").Returns("Result"), "Result MyMethod();")
+	expected := `
+/// <returns>Result</returns>
+Result MyMethod();
+	`
+	assertCode(t, Method("MyMethod").Returns("Result"), expected)
 }
 
 func TestMethodPublic(t *testing.T) {
@@ -18,11 +24,18 @@ func TestMethodParams(t *testing.T) {
 	method := Method("MyMethod").Public()
 	method.Param("int", "intParam")
 	method.Param("string", "stringParam")
-	assertCode(t, method, "public void MyMethod(int intParam, string stringParam);")
+
+	expected := `
+/// <param name="intParam"></param>
+/// <param name="stringParam"></param>
+public void MyMethod(int intParam, string stringParam);
+	`
+	assertCode(t, method, expected)
 }
 
 func TestMethodBody(t *testing.T) {
 	expected := `
+/// <returns>Result</returns>
 Result MyMethod()
 {
 }
@@ -96,6 +109,7 @@ Result MyMethod(int intParam, string stringParam);
 
 func TestConstructor(t *testing.T) {
 	expected := `
+/// <param name="myString"></param>
 MyType(string myString)
 {
 }
@@ -108,6 +122,8 @@ MyType(string myString)
 
 func TestConstructorWithBase(t *testing.T) {
 	expected := `
+/// <param name="myString"></param>
+/// <param name="myBool"></param>
 MyType(string myString, bool myBool) : base(myString)
 {
 }

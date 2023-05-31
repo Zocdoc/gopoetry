@@ -11,7 +11,7 @@ type ClassDeclaration struct {
 	modifiers  []string
 	attributes []Writable
 	members    []Writable
-	summary    *SummaryDeclaration
+	summary    SummaryDeclaration
 }
 
 func (self *ClassDeclaration) addModifier(modifier string) *ClassDeclaration {
@@ -89,14 +89,12 @@ func Class(name string) *ClassDeclaration {
 		modifiers:  []string{},
 		attributes: []Writable{},
 		members:    []Writable{},
-		summary:    nil,
+		summary:    SummaryDeclaration{},
 	}
 }
 
 func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
-	if self.summary != nil {
-		self.summary.WriteCode(writer)
-	}
+	self.summary.WriteCode(writer)
 
 	declaration := fmt.Sprintf("class %s", self.name)
 	if len(self.modifiers) > 0 {
