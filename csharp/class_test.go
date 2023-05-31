@@ -102,3 +102,15 @@ class MyClass
 	property.Init(Str("bar"))
 	assertCode(t, class, expected)
 }
+
+func TestClassWithSummary(t *testing.T) {
+	expected := `
+/// <summary>
+/// my class summary
+/// </summary>
+class MyClass
+{
+}
+`
+	assertCode(t, Class("MyClass").Summary("my class summary"), expected)
+}
