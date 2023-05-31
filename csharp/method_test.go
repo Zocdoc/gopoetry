@@ -66,29 +66,29 @@ void MyMethod(int intParam, string stringParam);
 	assertCode(t, method, expected)
 }
 
-func TestMethodSummaryWithReturnType(t *testing.T) {
+func TestMethodSummaryWithReturns(t *testing.T) {
 	expected := `
 /// <summary>
 /// my method summary
 /// </summary>
-/// <returns>Result</returns>
-Result MyMethod();
+/// <returns>my return summary</returns>
+void MyMethod();
 `
-	method := Method("MyMethod").Summary("my method summary").Returns("Result")
+	method := Method("MyMethod").Summary("my method summary").ReturnsSummary("my return summary")
 	assertCode(t, method, expected)
 }
 
-func TestMethodSummaryWithParamsAndReturnType(t *testing.T) {
+func TestMethodSummaryWithParamsAndReturns(t *testing.T) {
 	expected := `
 /// <summary>
 /// my method summary
 /// </summary>
 /// <param name="intParam">A simple int param</param>
 /// <param name="stringParam"></param>
-/// <returns>Result</returns>
-Result MyMethod(int intParam, string stringParam);
+/// <returns>my return summary</returns>
+void MyMethod(int intParam, string stringParam);
 `
-	method := Method("MyMethod").Summary("my method summary").Returns("Result")
+	method := Method("MyMethod").Summary("my method summary").ReturnsSummary("my return summary")
 	method.ParamWithDescription("int", "intParam", "A simple int param")
 	method.Param("string", "stringParam")
 	assertCode(t, method, expected)

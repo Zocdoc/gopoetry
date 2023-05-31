@@ -9,7 +9,7 @@ type SummaryParam struct {
 type SummaryDeclaration struct {
 	description string
 	params      []SummaryParam
-	returnType  string
+	returns     string
 }
 
 func Summary(description string) *SummaryDeclaration {
@@ -28,8 +28,8 @@ func (self *SummaryDeclaration) AddParam(name string, description string) *Summa
 	return self
 }
 
-func (self *SummaryDeclaration) AddReturnType(returnType string) *SummaryDeclaration {
-	self.returnType = returnType
+func (self *SummaryDeclaration) AddReturns(returns string) *SummaryDeclaration {
+	self.returns = returns
 	return self
 }
 
@@ -50,8 +50,8 @@ func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
 		writer.Eol()
 	}
 
-	if self.returnType != "" {
-		writer.Write(fmt.Sprintf("/// <returns>%s</returns>", self.returnType))
+	if self.returns != "" {
+		writer.Write(fmt.Sprintf("/// <returns>%s</returns>", self.returns))
 		writer.Eol()
 	}
 }

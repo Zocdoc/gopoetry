@@ -19,7 +19,6 @@ type MethodDeclaration struct {
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
 	self.returns = returnType
-	self.summary.AddReturnType(returnType)
 	return self
 }
 
@@ -85,6 +84,11 @@ func (self *MethodDeclaration) ParamWithDescription(type_ string, name string, d
 
 func (self *MethodDeclaration) WithBase(args ...string) *MethodDeclaration {
 	self.base = Base(args)
+	return self
+}
+
+func (self *MethodDeclaration) ReturnsSummary(returns string) *MethodDeclaration {
+	self.summary.AddReturns(returns)
 	return self
 }
 
