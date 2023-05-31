@@ -14,15 +14,22 @@ type MethodDeclaration struct {
 	body       Writable
 	hasBase    bool
 	base       *BaseStatement
+	summary    SummaryDeclaration
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
 	self.returns = returnType
+	self.summary.AddReturnType(returnType)
 	return self
 }
 
 func (self *MethodDeclaration) addModifier(modifier string) *MethodDeclaration {
 	self.modifiers = append(self.modifiers, modifier)
+	return self
+}
+
+func (self *MethodDeclaration) addParamDescription(name string, description string) *MethodDeclaration {
+	self.summary.AddParam(name, description)
 	return self
 }
 
@@ -65,11 +72,24 @@ func (self *MethodDeclaration) Body(lines ...string) *BlockDeclaration {
 func (self *MethodDeclaration) Param(type_ string, name string) *ParamDeclaration {
 	param := Param(type_, name)
 	self.AddParams(param)
+	self.addParamDescription(name, "")
+	return param
+}
+
+func (self *MethodDeclaration) ParamWithDescription(type_ string, name string, description string) *ParamDeclaration {
+	param := Param(type_, name)
+	self.AddParams(param)
+	self.addParamDescription(name, description)
 	return param
 }
 
 func (self *MethodDeclaration) WithBase(args ...string) *MethodDeclaration {
 	self.base = Base(args)
+	return self
+}
+
+func (self *MethodDeclaration) Summary(summary string) *MethodDeclaration {
+	self.summary.AddDescription(summary)
 	return self
 }
 
@@ -84,6 +104,7 @@ func Method(name string) *MethodDeclaration {
 		body:       nil,
 		hasBase:    false,
 		base:       nil,
+		summary:    SummaryDeclaration{},
 	}
 }
 
@@ -98,6 +119,7 @@ func Constructor(name string) *MethodDeclaration {
 		body:       nil,
 		hasBase:    true,
 		base:       nil,
+		summary:    SummaryDeclaration{},
 	}
 }
 
@@ -112,6 +134,7 @@ func Get() *MethodDeclaration {
 		body:       nil,
 		hasBase:    false,
 		base:       nil,
+		summary:    SummaryDeclaration{},
 	}
 }
 
@@ -126,10 +149,13 @@ func Set() *MethodDeclaration {
 		body:       nil,
 		hasBase:    false,
 		base:       nil,
+		summary:    SummaryDeclaration{},
 	}
 }
 
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
+	self.summary.WriteCode(writer)
+
 	if len(self.attributes) > 0 {
 		writer.Write("[")
 		for i, attribute := range self.attributes {
