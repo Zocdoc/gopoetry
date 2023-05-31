@@ -11,6 +11,7 @@ type ClassDeclaration struct {
 	modifiers  []string
 	attributes []Writable
 	members    []Writable
+	summary    SummaryDeclaration
 }
 
 func (self *ClassDeclaration) addModifier(modifier string) *ClassDeclaration {
@@ -77,23 +78,31 @@ func (self *ClassDeclaration) Property(type_ string, name string) *PropertyDecla
 	return property
 }
 
+func (self *ClassDeclaration) Summary(summary string) *ClassDeclaration {
+	self.summary.AddDescription(summary)
+	return self
+}
+
 func Class(name string) *ClassDeclaration {
 	return &ClassDeclaration{
 		name:       name,
 		modifiers:  []string{},
 		attributes: []Writable{},
 		members:    []Writable{},
+		summary:    SummaryDeclaration{},
 	}
 }
 
 func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
+	self.summary.WriteCode(writer)
+
 	declaration := fmt.Sprintf("class %s", self.name)
 	if len(self.modifiers) > 0 {
 		declaration = strings.Join(self.modifiers, " ") + " " + declaration
 	}
 
 	if len(self.inherits) > 0 {
-		declaration += ": "+strings.Join(self.inherits, ", ")
+		declaration += ": " + strings.Join(self.inherits, ", ")
 	}
 
 	if len(self.attributes) > 0 {
@@ -111,7 +120,9 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write(declaration)
 	writer.Begin()
 	for index, member := range self.members {
-		if index > 0 { writer.Eol() }
+		if index > 0 {
+			writer.Eol()
+		}
 		member.WriteCode(writer)
 	}
 	writer.End()
