@@ -14,30 +14,39 @@ func Summary(description string) SummaryDeclaration {
 	}
 }
 
+func (s *SummaryDeclaration) isInitialized() bool {
+	return s.description != ""
+}
+
 func (self *SummaryDeclaration) AddParam(name string, description string) *SummaryDeclaration {
+	if !self.isInitialized() {
+		return self
+	}
+
 	self.params = append(self.params, map[string]string{name: description})
 	return self
 }
 
 func (self *SummaryDeclaration) AddReturnType(returnType string) *SummaryDeclaration {
+	if !self.isInitialized() {
+		return self
+	}
+
 	self.returnType = returnType
 	return self
 }
 
 func (self SummaryDeclaration) WriteCode(writer CodeWriter) {
-	isEmpty := self.description == "" && len(self.params) == 0 && self.returnType == ""
-	if isEmpty {
+	if !self.isInitialized() {
 		return
 	}
 
-	if self.description != "" {
-		writer.Write("/// <summary>")
-		writer.Eol()
-		writer.Write(fmt.Sprintf("/// %s", self.description))
-		writer.Eol()
-		writer.Write("/// </summary>")
-		writer.Eol()
-	}
+	writer.Write("/// <summary>")
+	writer.Eol()
+	writer.Write(fmt.Sprintf("/// %s", self.description))
+	writer.Eol()
+	writer.Write("/// </summary>")
+	writer.Eol()
 
 	for _, param := range self.params {
 		for name, description := range param {
