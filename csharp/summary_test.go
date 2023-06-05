@@ -12,6 +12,18 @@ func TestSummary(t *testing.T) {
 	assertCode(t, summary, expected)
 }
 
+func TestSummaryMultiLined(t *testing.T) {
+	expected := `
+/// <summary>
+/// my summary
+/// my second line
+/// my third line
+/// </summary>
+`
+	summary := Summary("my summary\nmy second line\nmy third line\n")
+	assertCode(t, summary, expected)
+}
+
 func TestSummaryWithParams(t *testing.T) {
 	expected := `
 /// <summary>
