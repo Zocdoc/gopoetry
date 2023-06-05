@@ -1,6 +1,9 @@
 package csharp
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type SummaryParam struct {
 	name, description string
@@ -40,8 +43,14 @@ func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
 
 	writer.Write("/// <summary>")
 	writer.Eol()
-	writer.Write(fmt.Sprintf("/// %s", self.description))
-	writer.Eol()
+
+	for _, line := range strings.Split(self.description, "\n") {
+		if line != "" {
+			writer.Write(fmt.Sprintf("/// %s", line))
+			writer.Eol()
+		}
+	}
+
 	writer.Write("/// </summary>")
 	writer.Eol()
 
