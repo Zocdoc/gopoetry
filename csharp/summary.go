@@ -36,6 +36,15 @@ func (self *SummaryDeclaration) AddReturns(returns string) *SummaryDeclaration {
 	return self
 }
 
+func (self *SummaryDeclaration) writeMultiLine(writer CodeWriter, description string) {
+	for _, line := range strings.Split(strings.Replace(description, "\r\n", "\n", -1), "\n") {
+		if line != "" {
+			writer.Write(fmt.Sprintf("/// %s", line))
+			writer.Eol()
+		}
+	}
+}
+
 func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
 	if self.description == "" {
 		return
@@ -44,18 +53,23 @@ func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write("/// <summary>")
 	writer.Eol()
 
-	for _, line := range strings.Split(self.description, "\n") {
-		if line != "" {
-			writer.Write(fmt.Sprintf("/// %s", line))
-			writer.Eol()
-		}
-	}
+	self.writeMultiLine(writer, self.description)
 
 	writer.Write("/// </summary>")
 	writer.Eol()
 
 	for _, param := range self.params {
-		writer.Write(fmt.Sprintf("/// <param name=\"%s\">%s</param>", param.name, param.description))
+		if strings.Contains(param.description, "\n") {
+			writer.Write(fmt.Sprintf("/// <param name=\"%s\">", param.name))
+			writer.Eol()
+
+			self.writeMultiLine(writer, param.description)
+
+			writer.Write("/// </param>")
+		} else {
+			writer.Write(fmt.Sprintf("/// <param name=\"%s\">%s</param>", param.name, param.description))
+		}
+
 		writer.Eol()
 	}
 
