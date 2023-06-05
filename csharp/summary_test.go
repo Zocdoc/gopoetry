@@ -20,7 +20,7 @@ func TestSummaryMultiLined(t *testing.T) {
 /// my third line
 /// </summary>
 `
-	summary := Summary("my summary\nmy second line\nmy third line\n")
+	summary := Summary("my summary\nmy second line\r\nmy third line\n")
 	assertCode(t, summary, expected)
 }
 
@@ -34,6 +34,24 @@ func TestSummaryWithParams(t *testing.T) {
 `
 	summary := Summary("my summary")
 	summary.AddParam("intParam", "A simple int param")
+	summary.AddParam("stringParam", "")
+	assertCode(t, summary, expected)
+}
+
+func TestSummaryWithParamsMultiLined(t *testing.T) {
+	expected := `
+/// <summary>
+/// my summary
+/// </summary>
+/// <param name="intParam">
+/// A simple int param
+/// my second param line
+/// my third param line
+/// </param>
+/// <param name="stringParam"></param>
+`
+	summary := Summary("my summary")
+	summary.AddParam("intParam", "A simple int param\nmy second param line\r\nmy third param line\n")
 	summary.AddParam("stringParam", "")
 	assertCode(t, summary, expected)
 }
