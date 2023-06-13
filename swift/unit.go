@@ -31,8 +31,15 @@ func (u *Unit) WriteCode(writer CodeWriter) {
 
 	for _, decl := range u.declarations {
 		decl.WriteCode(writer)
+		writer.Write("\n")
 		writer.Eol()
 	}
 }
 
 var _ Writable = (*Unit)(nil)
+
+func (u *Unit) Code() string {
+	writer := CreateWriter()
+	u.WriteCode(&writer)
+	return writer.Code()
+}

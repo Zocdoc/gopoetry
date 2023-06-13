@@ -20,6 +20,7 @@ import Foundation
 import UIKit
 
 var name: String
+
 var count: Int
 `
 	assertCode(t, unit, expected)
