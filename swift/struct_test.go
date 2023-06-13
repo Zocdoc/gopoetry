@@ -5,7 +5,7 @@ import "testing"
 func TestEmptyStruct(t *testing.T) {
 	myStruct := NewStruct("MyStruct")
 
-	assertCode(t, myStruct, "struct MyStruct {\n}")
+	assertCode(t, myStruct, "struct MyStruct {}")
 }
 
 func TestStructSimpleMember(t *testing.T) {
@@ -34,6 +34,22 @@ struct MyStruct {
 	assertCode(t, myStruct, expected)
 }
 
+func TestPuplicStructSimpleMemberInit(t *testing.T) {
+	myStruct := NewStruct("MyStruct")
+	myStruct.AddMembers(
+		Var("name", "String").
+			InitWith(Str("some_name")).
+			Public(),
+	)
+
+	expected := `
+struct MyStruct {
+    public var name: String = "some_name"
+}
+`
+	assertCode(t, myStruct, expected)
+}
+
 func TestStructInStruct(t *testing.T) {
 	myStruct := NewStruct("MyStruct")
 	myStruct.AddMembers(
@@ -44,6 +60,24 @@ func TestStructInStruct(t *testing.T) {
 	expected := `
 struct MyStruct {
     struct InnerStruct {
+        var age: Int
+    }
+}
+`
+	assertCode(t, myStruct, expected)
+}
+
+func TestPublicStructInStruct(t *testing.T) {
+	myStruct := NewStruct("MyStruct")
+	myStruct.AddMembers(
+		NewStruct("InnerStruct").
+			AddMembers(Var("age", "Int")).
+			Public(),
+	)
+
+	expected := `
+struct MyStruct {
+    public struct InnerStruct {
         var age: Int
     }
 }
