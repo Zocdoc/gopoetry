@@ -39,7 +39,7 @@ func TestValAccessModifiers(t *testing.T) {
 		myVal.Internal,
 	}
 
-	expected := []string{
+	expectedMod := []string{
 		"public",
 		"fileprivate",
 		"private",
@@ -48,7 +48,7 @@ func TestValAccessModifiers(t *testing.T) {
 
 	for i, modify := range modifiers {
 		modify()
-		expected := fmt.Sprintf("%s var myVal: Any", expected[i])
+		expected := fmt.Sprintf("%s var myVal: Any", expectedMod[i])
 		assertCode(t, myVal, expected)
 	}
 }
