@@ -98,7 +98,7 @@ func TestStructAccessModifiers(t *testing.T) {
 		myStruct.Internal,
 	}
 
-	expected := []string{
+	expectedMod := []string{
 		"public",
 		"fileprivate",
 		"private",
@@ -107,7 +107,7 @@ func TestStructAccessModifiers(t *testing.T) {
 
 	for i, modify := range modifiers {
 		modify()
-		expected := fmt.Sprintf("%s struct MyStruct {}", expected[i])
+		expected := fmt.Sprintf("%s struct MyStruct {}", expectedMod[i])
 		assertCode(t, myStruct, expected)
 	}
 }
