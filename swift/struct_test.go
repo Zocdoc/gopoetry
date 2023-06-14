@@ -1,6 +1,9 @@
 package swift
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestEmptyStruct(t *testing.T) {
 	myStruct := NewStruct("MyStruct")
@@ -83,4 +86,28 @@ struct MyStruct {
 }
 `
 	assertCode(t, myStruct, expected)
+}
+
+func TestStructAccessModifiers(t *testing.T) {
+	myStruct := NewStruct("MyStruct")
+
+	modifiers := []func() *StructDecl{
+		myStruct.Public,
+		myStruct.FilePrivate,
+		myStruct.Private,
+		myStruct.Internal,
+	}
+
+	expected := []string{
+		"public",
+		"fileprivate",
+		"private",
+		"internal",
+	}
+
+	for i, modify := range modifiers {
+		modify()
+		expected := fmt.Sprintf("%s struct MyStruct {}", expected[i])
+		assertCode(t, myStruct, expected)
+	}
 }
