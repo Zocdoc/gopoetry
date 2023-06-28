@@ -3,10 +3,11 @@ package swift
 import "fmt"
 
 type VarDeclaration struct {
-	accessModifier string
-	name           string
-	typeName       string
-	initValue      Writable
+	simpleAttributes []string
+	accessModifier   string
+	name             string
+	typeName         string
+	initValue        Writable
 }
 
 // VarDeclaration implements Declaration.
@@ -46,7 +47,20 @@ func (v *VarDeclaration) Private() *VarDeclaration {
 	return v
 }
 
+// SimpleAttributes adds simple attributes to the variable declaration.
+// Simple here means attributes with no arguments.
+func (v *VarDeclaration) SimpleAttributes(names ...string) *VarDeclaration {
+	v.simpleAttributes = append(v.simpleAttributes, names...)
+	return v
+}
+
 func (v *VarDeclaration) WriteCode(writer CodeWriter) {
+	if len(v.simpleAttributes) > 0 {
+		for _, attr := range v.simpleAttributes {
+			writer.Write(attr + " ")
+		}
+	}
+
 	if v.accessModifier != "" {
 		writer.Write(v.accessModifier + " ")
 	}
