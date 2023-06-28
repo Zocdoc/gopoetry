@@ -52,3 +52,8 @@ func TestValAccessModifiers(t *testing.T) {
 		assertCode(t, myVal, expected)
 	}
 }
+
+func TestValAttribute(t *testing.T) {
+	myVal := Var("myVal", "Any").SimpleAttributes("@IBOutlet", "@Indirect")
+	assertCode(t, myVal, "@IBOutlet @Indirect var myVal: Any")
+}
