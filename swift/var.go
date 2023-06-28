@@ -57,6 +57,9 @@ func (v *VarDeclaration) SimpleAttributes(names ...string) *VarDeclaration {
 func (v *VarDeclaration) WriteCode(writer CodeWriter) {
 	if len(v.simpleAttributes) > 0 {
 		for _, attr := range v.simpleAttributes {
+			if attr[0] != '@' {
+				attr = "@" + attr
+			}
 			writer.Write(attr + " ")
 		}
 	}

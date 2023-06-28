@@ -57,3 +57,8 @@ func TestValAttribute(t *testing.T) {
 	myVal := Var("myVal", "Any").SimpleAttributes("@IBOutlet", "@Indirect")
 	assertCode(t, myVal, "@IBOutlet @Indirect var myVal: Any")
 }
+
+func TestValAttributeMissingAtSymbol(t *testing.T) {
+	myVal := Var("myVal", "Any").SimpleAttributes("IBOutlet", "Indirect")
+	assertCode(t, myVal, "@IBOutlet @Indirect var myVal: Any")
+}
