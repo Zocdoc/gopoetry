@@ -8,6 +8,7 @@ type CodeWriter interface {
 	Begin()
 	End()
 	Eol()
+	Lambda()
 	Write(code string)
 }
 
@@ -38,6 +39,10 @@ func (self *codeWriter) End() {
 func (self *codeWriter) Eol() {
 	self.Write("\n")
 	self.newLine = true
+}
+
+func (self *codeWriter) Lambda() {
+	self.Write(" => ")
 }
 
 func (self *codeWriter) Write(code string) {

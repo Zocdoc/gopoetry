@@ -119,3 +119,12 @@ MyType(string myString, bool myBool) : base(myString)
 	ctor.Body()
 	assertCode(t, ctor, expected)
 }
+
+func TestMethodExpression(t *testing.T) {
+	expected := `
+Result MyMethod() => true;
+`
+	method := Method("MyMethod").Returns("Result")
+	method.ExpressionBodiedMember("true")
+	assertCode(t, method, expected)
+}
