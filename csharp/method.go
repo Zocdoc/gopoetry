@@ -15,6 +15,7 @@ type MethodDeclaration struct {
 	hasBase    bool
 	base       *BaseStatement
 	summary    SummaryDeclaration
+	expression *SingleLineExpressionDeclaration
 }
 
 func (self *MethodDeclaration) Returns(returnType string) *MethodDeclaration {
@@ -97,6 +98,11 @@ func (self *MethodDeclaration) Summary(summary string) *MethodDeclaration {
 	return self
 }
 
+func (self *MethodDeclaration) ExpressionBodiedMember(expression string) *MethodDeclaration {
+	self.expression = SingleLineExpression(expression)
+	return self
+}
+
 func Method(name string) *MethodDeclaration {
 	return &MethodDeclaration{
 		name:       name,
@@ -109,6 +115,7 @@ func Method(name string) *MethodDeclaration {
 		hasBase:    false,
 		base:       nil,
 		summary:    SummaryDeclaration{},
+		expression: nil,
 	}
 }
 
@@ -124,6 +131,7 @@ func Constructor(name string) *MethodDeclaration {
 		hasBase:    true,
 		base:       nil,
 		summary:    SummaryDeclaration{},
+		expression: nil,
 	}
 }
 
@@ -139,6 +147,7 @@ func Get() *MethodDeclaration {
 		hasBase:    false,
 		base:       nil,
 		summary:    SummaryDeclaration{},
+		expression: nil,
 	}
 }
 
@@ -154,6 +163,7 @@ func Set() *MethodDeclaration {
 		hasBase:    false,
 		base:       nil,
 		summary:    SummaryDeclaration{},
+		expression: nil,
 	}
 }
 
@@ -197,7 +207,12 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		}
 	}
 
-	if self.body != nil {
+	if self.expression != nil {
+		writer.Lambda()
+		self.expression.WriteCode(writer)
+		writer.Write(";")
+		writer.Eol()
+	} else if self.body != nil {
 		self.body.WriteCode(writer)
 	} else {
 		writer.Write(";")

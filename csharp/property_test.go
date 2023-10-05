@@ -89,3 +89,12 @@ public int intParam
 	property.Set()
 	assertCode(t, property, expected)
 }
+
+func TestPropertyWithExpressionBodiedMember(t *testing.T) {
+	expected := `
+public new LogLevel? MyLogLevel => SomeAwesomeLogLevel.Ignore;
+`
+	property := Property("new LogLevel?", "MyLogLevel").Public()
+	property.ExpressionBodiedMember("SomeAwesomeLogLevel.Ignore")
+	assertCode(t, property, expected)
+}

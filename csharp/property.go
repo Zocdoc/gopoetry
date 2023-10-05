@@ -14,6 +14,7 @@ type PropertyDeclaration struct {
 	setter     *MethodDeclaration
 	init       Writable
 	summary    SummaryDeclaration
+	expression *SingleLineExpressionDeclaration
 }
 
 func (self *PropertyDeclaration) addModifier(modifier string) *PropertyDeclaration {
@@ -63,6 +64,11 @@ func (self *PropertyDeclaration) Init(init Writable) *PropertyDeclaration {
 	return self
 }
 
+func (self *PropertyDeclaration) ExpressionBodiedMember(expression string) *PropertyDeclaration {
+	self.expression = SingleLineExpression(expression)
+	return self
+}
+
 func (self *PropertyDeclaration) Summary(summary string) *PropertyDeclaration {
 	self.summary.AddDescription(summary)
 	return self
@@ -98,19 +104,27 @@ func (self *PropertyDeclaration) WriteCode(writer CodeWriter) {
 		declaration = strings.Join(self.modifiers, " ") + " " + declaration
 	}
 	writer.Write(declaration)
-	writer.Begin()
-	if self.getter != nil {
-		self.getter.WriteCode(writer)
-	}
-	if self.setter != nil {
-		self.setter.WriteCode(writer)
-	}
-	writer.End()
 
-	if self.init != nil {
-		writer.Write(" = ")
-		self.init.WriteCode(writer)
+	if self.expression != nil {
+		writer.Lambda()
+		self.expression.WriteCode(writer)
 		writer.Write(";")
 		writer.Eol()
+	} else {
+		writer.Begin()
+		if self.getter != nil {
+			self.getter.WriteCode(writer)
+		}
+		if self.setter != nil {
+			self.setter.WriteCode(writer)
+		}
+		writer.End()
+
+		if self.init != nil {
+			writer.Write(" = ")
+			self.init.WriteCode(writer)
+			writer.Write(";")
+			writer.Eol()
+		}
 	}
 }
