@@ -1,8 +1,11 @@
 package typescript
 
+import "fmt"
+
 // ObjectValue represents a javascript object
 type ObjectValue struct {
 	BlockDeclaration
+	spreads []string
 }
 
 func NewObjectValue() *ObjectValue {
@@ -17,6 +20,12 @@ func (t *ObjectValue) WriteCode(writer CodeWriter) {
 	}
 
 	writer.OpenBlock()
+
+	for _, spread := range t.spreads {
+		writer.Write(fmt.Sprintf("...%s,", spread))
+		writer.Eol()
+	}
+
 	for _, member := range t.lines {
 		member.WriteCode(writer)
 	}
@@ -32,6 +41,11 @@ func (o *ObjectValue) AddProp(name string, value Writable) *ObjectValue {
 	return o
 }
 
+func (o *ObjectValue) AddSpread(objectNameToSpread string) *ObjectValue {
+	o.spreads = append(o.spreads, objectNameToSpread)
+	return o
+}
+
 // ObjProp represent a named property with a value on an object
 type ObjProp struct {
 	Name  string
@@ -40,6 +54,7 @@ type ObjProp struct {
 
 func (ps *ObjProp) WriteCode(writer CodeWriter) {
 	writer.Write(ps.Name)
+
 	if ps.Value != nil {
 		writer.Write(": ")
 		ps.Value.WriteCode(writer)
