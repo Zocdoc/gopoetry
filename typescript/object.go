@@ -5,7 +5,8 @@ import "fmt"
 // ObjectValue represents a javascript object
 type ObjectValue struct {
 	BlockDeclaration
-	spreads []string
+	preAssignmentSpreads  []string
+	postAssignmentSpreads []string
 }
 
 func NewObjectValue() *ObjectValue {
@@ -21,13 +22,18 @@ func (t *ObjectValue) WriteCode(writer CodeWriter) {
 
 	writer.OpenBlock()
 
-	for _, spread := range t.spreads {
+	for _, spread := range t.preAssignmentSpreads {
 		writer.Write(fmt.Sprintf("...%s,", spread))
 		writer.Eol()
 	}
 
 	for _, member := range t.lines {
 		member.WriteCode(writer)
+	}
+
+	for _, spread := range t.postAssignmentSpreads {
+		writer.Write(fmt.Sprintf("...%s,", spread))
+		writer.Eol()
 	}
 	writer.CloseBlock()
 }
@@ -41,8 +47,12 @@ func (o *ObjectValue) AddProp(name string, value Writable) *ObjectValue {
 	return o
 }
 
-func (o *ObjectValue) AddSpread(objectNameToSpread string) *ObjectValue {
-	o.spreads = append(o.spreads, objectNameToSpread)
+func (o *ObjectValue) AddSpread(objectNameToSpread string, postPropertyAssignment bool) *ObjectValue {
+	if postPropertyAssignment {
+		o.postAssignmentSpreads = append(o.postAssignmentSpreads, objectNameToSpread)
+	} else {
+		o.preAssignmentSpreads = append(o.preAssignmentSpreads, objectNameToSpread)
+	}
 	return o
 }
 
