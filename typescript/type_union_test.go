@@ -29,12 +29,14 @@ type DiningType = 'in_door' | 'out_door';
 
 func TestUnionBuilderFunction(t *testing.T) {
 	expected := `
+/** my dining type */
 type DiningType = 'in_door' | 'out_door' | 'underwater' | 'up_in_the_air';
 `
 	elements := UnionType("'underwater'", "'up_in_the_air'")
 	doors := UnionType("'in_door'", "'out_door'")
 
 	typeDec := DeclareType("DiningType", doors.Union(elements))
+	typeDec.AddComments("my dining type")
 	assertCode(t, typeDec, expected)
 }
 

@@ -4,18 +4,25 @@ import "testing"
 
 func TestObjectType(t *testing.T) {
 	expected := `
+/** my type */
 type MyType = {
+    /** my prop */
     foo: string;
 };
 	`
 
 	ot := &ObjectType{}
-	ot.AddProp(&PropertySig{
+	prop := &PropertySig{
 		Name:           "foo",
 		TypeAnnotation: Code("string"),
-	})
+	}
+	prop.AddComments("my prop")
+	ot.AddProp(prop)
 
-	assertCode(t, DeclareType("MyType", ot), expected)
+	dt := DeclareType("MyType", ot)
+	dt.AddComments("my type")
+
+	assertCode(t, dt, expected)
 }
 
 func TestNestedObjectType(t *testing.T) {

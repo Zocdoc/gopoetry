@@ -31,12 +31,14 @@ type PropertySig struct {
 	Name           string
 	Optional       bool
 	TypeAnnotation Writable
+	CommentBlockDeclaration
 }
 
 var _ Writable = &PropertySig{}
 
 // WriteCode implements Writable
 func (ps *PropertySig) WriteCode(writer CodeWriter) {
+	ps.WriteComments(writer)
 	name := ps.Name
 	if ps.Optional {
 		name += "?"

@@ -71,12 +71,14 @@ export function add(): void {
 
 func TestBody(t *testing.T) {
 	expected := `
+/** adds two numbers */
 export function add(x: number, y: number): number {
     return x + y;
 }
   `
 
 	fn := DeclareFunction("add").Export()
+	fn.AddComments("adds two numbers")
 	fn.GetExpression().
 		AddParams(
 			*Param("number", "x"),
