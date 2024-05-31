@@ -4,6 +4,7 @@ package typescript
 type EnumMemberDeclaration struct {
 	name  string
 	value *WritableCode
+	CommentBlockDeclaration
 }
 
 // Value sets the enums value
@@ -22,6 +23,7 @@ func EnumMember(name string) *EnumMemberDeclaration {
 
 // WriteCode writes the enum to the writer
 func (enum *EnumMemberDeclaration) WriteCode(writer CodeWriter) {
+	enum.WriteComments(writer)
 	writer.Write(enum.name)
 	if enum.value != nil {
 		writer.Write(" = ")

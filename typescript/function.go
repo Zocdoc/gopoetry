@@ -4,6 +4,7 @@ package typescript
 type FunctionDecl struct {
 	Name     string
 	exported bool
+	CommentBlockDeclaration
 	FunctionExpression
 }
 
@@ -31,6 +32,7 @@ func (f *FunctionDecl) AddParams(params ...ParamDeclaration) *FunctionDecl {
 
 // WriteCode implements Writable
 func (f *FunctionDecl) WriteCode(writer CodeWriter) {
+	f.WriteComments(writer)
 	if f.exported {
 		writer.Write("export ")
 	}

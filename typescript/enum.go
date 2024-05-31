@@ -10,6 +10,7 @@ type EnumDeclaration struct {
 	name      string
 	modifiers []string
 	members   []Writable
+	CommentBlockDeclaration
 }
 
 func (enum *EnumDeclaration) addModifier(modifier string) *EnumDeclaration {
@@ -51,6 +52,7 @@ func Enum(name string) *EnumDeclaration {
 
 // WriteCode writes the enum to the writer
 func (enum *EnumDeclaration) WriteCode(writer CodeWriter) {
+	enum.WriteComments(writer)
 	declaration := fmt.Sprintf("enum %s", enum.name)
 	if len(enum.modifiers) > 0 {
 		declaration = strings.Join(enum.modifiers, " ") + " " + declaration

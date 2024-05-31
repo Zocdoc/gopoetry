@@ -17,6 +17,7 @@ type TypeDeclaration struct {
 	name          string
 	typeReference Writable
 	export        bool
+	CommentBlockDeclaration
 }
 
 func (td *TypeDeclaration) Export() *TypeDeclaration {
@@ -26,6 +27,7 @@ func (td *TypeDeclaration) Export() *TypeDeclaration {
 
 // WriteCode writes the type declaration to the writer
 func (td *TypeDeclaration) WriteCode(writer CodeWriter) {
+	td.WriteComments(writer)
 	exportMod := ""
 	if td.export {
 		exportMod = "export " // trailing space is intentional
