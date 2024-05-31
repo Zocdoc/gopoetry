@@ -12,6 +12,7 @@ type MethodDeclaration struct {
 	hasParams bool
 	params    []Writable
 	body      Writable
+	CommentBlockDeclaration
 }
 
 // Returns sets the return type of the method
@@ -91,6 +92,7 @@ func Constructor() *MethodDeclaration {
 
 // WriteCode writes the method to the writer
 func (method *MethodDeclaration) WriteCode(writer CodeWriter) {
+	method.WriteComments(writer)
 	if len(method.modifiers) > 0 {
 		writer.Write(strings.Join(method.modifiers, " ") + " ")
 	}
