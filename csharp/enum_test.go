@@ -43,14 +43,25 @@ enum MyEnum
 
 func TestEnumWithMembers(t *testing.T) {
 	expected := `
+/// <summary>
+/// Enum Summary
+/// </summary>
 enum MyEnum
 {
+    /// <summary>
+    /// member 1
+    /// </summary>
     Member1,
+    /// <summary>
+    /// member 2
+    /// </summary>
     Member2,
 }
 `
 	enum := Enum("MyEnum")
-	enum.Member("Member1")
-	enum.Member("Member2")
+	enum.Summary("Enum Summary")
+
+	enum.Member("Member1").Summary("member 1")
+	enum.Member("Member2").Summary("member 2")
 	assertCode(t, enum, expected)
 }

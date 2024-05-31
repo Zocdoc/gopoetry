@@ -3,7 +3,8 @@ package csharp
 type EnumMemberDeclaration struct {
 	name       string
 	attributes []Writable
-	value       *string
+	value      *string
+	summary    SummaryDeclaration
 }
 
 func (self *EnumMemberDeclaration) Value(value string) *EnumMemberDeclaration {
@@ -24,11 +25,13 @@ func EnumMember(name string) *EnumMemberDeclaration {
 	return &EnumMemberDeclaration{
 		name:       name,
 		attributes: []Writable{},
-		value:       nil,
+		value:      nil,
+		summary:    SummaryDeclaration{},
 	}
 }
 
 func (self *EnumMemberDeclaration) WriteCode(writer CodeWriter) {
+	self.summary.WriteCode(writer)
 	if len(self.attributes) > 0 {
 		writer.Write("[")
 		for i, attribute := range self.attributes {
@@ -45,4 +48,8 @@ func (self *EnumMemberDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(" = ")
 		writer.Write(*self.value)
 	}
+}
+
+func (self *EnumMemberDeclaration) Summary(summary string) {
+	self.summary.AddDescription(summary)
 }
