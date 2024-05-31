@@ -11,6 +11,7 @@ type EnumDeclaration struct {
 	modifiers  []string
 	attributes []Writable
 	members    []Writable
+	summary    SummaryDeclaration
 }
 
 func (self *EnumDeclaration) addModifier(modifier string) *EnumDeclaration {
@@ -55,16 +56,23 @@ func (self *EnumDeclaration) Member(name string) *EnumMemberDeclaration {
 	return member
 }
 
+func (self *EnumDeclaration) Summary(summary string) *EnumDeclaration {
+	self.summary.AddDescription(summary)
+	return self
+}
+
 func Enum(name string) *EnumDeclaration {
 	return &EnumDeclaration{
 		name:       name,
 		modifiers:  []string{},
 		attributes: []Writable{},
 		members:    []Writable{},
+		summary:    SummaryDeclaration{},
 	}
 }
 
 func (self *EnumDeclaration) WriteCode(writer CodeWriter) {
+	self.summary.WriteCode(writer)
 	declaration := fmt.Sprintf("enum %s", self.name)
 	if len(self.modifiers) > 0 {
 		declaration = strings.Join(self.modifiers, " ") + " " + declaration
