@@ -11,6 +11,7 @@ type InterfaceDeclaration struct {
 	extends   []string
 	modifiers []string
 	members   []Writable
+	CommentBlockDeclaration
 }
 
 func (iface *InterfaceDeclaration) addModifier(modifier string) *InterfaceDeclaration {
@@ -59,6 +60,7 @@ func Interface(name string) *InterfaceDeclaration {
 
 // WriteCode writes the interface to the writer
 func (iface *InterfaceDeclaration) WriteCode(writer CodeWriter) {
+	iface.WriteComments(writer)
 	declaration := fmt.Sprintf("interface %s", iface.name)
 
 	if len(iface.modifiers) > 0 {

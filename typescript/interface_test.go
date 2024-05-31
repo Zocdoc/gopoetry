@@ -15,13 +15,17 @@ interface MyInterface
 
 func TestInterfaceMethod(t *testing.T) {
 	expected := `
+/** makes a thing */
 interface MyInterface
 {
+    /** does a thing */
     MyMethod(): void;
 }
 `
 	iface := Interface("MyInterface")
-	iface.Method("MyMethod")
+	iface.AddComments("makes a thing")
+	iface.Method("MyMethod").AddComments("does a thing")
+
 	assertCode(t, iface, expected)
 }
 
@@ -29,11 +33,12 @@ func TestExportedInterfaceWithProperty(t *testing.T) {
 	expected := `
 export interface MyInterface extends IfaceOne, IfaceTwo
 {
+    /** MyProperty */
     MyProperty?: Result;
 }
 `
 	iface := Interface("MyInterface").Export().Extends("IfaceOne", "IfaceTwo")
-	_ = iface.Property("Result", "MyProperty").Optional()
+	_ = iface.Property("Result", "MyProperty").Optional().AddComments("MyProperty")
 	assertCode(t, iface, expected)
 }
 

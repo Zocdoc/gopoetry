@@ -12,6 +12,7 @@ type PropertyDeclaration struct {
 	modifiers   []string
 	optional    bool
 	initializer string
+	CommentBlockDeclaration
 }
 
 func (prop *PropertyDeclaration) addModifier(modifier string) *PropertyDeclaration {
@@ -62,6 +63,7 @@ func Property(typeName string, name string) *PropertyDeclaration {
 
 // WriteCode writes the property to the writer
 func (prop *PropertyDeclaration) WriteCode(writer CodeWriter) {
+	prop.WriteComments(writer)
 	optionalStr := ""
 	if prop.optional {
 		optionalStr = "?"
