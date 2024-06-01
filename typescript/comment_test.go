@@ -27,3 +27,18 @@ function myFunction() {
 	fn.AddComments("my comment", "my second line", "my third line")
 	assertCode(t, fn, expected)
 }
+
+func TestCommentBlockDeclarationMultilineSingleString(t *testing.T) {
+	expected := `
+/**
+ * my comment
+ * my second line
+ * my third line
+ */
+function myFunction() {
+}
+`
+	fn := DeclareFunction("myFunction")
+	fn.AddComments("my comment\nmy second line\nmy third line")
+	assertCode(t, fn, expected)
+}
