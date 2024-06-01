@@ -2,6 +2,7 @@ package typescript
 
 import (
 	"fmt"
+	"strings"
 )
 
 type CommentBlockDeclaration struct {
@@ -20,9 +21,11 @@ func (self *CommentBlockDeclaration) AddComments(lines ...string) *CommentBlockD
 }
 
 func (self *CommentBlockDeclaration) writeMultiLine(writer CodeWriter) {
-	for _, line := range self.comments {
-		writer.Write(fmt.Sprintf(" * %s", line))
-		writer.Eol()
+	for _, comment := range self.comments {
+		for _, line := range strings.Split(strings.Replace(comment, "\r\n", "\n", -1), "\n") {
+			writer.Write(fmt.Sprintf(" * %s", line))
+			writer.Eol()
+		}
 	}
 }
 
@@ -36,7 +39,7 @@ func (self *CommentBlockDeclaration) WriteComments(writer CodeWriter) {
 		writer.Eol()
 		return
 	}
-	
+
 	writer.Write("/**")
 	writer.Eol()
 
