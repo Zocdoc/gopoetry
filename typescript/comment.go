@@ -16,16 +16,18 @@ func CommentBlock(lines ...string) *CommentBlockDeclaration {
 }
 
 func (self *CommentBlockDeclaration) AddComments(lines ...string) *CommentBlockDeclaration {
-	self.comments = append(self.comments, lines...)
+	for _, line := range lines {
+		for _, comment := range strings.Split(strings.Replace(line, "\r\n", "\n", -1), "\n") {
+			self.comments = append(self.comments, comment)
+		}
+	}
 	return self
 }
 
 func (self *CommentBlockDeclaration) writeMultiLine(writer CodeWriter) {
-	for _, comment := range self.comments {
-		for _, line := range strings.Split(strings.Replace(comment, "\r\n", "\n", -1), "\n") {
-			writer.Write(fmt.Sprintf(" * %s", line))
-			writer.Eol()
-		}
+	for _, line := range self.comments {
+		writer.Write(fmt.Sprintf(" * %s", line))
+		writer.Eol()
 	}
 }
 
