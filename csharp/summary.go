@@ -7,6 +7,7 @@ import (
 
 type SummaryParam struct {
 	name, description string
+	isEscaped         bool
 }
 
 type SummaryDeclaration struct {
@@ -27,7 +28,12 @@ func (self *SummaryDeclaration) AddDescription(description string) *SummaryDecla
 }
 
 func (self *SummaryDeclaration) AddParam(name string, description string) *SummaryDeclaration {
-	self.params = append(self.params, SummaryParam{name, description})
+	self.params = append(self.params, SummaryParam{name, description, false})
+	return self
+}
+
+func (self *SummaryDeclaration) AddParamAlreadyEscaped(name string, description string) *SummaryDeclaration {
+	self.params = append(self.params, SummaryParam{name, description, true})
 	return self
 }
 
@@ -59,15 +65,20 @@ func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
 	writer.Eol()
 
 	for _, param := range self.params {
-		if strings.Contains(param.description, "\n") {
+		desc := param.description
+		if !param.isEscaped {
+			desc = xmlEncode(desc)
+		}
+
+		if strings.Contains(desc, "\n") {
 			writer.Write(fmt.Sprintf("/// <param name=\"%s\">", param.name))
 			writer.Eol()
 
-			self.writeMultiLine(writer, xmlEncode(param.description))
+			self.writeMultiLine(writer, desc)
 
 			writer.Write("/// </param>")
 		} else {
-			writer.Write(fmt.Sprintf("/// <param name=\"%s\">%s</param>", param.name, xmlEncode(param.description)))
+			writer.Write(fmt.Sprintf("/// <param name=\"%s\">%s</param>", param.name, desc))
 		}
 
 		writer.Eol()
