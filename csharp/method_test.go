@@ -94,6 +94,22 @@ void MyMethod(int intParam, string stringParam);
 	assertCode(t, method, expected)
 }
 
+func TestMethodSummaryXmlEscape(t *testing.T) {
+	expected := `
+/// <summary>
+/// my method summary &lt;foo&gt;
+/// </summary>
+/// <param name="intParam">A simple int &lt;param&gt;</param>
+/// <param name="stringParam"></param>
+/// <returns>my return summary &lt;bar&gt;</returns>
+void MyMethod(int intParam, string stringParam);
+`
+	method := Method("MyMethod").Summary("my method summary <foo>").ReturnsSummary("my return summary <bar>")
+	method.ParamWithDescription("int", "intParam", "A simple int <param>")
+	method.Param("string", "stringParam")
+	assertCode(t, method, expected)
+}
+
 func TestConstructor(t *testing.T) {
 	expected := `
 MyType(string myString)

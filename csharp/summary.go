@@ -53,7 +53,7 @@ func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
 	writer.Write("/// <summary>")
 	writer.Eol()
 
-	self.writeMultiLine(writer, self.description)
+	self.writeMultiLine(writer, xmlEncode(self.description))
 
 	writer.Write("/// </summary>")
 	writer.Eol()
@@ -63,18 +63,27 @@ func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
 			writer.Write(fmt.Sprintf("/// <param name=\"%s\">", param.name))
 			writer.Eol()
 
-			self.writeMultiLine(writer, param.description)
+			self.writeMultiLine(writer, xmlEncode(param.description))
 
 			writer.Write("/// </param>")
 		} else {
-			writer.Write(fmt.Sprintf("/// <param name=\"%s\">%s</param>", param.name, param.description))
+			writer.Write(fmt.Sprintf("/// <param name=\"%s\">%s</param>", param.name, xmlEncode(param.description)))
 		}
 
 		writer.Eol()
 	}
 
 	if self.returns != "" {
-		writer.Write(fmt.Sprintf("/// <returns>%s</returns>", self.returns))
+		writer.Write(fmt.Sprintf("/// <returns>%s</returns>", xmlEncode(self.returns)))
 		writer.Eol()
 	}
+}
+
+func xmlEncode(s string) string {
+	s = strings.Replace(s, "&", "&amp;", -1)
+	s = strings.Replace(s, "<", "&lt;", -1)
+	s = strings.Replace(s, ">", "&gt;", -1)
+	s = strings.Replace(s, "\"", "&quot;", -1)
+	s = strings.Replace(s, "'", "&apos;", -1)
+	return s
 }
