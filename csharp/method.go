@@ -28,11 +28,6 @@ func (self *MethodDeclaration) addModifier(modifier string) *MethodDeclaration {
 	return self
 }
 
-func (self *MethodDeclaration) addParamDescription(name string, description string) *MethodDeclaration {
-	self.summary.AddParam(name, description)
-	return self
-}
-
 func (self *MethodDeclaration) Private() *MethodDeclaration {
 	return self.addModifier("private")
 }
@@ -72,14 +67,21 @@ func (self *MethodDeclaration) Body(lines ...string) *BlockDeclaration {
 func (self *MethodDeclaration) Param(type_ string, name string) *ParamDeclaration {
 	param := Param(type_, name)
 	self.AddParams(param)
-	self.addParamDescription(name, "")
+	self.summary.AddParam(name, "")
 	return param
 }
 
 func (self *MethodDeclaration) ParamWithDescription(type_ string, name string, description string) *ParamDeclaration {
 	param := Param(type_, name)
 	self.AddParams(param)
-	self.addParamDescription(name, description)
+	self.summary.AddParam(name, description)
+	return param
+}
+
+func (self *MethodDeclaration) ParamWithDescriptionAlreadyEscaped(type_ string, name string, description string) *ParamDeclaration {
+	param := Param(type_, name)
+	self.AddParams(param)
+	self.summary.AddParamAlreadyEscaped(name, description)
 	return param
 }
 

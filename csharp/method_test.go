@@ -100,6 +100,24 @@ func TestMethodSummaryXmlEscape(t *testing.T) {
 /// my method summary &lt;foo&gt;
 /// </summary>
 /// <param name="intParam">A simple int &lt;param&gt;</param>
+/// <param name="intParam2"><see cref="int" /></param>
+/// <param name="stringParam"></param>
+/// <returns>my return summary &lt;bar&gt;</returns>
+void MyMethod(int intParam, int intParam2, string stringParam);
+`
+	method := Method("MyMethod").Summary("my method summary <foo>").ReturnsSummary("my return summary <bar>")
+	method.ParamWithDescription("int", "intParam", "A simple int <param>")
+	method.ParamWithDescriptionAlreadyEscaped("int", "intParam2", "<see cref=\"int\" />")
+	method.Param("string", "stringParam")
+	assertCode(t, method, expected)
+}
+
+func TestMethodSummaryXmlEmbedded(t *testing.T) {
+	expected := `
+/// <summary>
+/// my method summary &lt;foo&gt;
+/// </summary>
+/// <param name="intParam">A simple int &lt;param&gt;</param>
 /// <param name="stringParam"></param>
 /// <returns>my return summary &lt;bar&gt;</returns>
 void MyMethod(int intParam, string stringParam);
