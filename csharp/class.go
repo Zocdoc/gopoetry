@@ -102,7 +102,7 @@ func (self *ClassDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	if len(self.inherits) > 0 {
-		declaration += ": " + strings.Join(self.inherits, ", ")
+		declaration += " : " + strings.Join(self.inherits, ", ")
 	}
 
 	if len(self.attributes) > 0 {
