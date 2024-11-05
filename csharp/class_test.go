@@ -15,7 +15,7 @@ class MyClass
 
 func TestClassInherits(t *testing.T) {
 	expected := `
-class MyClass: MyParent
+class MyClass : MyParent
 {
 }
 `
@@ -29,6 +29,15 @@ private class MyClass
 }
 `
 	assertCode(t, Class("MyClass").Private(), expected)
+}
+
+func TestMultipleClassModifier(t *testing.T) {
+	expected := `
+private abstract class MyClass
+{
+}
+`
+	assertCode(t, Class("MyClass").Private().Abstract(), expected)
 }
 
 func TestClassAttributed(t *testing.T) {

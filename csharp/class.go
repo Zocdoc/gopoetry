@@ -27,6 +27,10 @@ func (self *ClassDeclaration) Public() *ClassDeclaration {
 	return self.addModifier("public")
 }
 
+func (self *ClassDeclaration) Abstract() *ClassDeclaration {
+	return self.addModifier("abstract")
+}
+
 func (self *ClassDeclaration) Static() *ClassDeclaration {
 	return self.addModifier("static")
 }
