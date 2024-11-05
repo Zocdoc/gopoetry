@@ -78,11 +78,7 @@ func TestClassProperty(t *testing.T) {
 	expected := `
 class MyClass
 {
-    Result MyProperty
-    {
-        get;
-        set;
-    }
+    Result MyProperty { get; set; }
 }
 `
 	class := Class("MyClass")
@@ -96,12 +92,7 @@ func TestClassPropertyWithInitializer(t *testing.T) {
 	expected := `
 class MyClass
 {
-    Result MyProperty
-    {
-        get;
-        set;
-    }
-     = "bar";
+    Result MyProperty { get; set; } = "bar";
 }
 `
 	class := Class("MyClass")
@@ -116,11 +107,7 @@ func TestClassPropertyWithInit(t *testing.T) {
 	expected := `
 class MyClass
 {
-    Result MyProperty
-    {
-        get;
-        init;
-    }
+    Result MyProperty { get; init; }
 }
 `
 	class := Class("MyClass")

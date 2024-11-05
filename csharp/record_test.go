@@ -78,11 +78,7 @@ func TestRecordProperty(t *testing.T) {
 	expected := `
 record MyRecord
 {
-    Result MyProperty
-    {
-        get;
-        set;
-    }
+    Result MyProperty { get; set; }
 }
 `
 	record := Record("MyRecord")
@@ -96,12 +92,7 @@ func TestRecordPropertyWithInitializer(t *testing.T) {
 	expected := `
 record MyRecord
 {
-    Result MyProperty
-    {
-        get;
-        set;
-    }
-     = "bar";
+    Result MyProperty { get; set; } = "bar";
 }
 `
 	record := Record("MyRecord")
