@@ -108,7 +108,7 @@ record MyRecord
 	property := record.Property("Result", "MyProperty")
 	property.Get()
 	property.Set()
-	property.Init(Str("bar"))
+	property.Initialize(Str("bar"))
 	assertCode(t, record, expected)
 }
 

@@ -40,6 +40,11 @@ func (self *PropertyDeclaration) Set() *MethodDeclaration {
 	return self.setter
 }
 
+func (self *PropertyDeclaration) Init() *MethodDeclaration {
+	self.setter = Init()
+	return self.setter
+}
+
 func (self *PropertyDeclaration) WithGet() *PropertyDeclaration {
 	self.Get()
 	return self
@@ -59,7 +64,7 @@ func (self *PropertyDeclaration) WithAttribute(code string) *PropertyDeclaration
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *PropertyDeclaration) Init(init Writable) *PropertyDeclaration {
+func (self *PropertyDeclaration) Initialize(init Writable) *PropertyDeclaration {
 	self.init = init
 	return self
 }

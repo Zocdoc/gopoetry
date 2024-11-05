@@ -108,7 +108,25 @@ class MyClass
 	property := class.Property("Result", "MyProperty")
 	property.Get()
 	property.Set()
-	property.Init(Str("bar"))
+	property.Initialize(Str("bar"))
+	assertCode(t, class, expected)
+}
+
+func TestClassPropertyWithInit(t *testing.T) {
+	expected := `
+class MyClass
+{
+    Result MyProperty
+    {
+        get;
+        init;
+    }
+}
+`
+	class := Class("MyClass")
+	property := class.Property("Result", "MyProperty")
+	property.Get()
+	property.Init()
 	assertCode(t, class, expected)
 }
 

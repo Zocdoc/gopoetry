@@ -26,7 +26,7 @@ string MyProperty
 `
 	property := Property("string", "MyProperty")
 	property.Get()
-	property.Init(Str("foo"))
+	property.Initialize(Str("foo"))
 	assertCode(t, property, expected)
 }
 

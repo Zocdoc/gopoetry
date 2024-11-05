@@ -169,6 +169,22 @@ func Set() *MethodDeclaration {
 	}
 }
 
+func Init() *MethodDeclaration {
+	return &MethodDeclaration{
+		name:       "init",
+		returns:    "",
+		modifiers:  []string{},
+		attributes: []Writable{},
+		hasParams:  false,
+		params:     []Writable{},
+		body:       nil,
+		hasBase:    false,
+		base:       nil,
+		summary:    SummaryDeclaration{},
+		expression: nil,
+	}
+}
+
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	self.summary.WriteCode(writer)
 
