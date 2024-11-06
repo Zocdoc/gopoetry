@@ -4,11 +4,7 @@ import "testing"
 
 func TestPropertyGetSet(t *testing.T) {
 	expected := `
-MyType MyProperty
-{
-    get;
-    set;
-}
+MyType MyProperty { get; set; }
 `
 	property := Property("MyType", "MyProperty")
 	property.Get()
@@ -18,25 +14,17 @@ MyType MyProperty
 
 func TestPropertyGetWithInitializer(t *testing.T) {
 	expected := `
-string MyProperty
-{
-    get;
-}
- = "foo";
+string MyProperty { get; } = "foo";
 `
 	property := Property("string", "MyProperty")
 	property.Get()
-	property.Init(Str("foo"))
+	property.Initialize(Str("foo"))
 	assertCode(t, property, expected)
 }
 
 func TestPropertyPublic(t *testing.T) {
 	expected := `
-public MyType MyProperty
-{
-    get;
-    set;
-}
+public MyType MyProperty { get; set; }
 `
 	property := Property("MyType", "MyProperty").Public()
 	property.Get()
@@ -46,13 +34,19 @@ public MyType MyProperty
 
 func TestPropertyPrivateSetter(t *testing.T) {
 	expected := `
-MyType MyProperty
-{
-    get;
-    private set;
-}
+MyType MyProperty { get; private set; }
 `
 	property := Property("MyType", "MyProperty")
+	property.Get()
+	property.Set().Private()
+	assertCode(t, property, expected)
+}
+
+func TestPropertyRequired(t *testing.T) {
+	expected := `
+public required MyType MyProperty { get; private set; }
+`
+	property := Property("MyType", "MyProperty").Public().Required()
 	property.Get()
 	property.Set().Private()
 	assertCode(t, property, expected)
@@ -61,11 +55,7 @@ MyType MyProperty
 func TestPropertyAttributed(t *testing.T) {
 	expected := `
 [MyAttribute]
-public MyType MyProperty
-{
-    get;
-    set;
-}
+public MyType MyProperty { get; set; }
 `
 	property := Property("MyType", "MyProperty").Public().WithAttribute("MyAttribute")
 	property.Get()
@@ -78,11 +68,7 @@ func TestPropertyWithSummary(t *testing.T) {
 /// <summary>
 /// my property summary
 /// </summary>
-public int intParam
-{
-    get;
-    set;
-}
+public int intParam { get; set; }
 `
 	property := Property("int", "intParam").Public().Summary("my property summary")
 	property.Get()

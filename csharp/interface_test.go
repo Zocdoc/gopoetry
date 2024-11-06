@@ -29,11 +29,7 @@ func TestInterfaceProperty(t *testing.T) {
 	expected := `
 interface MyInterface
 {
-    Result MyProperty
-    {
-        get;
-        set;
-    }
+    Result MyProperty { get; set; }
 }
 `
 	iface := Interface("MyInterface")

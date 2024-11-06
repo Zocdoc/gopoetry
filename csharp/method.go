@@ -169,6 +169,31 @@ func Set() *MethodDeclaration {
 	}
 }
 
+func Init() *MethodDeclaration {
+	return &MethodDeclaration{
+		name:       "init",
+		returns:    "",
+		modifiers:  []string{},
+		attributes: []Writable{},
+		hasParams:  false,
+		params:     []Writable{},
+		body:       nil,
+		hasBase:    false,
+		base:       nil,
+		summary:    SummaryDeclaration{},
+		expression: nil,
+	}
+}
+
+func (self *MethodDeclaration) IsSimpleGetSetOrInit() bool {
+	if self.name == "get" || self.name == "set" || self.name == "init" {
+		if self.body == nil && self.base == nil && self.expression == nil {
+			return true
+		}
+	}
+	return false
+}
+
 func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 	self.summary.WriteCode(writer)
 
@@ -218,6 +243,9 @@ func (self *MethodDeclaration) WriteCode(writer CodeWriter) {
 		self.body.WriteCode(writer)
 	} else {
 		writer.Write(";")
-		writer.Eol()
+
+		if !self.IsSimpleGetSetOrInit() {
+			writer.Eol()
+		}
 	}
 }

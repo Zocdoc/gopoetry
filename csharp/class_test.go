@@ -15,7 +15,7 @@ class MyClass
 
 func TestClassInherits(t *testing.T) {
 	expected := `
-class MyClass: MyParent
+class MyClass : MyParent
 {
 }
 `
@@ -29,6 +29,15 @@ private class MyClass
 }
 `
 	assertCode(t, Class("MyClass").Private(), expected)
+}
+
+func TestMultipleClassModifier(t *testing.T) {
+	expected := `
+private abstract class MyClass
+{
+}
+`
+	assertCode(t, Class("MyClass").Private().Abstract(), expected)
 }
 
 func TestClassAttributed(t *testing.T) {
@@ -69,11 +78,7 @@ func TestClassProperty(t *testing.T) {
 	expected := `
 class MyClass
 {
-    Result MyProperty
-    {
-        get;
-        set;
-    }
+    Result MyProperty { get; set; }
 }
 `
 	class := Class("MyClass")
@@ -87,19 +92,28 @@ func TestClassPropertyWithInitializer(t *testing.T) {
 	expected := `
 class MyClass
 {
-    Result MyProperty
-    {
-        get;
-        set;
-    }
-     = "bar";
+    Result MyProperty { get; set; } = "bar";
 }
 `
 	class := Class("MyClass")
 	property := class.Property("Result", "MyProperty")
 	property.Get()
 	property.Set()
-	property.Init(Str("bar"))
+	property.Initialize(Str("bar"))
+	assertCode(t, class, expected)
+}
+
+func TestClassPropertyWithInit(t *testing.T) {
+	expected := `
+class MyClass
+{
+    Result MyProperty { get; init; }
+}
+`
+	class := Class("MyClass")
+	property := class.Property("Result", "MyProperty")
+	property.Get()
+	property.Init()
 	assertCode(t, class, expected)
 }
 

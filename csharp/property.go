@@ -30,6 +30,10 @@ func (self *PropertyDeclaration) Public() *PropertyDeclaration {
 	return self.addModifier("public")
 }
 
+func (self *PropertyDeclaration) Required() *PropertyDeclaration {
+	return self.addModifier("required")
+}
+
 func (self *PropertyDeclaration) Get() *MethodDeclaration {
 	self.getter = Get()
 	return self.getter
@@ -37,6 +41,11 @@ func (self *PropertyDeclaration) Get() *MethodDeclaration {
 
 func (self *PropertyDeclaration) Set() *MethodDeclaration {
 	self.setter = Set()
+	return self.setter
+}
+
+func (self *PropertyDeclaration) Init() *MethodDeclaration {
+	self.setter = Init()
 	return self.setter
 }
 
@@ -50,6 +59,11 @@ func (self *PropertyDeclaration) WithSet() *PropertyDeclaration {
 	return self
 }
 
+func (self *PropertyDeclaration) WithInit() *PropertyDeclaration {
+	self.Init()
+	return self
+}
+
 func (self *PropertyDeclaration) AddAttributes(attributes ...Writable) *PropertyDeclaration {
 	self.attributes = append(self.attributes, attributes...)
 	return self
@@ -59,7 +73,7 @@ func (self *PropertyDeclaration) WithAttribute(code string) *PropertyDeclaration
 	return self.AddAttributes(Attribute(code))
 }
 
-func (self *PropertyDeclaration) Init(init Writable) *PropertyDeclaration {
+func (self *PropertyDeclaration) Initialize(init Writable) *PropertyDeclaration {
 	self.init = init
 	return self
 }
@@ -111,20 +125,50 @@ func (self *PropertyDeclaration) WriteCode(writer CodeWriter) {
 		writer.Write(";")
 		writer.Eol()
 	} else {
-		writer.Begin()
-		if self.getter != nil {
-			self.getter.WriteCode(writer)
-		}
-		if self.setter != nil {
-			self.setter.WriteCode(writer)
-		}
-		writer.End()
 
-		if self.init != nil {
-			writer.Write(" = ")
-			self.init.WriteCode(writer)
-			writer.Write(";")
+		inlineBlock := (self.getter == nil || self.getter.IsSimpleGetSetOrInit()) &&
+			(self.setter == nil || self.setter.IsSimpleGetSetOrInit())
+
+		if inlineBlock {
+			writer.Write(" { ")
+
+			if self.getter != nil {
+				self.getter.WriteCode(writer)
+			}
+			if self.setter != nil {
+				if self.getter != nil {
+					writer.Write(" ")
+				}
+				self.setter.WriteCode(writer)
+			}
+
+			writer.Write(" }")
+
+			if self.init != nil {
+				writer.Write(" = ")
+				self.init.WriteCode(writer)
+				writer.Write(";")
+			}
+
 			writer.Eol()
+		} else {
+			writer.Begin()
+
+			if self.getter != nil {
+				self.getter.WriteCode(writer)
+			}
+			if self.setter != nil {
+				self.setter.WriteCode(writer)
+			}
+
+			writer.End()
+
+			if self.init != nil {
+				writer.Write(" = ")
+				self.init.WriteCode(writer)
+				writer.Write(";")
+				writer.Eol()
+			}
 		}
 	}
 }
