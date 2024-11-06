@@ -42,6 +42,16 @@ MyType MyProperty { get; private set; }
 	assertCode(t, property, expected)
 }
 
+func TestPropertyRequired(t *testing.T) {
+	expected := `
+public required MyType MyProperty { get; private set; }
+`
+	property := Property("MyType", "MyProperty").Public().Required()
+	property.Get()
+	property.Set().Private()
+	assertCode(t, property, expected)
+}
+
 func TestPropertyAttributed(t *testing.T) {
 	expected := `
 [MyAttribute]

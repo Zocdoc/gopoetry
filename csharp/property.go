@@ -30,6 +30,10 @@ func (self *PropertyDeclaration) Public() *PropertyDeclaration {
 	return self.addModifier("public")
 }
 
+func (self *PropertyDeclaration) Required() *PropertyDeclaration {
+	return self.addModifier("required")
+}
+
 func (self *PropertyDeclaration) Get() *MethodDeclaration {
 	self.getter = Get()
 	return self.getter
