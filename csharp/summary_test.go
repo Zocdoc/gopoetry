@@ -101,3 +101,14 @@ func TestSummaryWithOnlyParamDescription(t *testing.T) {
 	summary.AddParam("myParam", "param description")
 	assertCode(t, summary, expected)
 }
+
+func TestSummaryWithEscapedParam(t *testing.T) {
+	expected := `
+/// <summary>
+/// </summary>
+/// <param name="bool">A boolean parameter</param>
+`
+	summary := Summary("")
+	summary.AddParam("@bool", "A boolean parameter")
+	assertCode(t, summary, expected)
+}

@@ -85,15 +85,20 @@ func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
 			desc = xmlEncode(desc)
 		}
 
+		unescapedName := param.name
+		if strings.HasPrefix(param.name, "@") {
+			unescapedName = strings.TrimPrefix(param.name, "@")
+		}
+
 		if strings.Contains(desc, "\n") {
-			writer.Write(fmt.Sprintf("/// <param name=\"%s\">", param.name))
+			writer.Write(fmt.Sprintf("/// <param name=\"%s\">", unescapedName))
 			writer.Eol()
 
 			self.writeMultiLine(writer, desc)
 
 			writer.Write("/// </param>")
 		} else {
-			writer.Write(fmt.Sprintf("/// <param name=\"%s\">%s</param>", param.name, desc))
+			writer.Write(fmt.Sprintf("/// <param name=\"%s\">%s</param>", unescapedName, desc))
 		}
 
 		writer.Eol()
