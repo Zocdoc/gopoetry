@@ -51,8 +51,23 @@ func (self *SummaryDeclaration) writeMultiLine(writer CodeWriter, description st
 	}
 }
 
+func (self *SummaryDeclaration) hasDescription() bool {
+	if self.description != "" {
+		return true
+	}
+	for _, param := range self.params {
+		if param.description != "" {
+			return true
+		}
+	}
+	if self.returns != "" {
+		return true
+	}
+	return false
+}
+
 func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
-	if self.description == "" {
+	if !self.hasDescription() {
 		return
 	}
 
