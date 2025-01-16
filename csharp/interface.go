@@ -11,6 +11,7 @@ type InterfaceDeclaration struct {
 	modifiers  []string
 	attributes []Writable
 	members    []Writable
+	summary    SummaryDeclaration
 }
 
 func (self *InterfaceDeclaration) addModifier(modifier string) *InterfaceDeclaration {
@@ -62,10 +63,18 @@ func Interface(name string) *InterfaceDeclaration {
 		name:       name,
 		attributes: []Writable{},
 		members:    []Writable{},
+		summary:    SummaryDeclaration{},
 	}
 }
 
+func (self *InterfaceDeclaration) Summary(description string) *InterfaceDeclaration {
+	self.summary.AddDescription(description)
+	return self
+}
+
 func (self *InterfaceDeclaration) WriteCode(writer CodeWriter) {
+	self.summary.WriteCode(writer)
+
 	declaration := fmt.Sprintf("interface %s", self.name)
 
 	if len(self.modifiers) > 0 {
@@ -73,7 +82,7 @@ func (self *InterfaceDeclaration) WriteCode(writer CodeWriter) {
 	}
 
 	if len(self.inherits) > 0 {
-		declaration += ": "+strings.Join(self.inherits, ", ")
+		declaration += ": " + strings.Join(self.inherits, ", ")
 	}
 
 	for _, attribute := range self.attributes {

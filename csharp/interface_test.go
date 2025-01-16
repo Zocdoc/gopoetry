@@ -38,3 +38,17 @@ interface MyInterface
 	property.Set()
 	assertCode(t, iface, expected)
 }
+
+func TestInterfaceSummary(t *testing.T) {
+	expected := `
+/// <summary>
+/// This is a summary
+/// </summary>
+interface MyInterface
+{
+}
+`
+	iface := Interface("MyInterface")
+	iface.Summary("This is a summary")
+	assertCode(t, iface, expected)
+}
