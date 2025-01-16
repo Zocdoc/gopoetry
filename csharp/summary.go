@@ -51,8 +51,23 @@ func (self *SummaryDeclaration) writeMultiLine(writer CodeWriter, description st
 	}
 }
 
+func (self *SummaryDeclaration) hasDescription() bool {
+	if self.description != "" {
+		return true
+	}
+	for _, param := range self.params {
+		if param.description != "" {
+			return true
+		}
+	}
+	if self.returns != "" {
+		return true
+	}
+	return false
+}
+
 func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
-	if self.description == "" {
+	if !self.hasDescription() {
 		return
 	}
 
@@ -70,15 +85,20 @@ func (self *SummaryDeclaration) WriteCode(writer CodeWriter) {
 			desc = xmlEncode(desc)
 		}
 
+		unescapedName := param.name
+		if strings.HasPrefix(param.name, "@") {
+			unescapedName = strings.TrimPrefix(param.name, "@")
+		}
+
 		if strings.Contains(desc, "\n") {
-			writer.Write(fmt.Sprintf("/// <param name=\"%s\">", param.name))
+			writer.Write(fmt.Sprintf("/// <param name=\"%s\">", unescapedName))
 			writer.Eol()
 
 			self.writeMultiLine(writer, desc)
 
 			writer.Write("/// </param>")
 		} else {
-			writer.Write(fmt.Sprintf("/// <param name=\"%s\">%s</param>", param.name, desc))
+			writer.Write(fmt.Sprintf("/// <param name=\"%s\">%s</param>", unescapedName, desc))
 		}
 
 		writer.Eol()

@@ -83,3 +83,32 @@ func TestSummaryWithParamsAndReturns(t *testing.T) {
 	summary.AddReturns("my return summary")
 	assertCode(t, summary, expected)
 }
+
+func TestEmptySummary(t *testing.T) {
+	expected := ``
+	summary := Summary("")
+
+	assertCode(t, summary, expected)
+}
+
+func TestSummaryWithOnlyParamDescription(t *testing.T) {
+	expected := `
+/// <summary>
+/// </summary>
+/// <param name="myParam">param description</param>
+`
+	summary := Summary("")
+	summary.AddParam("myParam", "param description")
+	assertCode(t, summary, expected)
+}
+
+func TestSummaryWithEscapedParam(t *testing.T) {
+	expected := `
+/// <summary>
+/// </summary>
+/// <param name="bool">A boolean parameter</param>
+`
+	summary := Summary("")
+	summary.AddParam("@bool", "A boolean parameter")
+	assertCode(t, summary, expected)
+}
