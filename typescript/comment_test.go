@@ -42,3 +42,17 @@ function myFunction() {
 	fn.AddComments("my comment\nmy second line\nmy third line")
 	assertCode(t, fn, expected)
 }
+
+func TestCommentBlockEscapesBlockCommentTerminator(t *testing.T) {
+	expected := `
+/**
+ * This comment contains a block terminator: * / but it's escaped
+ * Another line with * / in the middle
+ */
+function myFunction() {
+}
+`
+	fn := DeclareFunction("myFunction")
+	fn.AddComments("This comment contains a block terminator: */ but it's escaped", "Another line with */ in the middle")
+	assertCode(t, fn, expected)
+}

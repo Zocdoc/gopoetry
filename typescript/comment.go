@@ -15,10 +15,15 @@ func CommentBlock(lines ...string) *CommentBlockDeclaration {
 	}
 }
 
+func cleanCommentLine(line string) string {
+	return strings.Replace(line, "*/", "* /", -1)
+}
+
 func (self *CommentBlockDeclaration) AddComments(lines ...string) *CommentBlockDeclaration {
 	for _, line := range lines {
 		for _, comment := range strings.Split(strings.Replace(line, "\r\n", "\n", -1), "\n") {
-			self.comments = append(self.comments, comment)
+			cleanComment := cleanCommentLine(comment)
+			self.comments = append(self.comments, cleanComment)
 		}
 	}
 	return self
